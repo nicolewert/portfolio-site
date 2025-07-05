@@ -43,9 +43,9 @@ export default function Home() {
 					{/* Hero Section */}
 					<section className="flex flex-col items-center justify-center py-24 lg:py-32">
 						<div className="glass w-full max-w-4xl mx-auto px-6 py-16 text-center rounded-2xl">
-							<h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-[var(--foreground)]">
-								Nicole Wert
-							</h1>
+						<h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-[var(--foreground)]">
+							Nicole Wert
+						</h1>
 							<img
 								src="/profile_picture.png"
 								alt="Nicole Wert"
@@ -125,15 +125,15 @@ export default function Home() {
 						</div>
 					</section>
 
-					{/* Resume Section */}
-					<section className="py-20">
-						<ResumeSection />
-					</section>
+				   {/* Resume Section */}
+				   <section id="resume" className="py-20">
+					   <ResumeSection />
+				   </section>
 
-					{/* Contact Section */}
-					<section className="py-20">
-						<ContactForm />
-					</section>
+				   {/* Contact Section */}
+				   <section id="contact" className="py-20">
+					   <ContactForm />
+				   </section>
 				</div>
 			</main>
 		</>
