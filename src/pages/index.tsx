@@ -46,8 +46,14 @@ export default function Home() {
 							<h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-[var(--foreground)]">
 								Nicole Wert
 							</h1>
-							<p className="mt-8 text-xl lg:text-2xl leading-relaxed text-[var(--foreground)] max-w-2xl mx-auto">
-								Welcome to my portfolio.
+							<img
+								src="/profile_picture.png"
+								alt="Nicole Wert"
+								className="w-32 h-32 mx-auto mt-6"
+							/>
+							<p className="mt-8 text-xl lg:text-2xl leading-relaxed max-w-2xl mx-auto">
+								<span className="text-[var(--foreground)] font-bold">Welcome</span>
+								<span className="text-[var(--secondary)]"> to my portfolio.</span>
 							</p>
 							{/* Social Links */}
 							<div className="mt-8 flex justify-center gap-6">
