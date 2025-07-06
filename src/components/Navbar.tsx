@@ -17,7 +17,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full z-50 px-4">
+    <div className="fixed top-0 left-0 w-full z-50 px-4 pt-2">
       <nav className="w-full flex items-center justify-between px-6 py-4 border-b border-white/10 backdrop-blur-md rounded-lg glass">
         <div className="text-xl font-bold text-shadow-lg text-[var(--foreground)]">
           Nicole Wert
@@ -37,20 +37,11 @@ export default function Navbar() {
           </ul>
           <DarkModeToggle />
         </div>
-        <button
-          className="md:hidden text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 z-50"
-          onClick={toggleMenu}
-        >
-          <span
-            className={`block w-4 h-0.5 bg-[var(--foreground)] mb-0.5 transition-transform duration-300 transform ${isOpen ? "rotate-45 translate-y-0.5" : ""}`}
-          ></span>
-          <span
-            className={`block w-4 h-0.5 bg-[var(--foreground)] transition-transform duration-300 transform ${isOpen ? "-rotate-45 -translate-y-0.5" : ""}`}
-          ></span>
-        </button>
       </nav>
       {isOpen && (
-        <div className="inset-0 bg-[var(--background)] flex flex-col items-center justify-center">
+        <div
+          className="absolute top-0 left-0 w-full h-screen z-40 px-6 bg-[var(--background)] flex flex-col items-center justify-center"
+        >
           <ul className="flex flex-col gap-8 list-none m-0 p-0 animate-fade-out">
             {links.map((link, index) => (
               <li key={link.href} className={`animate-slide-up delay-${index * 100}`}>
@@ -68,6 +59,24 @@ export default function Navbar() {
           </div>
         </div>
       )}
+      <button
+        className={`absolute md:hidden text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 z-50 transition-all duration-300 top-[38px] right-[52px]`}
+        onClick={toggleMenu}
+        aria-label={isOpen ? "Close menu" : "Open menu"}
+      >
+        <div className="relative w-4 h-4 flex items-center justify-center">
+          <span
+            className={`absolute w-4 h-[0.1rem] bg-[var(--foreground)] transition-all duration-300 transform ${
+              isOpen ? "rotate-45" : "translate-y-[-0.15rem]"
+            }`}
+          ></span>
+          <span
+            className={`absolute w-4 h-[0.1rem] bg-[var(--foreground)] transition-all duration-300 transform ${
+              isOpen ? "-rotate-45" : "translate-y-[0.15rem]"
+            }`}
+          ></span>
+        </div>
+      </button>
     </div>
   );
 }

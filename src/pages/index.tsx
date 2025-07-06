@@ -45,6 +45,7 @@ export default function Home() {
 						<div className="glass w-full max-w-4xl mx-auto px-6 py-16 text-center rounded-2xl">
 						<h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-[var(--foreground)]">
 							Nicole Wert
+							<span className="text-2xl lg:text-3xl font-medium block mt-4 text-[var(--secondary)]">Software Engineer · AI Enthusiast · Problem Solver</span>
 						</h1>
 							<img
 								src="/profile_picture.png"
