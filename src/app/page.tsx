@@ -131,12 +131,14 @@ export default function Home() {
 								))}
 							</div>
 							<div className="text-center">
-								<Link
-									href="/projects"
+								<a
+									href="https://github.com/nicolewert"
+									target="_blank"
+									rel="noopener noreferrer"
 									className="icy-button inline-flex items-center justify-center px-8 py-4 text-lg font-medium rounded-xl text-[var(--foreground)] shadow-lg hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
 								>
-									See All Projects
-								</Link>
+									See My GitHub
+								</a>
 							</div>
 						</div>
 					</section>
