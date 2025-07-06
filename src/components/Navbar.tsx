@@ -32,9 +32,9 @@ export default function Navbar() {
   return (
     <div className="fixed top-0 left-0 w-full z-50 px-4 pt-2">
       <nav className="w-full flex items-center justify-between px-6 py-4 border-b border-white/10 backdrop-blur-md rounded-lg glass">
-        <div className="text-xl font-bold text-shadow-lg text-[var(--foreground)]">
+        <Link href="/" className="text-xl font-bold text-shadow-lg text-[var(--foreground)] hover:text-[var(--primary)] transition-colors">
           Nicole Wert
-        </div>
+        </Link>
         <div className="hidden md:flex items-center gap-6 text-base">
           <ul className="flex gap-6 list-none m-0 p-0">
             {links.map((link) => (
