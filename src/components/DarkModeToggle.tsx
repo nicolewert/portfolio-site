@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 
-export default function DarkModeToggle() {
+interface DarkModeToggleProps {
+  mobile?: boolean;
+}
+
+export default function DarkModeToggle({ mobile }: DarkModeToggleProps) {
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
@@ -14,10 +18,18 @@ export default function DarkModeToggle() {
   return (
     <button
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-      className="ml-4 mr-4 p-2 rounded-full bg-white/20 hover:bg-white/40 transition-colors text-white dark:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400"
-      onClick={() => setDark((d) => !d)}
+      className={`${
+        mobile
+          ? "px-4 py-2 w-full" 
+          : "md:ml-4 md:mr-4 p-2"
+      } rounded-full bg-white/20 hover:bg-white/40 transition-colors text-white dark:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center gap-2 ${
+        mobile ? "justify-center" : ""
+      }`}
+      onClick={() => {
+        setDark((d) => !d);
+      }}
     >
-      {dark ? "🌙" : "☀️"}
+      {dark ? "🌙 Dark" : "☀️ Light"}
     </button>
   );
 }

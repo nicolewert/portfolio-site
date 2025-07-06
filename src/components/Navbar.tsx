@@ -40,7 +40,7 @@ export default function Navbar() {
       </nav>
       {isOpen && (
         <div
-          className="absolute top-0 left-0 w-full h-screen z-40 px-6 bg-[var(--background)] flex flex-col items-center justify-center"
+          className="absolute top-0 left-0 w-full h-screen z-40 px-6 glass flex flex-col items-center justify-center backdrop-blur-md bg-[var(--background)]"
         >
           <ul className="flex flex-col gap-8 list-none m-0 p-0 animate-fade-out">
             {links.map((link, index) => (
@@ -48,14 +48,15 @@ export default function Navbar() {
                 <Link
                   href={link.href}
                   className="no-underline text-[var(--foreground)] hover:text-[var(--primary)] transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
+                  onClick={() => setIsOpen(false)}
                 >
                   {link.label}
                 </Link>
               </li>
             ))}
           </ul>
-          <div className="mt-8">
-            <DarkModeToggle />
+          <div className={`mt-8 animate-slide-up delay-${links.length * 100}`}>
+            <DarkModeToggle mobile />
           </div>
         </div>
       )}
