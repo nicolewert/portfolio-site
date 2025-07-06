@@ -1,23 +1,16 @@
-import { useEffect, useState } from "react";
+'use client'
+import { useTheme } from "../contexts/ThemeContext";
 
 interface DarkModeToggleProps {
   mobile?: boolean;
 }
 
 export default function DarkModeToggle({ mobile }: DarkModeToggleProps) {
-  const [dark, setDark] = useState(false);
-
-  useEffect(() => {
-    if (dark) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [dark]);
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <button
-      aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
       className={`${
         mobile
           ? "px-4 py-2 w-full" 
@@ -25,11 +18,9 @@ export default function DarkModeToggle({ mobile }: DarkModeToggleProps) {
       } rounded-full bg-white/20 hover:bg-white/40 transition-colors text-white dark:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center gap-2 ${
         mobile ? "justify-center" : ""
       }`}
-      onClick={() => {
-        setDark((d) => !d);
-      }}
+      onClick={toggleTheme}
     >
-      {dark ? "🌙 Dark" : "☀️ Light"}
+      {theme === "dark" ? "🌙 Dark" : "☀️ Light"}
     </button>
   );
 }

@@ -1,5 +1,5 @@
-import Navbar from "../components/Navbar";
-import ProjectCard from "../components/ProjectCard";
+import Navbar from "../../components/Navbar";
+import ProjectCard from "../../components/ProjectCard";
 import Head from "next/head";
 
 const projects = [
