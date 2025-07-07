@@ -5,30 +5,9 @@ import ContactForm from "../components/ContactForm";
 import Head from "next/head";
 import Link from "next/link";
 import { SiLeetcode } from "react-icons/si";
+import projectsData from "../data/projects.json";
 
-const projects = [
-	{
-		title: "Project 1",
-		description: "A project description.",
-		image: "#",
-		link: "#",
-		gradientClass: "bg-gradient-to-br from-gray-700 to-gray-500",
-	},
-	{
-		title: "Project 2",
-		description: "A project description.",
-		image: "/portfolio.jpg",
-		link: "#",
-		gradientClass: "bg-gradient-to-br from-gray-700 to-gray-500",
-	},
-	{
-		title: "Project 3",
-		description: "A project description.",
-		image: "/portfolio.jpg",
-		link: "#",
-		gradientClass: "bg-gradient-to-br from-gray-700 to-gray-500",
-	},
-];
+const projects = projectsData;
 
 export default function Home() {
 	return (

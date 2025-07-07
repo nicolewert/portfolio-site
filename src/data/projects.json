@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Project 1",
+    "description": "A project description.",
+    "image": "#",
+    "github": "https://github.com/example/project1",
+    "live": "https://project1.example.com",
+    "tags": ["React", "API", "Demo"],
+    "documentation": "https://docs.example.com/project1",
+    "gradientClass": "bg-gradient-to-br from-gray-700 to-gray-500"
+  },
+  {
+    "title": "Project 2",
+    "description": "A project description.s simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into elec",
+    "image": "/portfolio.jpg",
+    "github": "https://github.com/example/project2",
+    "tags": ["Next.js", "Portfolio"],
+    "documentation": "https://docs.example.com/project2",
+    "gradientClass": "bg-gradient-to-br from-gray-700 to-gray-500"
+  },
+  {
+    "title": "Project 3",
+    "description": "A project description.",
+    "image": "/portfolio.jpg",
+    "live": "https://project3.example.com",
+    "tags": ["AI", "ML", "Showcase"],
+    "documentation": "https://docs.example.com/project3",
+    "gradientClass": "bg-gradient-to-br from-gray-700 to-gray-500"
+  }
+]
