@@ -3,7 +3,6 @@ import ProjectCard from "../components/ProjectCard";
 import ResumeSection from "../components/ResumeSection";
 import ContactForm from "../components/ContactForm";
 import Head from "next/head";
-import Link from "next/link";
 import { SiLeetcode } from "react-icons/si";
 import projectsData from "../data/projects.json";
 
