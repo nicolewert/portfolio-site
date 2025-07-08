@@ -1,8 +1,12 @@
+
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { sendDailySummaryEmail } from '@/lib/emailTemplate'
 
-export async function GET(request: NextRequest) {
+// If you want to force Node.js runtime (uncomment below)
+// export const runtime = 'nodejs';
+
+export async function POST(request: NextRequest) {
   try {
     // Verify cron secret to prevent unauthorized access
     const authHeader = request.headers.get('authorization')
@@ -40,16 +44,16 @@ export async function GET(request: NextRequest) {
     }
 
     // Send email summary
+    console.log(`[CRON] Found ${submissions.length} submissions`)
     const emailResult = await sendDailySummaryEmail(submissions)
-    
     if (!emailResult.success) {
-      console.error('Email sending failed:', emailResult.error)
+      console.error('[CRON] Email sending failed:', emailResult.error)
       return NextResponse.json({ 
         error: 'Failed to send email',
         details: emailResult.error 
       }, { status: 500 })
     }
-
+    console.log(`[CRON] Email sent with ID: ${emailResult.messageId}`)
     return NextResponse.json({
       message: 'Daily summary sent successfully',
       count: submissions.length,
@@ -57,7 +61,7 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Cron job error:', error)
+    console.error('[CRON] Cron job error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

@@ -4,5 +4,8 @@
       "path": "/api/cron/daily-summary",
       "schedule": "0 16 * * *"
     }
-  ]
+  ],
+  "env": {
+    "CRON_SECRET": "@cron_secret"
+  }
 }
