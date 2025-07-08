@@ -1,3 +1,4 @@
+
 import Navbar from "../components/Navbar";
 import ProjectCard from "../components/ProjectCard";
 import ResumeSection from "../components/ResumeSection";
@@ -5,6 +6,7 @@ import ContactForm from "../components/ContactForm";
 import Head from "next/head";
 import { SiLeetcode } from "react-icons/si";
 import projectsData from "../data/projects.json";
+import Image from "next/image";
 
 const projects = projectsData;
 
@@ -25,10 +27,13 @@ export default function Home() {
 							Nicole Wert
 							<span className="text-xl sm:text-2xl lg:text-3xl font-medium block mt-4 text-[var(--secondary)]">Software Engineer · AI Enthusiast · Problem Solver</span>
 						</h1>
-							<img
+							<Image
 								src="/profile_picture.png"
 								alt="Nicole Wert"
+								width={128}
+								height={128}
 								className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mt-4 sm:mt-6 rounded-full border-2 border-[var(--foreground)]/10 shadow-xl dark:shadow-[var(--foreground)]/5 hover:scale-105 transition-transform duration-300 ease-in-out"
+								priority
 							/>
 							<p className="mt-4 sm:mt-8 text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-2xl mx-auto">
 								<span className="text-[var(--foreground)] font-bold">Welcome</span>
