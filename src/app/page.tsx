@@ -81,7 +81,11 @@ export default function Home() {
 							</div>
 						</div>
 						{/* Scroll Indicator */}
-						<div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce">
+						<a
+							href="#projects"
+							className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce cursor-pointer hover:scale-110 transition-transform duration-300 focus:outline-none"
+							aria-label="Scroll to projects section"
+						>
 							<span className="text-[var(--secondary)]/60 dark:text-[var(--secondary)]/50 text-[10px] sm:text-sm mb-1 sm:mb-2 font-medium">Scroll</span>
 							<svg
 								className="w-4 h-4 sm:w-6 sm:h-6 text-[var(--secondary)]/60 dark:text-[var(--secondary)]/50"
@@ -94,7 +98,7 @@ export default function Home() {
 							>
 								<path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
 							</svg>
-						</div>
+						</a>
 					</section>
 
 					{/* Projects Section */}
