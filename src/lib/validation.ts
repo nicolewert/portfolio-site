@@ -34,7 +34,9 @@ export type ContactFormData = z.infer<typeof contactFormSchema>
 export function validateContactForm(data: unknown): ValidationResult {
   // Check honeypot field first
   if (data && typeof data === 'object' && 'company' in data) {
-    const companyField = (data as any).company
+    const companyField = typeof data === 'object' && data !== null && 'company' in data
+      ? (data as { company?: unknown }).company
+      : undefined;
     if (companyField && typeof companyField === 'string' && companyField.trim() !== '') {
       return { isValid: false, errors: ['Invalid submission'] }
     }
