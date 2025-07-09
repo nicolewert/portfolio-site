@@ -76,10 +76,10 @@ export default function ProjectCard(props: ProjectCardProps) {
   }, [description]);
 
   return (
-    <div className={`glass w-full rounded-2xl hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 ease-out ${large ? 'min-h-[900px]' : 'min-h-[540px]'} flex flex-col overflow-hidden`}>
+    <div className={`glass w-full rounded-2xl hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 ease-out ${large ? 'min-h-[400px] sm:min-h-[900px]' : 'min-h-[300px] sm:min-h-[540px]'} flex flex-col overflow-hidden`}>
       {/* Image carousel */}
       <div
-        className={`w-full ${large ? 'h-96' : 'h-48'} relative overflow-hidden flex-shrink-0 ${gradientClass} flex items-center justify-center cursor-pointer`}
+        className={`w-full ${large ? 'h-48 sm:h-96' : 'h-32 sm:h-48'} relative overflow-hidden flex-shrink-0 ${gradientClass} flex items-center justify-center cursor-pointer`}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -113,15 +113,15 @@ export default function ProjectCard(props: ProjectCardProps) {
           </div>
         )}
       </div>
-      <div className={`p-8 flex flex-col flex-grow ${large ? 'text-lg' : ''}`}>
+      <div className={`p-4 sm:p-8 flex flex-col flex-grow ${large ? 'text-lg' : ''}`}>
         <div className="flex flex-col h-full">
           <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4">
             {title}
           </h3>
-          <div className="flex-grow mb-4 relative">
+          <div className="sm:flex-grow mb-4 relative">
             <div
               ref={descRef}
-              className="max-h-32 overflow-y-auto custom-scrollbar pr-1 description-scrollable relative"
+              className="max-h-20 sm:max-h-32 overflow-y-auto custom-scrollbar pr-1 description-scrollable relative"
               id={`desc-scroll-${title.replace(/\s+/g, '-')}`}
               onScroll={e => {
                 const el = e.currentTarget;
@@ -134,7 +134,7 @@ export default function ProjectCard(props: ProjectCardProps) {
                 }
               }}
             >
-              <p className="text-base text-[var(--foreground)] opacity-80 leading-relaxed">
+              <p className="text-sm sm:text-base text-[var(--foreground)] opacity-80 leading-relaxed">
                 {description}
               </p>
             </div>
@@ -142,7 +142,7 @@ export default function ProjectCard(props: ProjectCardProps) {
             <div
               ref={fadeRef}
               id={`fade-${title.replace(/\s+/g, '-')}`}
-              className="pointer-events-none absolute left-0 right-0 bottom-0 h-6 z-10 fade-gradient transition-opacity duration-200"
+              className="pointer-events-none absolute left-0 right-0 bottom-0 h-8 sm:h-6 z-10 fade-gradient transition-opacity duration-200"
               style={{ opacity: 0 }}
             />
           </div>
@@ -150,7 +150,7 @@ export default function ProjectCard(props: ProjectCardProps) {
           {Array.isArray(tags) && tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-4">
               {tags.map((tag: string) => (
-                <span key={tag} className="bg-[var(--primary)]/10 text-[var(--primary)] px-3 py-1 rounded-full text-xs font-medium">
+                <span key={tag} className="bg-[var(--primary)]/10 text-[var(--primary)] px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-medium">
                   {tag}
                 </span>
               ))}
@@ -164,7 +164,7 @@ export default function ProjectCard(props: ProjectCardProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 title="GitHub Repository"
-                className="text-2xl text-[var(--foreground)] hover:text-[var(--primary)] hover:scale-125 transition-transform duration-200"
+                className="text-xl sm:text-2xl text-[var(--foreground)] hover:text-[var(--primary)] hover:scale-125 transition-transform duration-200"
               >
                 <FaGithub />
               </a>
@@ -175,7 +175,7 @@ export default function ProjectCard(props: ProjectCardProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Live Demo"
-                className="text-2xl text-[var(--foreground)] hover:text-[var(--primary)] hover:scale-125 transition-transform duration-200"
+                className="text-xl sm:text-2xl text-[var(--foreground)] hover:text-[var(--primary)] hover:scale-125 transition-transform duration-200"
               >
                 <HiOutlineExternalLink />
               </a>
@@ -186,7 +186,7 @@ export default function ProjectCard(props: ProjectCardProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Documentation"
-                className="text-2xl text-[var(--foreground)] hover:text-[var(--primary)] hover:scale-125 transition-transform duration-200"
+                className="text-xl sm:text-2xl text-[var(--foreground)] hover:text-[var(--primary)] hover:scale-125 transition-transform duration-200"
               >
                 <MdDescription />
               </a>
