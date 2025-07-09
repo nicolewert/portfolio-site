@@ -32,26 +32,46 @@ export default function Navbar() {
 
   return (
     <div className="fixed top-0 left-0 w-full z-50 px-4 pt-2">
-      <nav className="w-full flex items-center justify-between px-6 py-4 border-b border-white/10 backdrop-blur-md rounded-lg glass">
-        <Link href="/" className="text-xl font-bold text-shadow-lg text-[var(--foreground)] hover:text-[var(--primary)] transition-colors">
-          Nicole Wert
-        </Link>
-        <div className="hidden md:flex items-center gap-6 text-base">
-          <ul className="flex gap-6 list-none m-0 p-0">
-            {links.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="no-underline text-[var(--foreground)] hover:text-[var(--primary)] transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <DarkModeToggle />
-        </div>
-      </nav>
+      <div className="relative">
+        <nav className="w-full flex items-center justify-between px-6 py-4 border-b border-white/10 backdrop-blur-md rounded-lg glass">
+          <Link href="/" className="text-xl font-bold text-shadow-lg text-[var(--foreground)] hover:text-[var(--primary)] transition-colors">
+            Nicole Wert
+          </Link>
+          <div className="hidden md:flex items-center gap-6 text-base">
+            <ul className="flex gap-6 list-none m-0 p-0">
+              {links.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="no-underline text-[var(--foreground)] hover:text-[var(--primary)] transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <DarkModeToggle />
+          </div>
+        </nav>
+        <button
+          className={`absolute md:hidden text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 z-50 transition-all duration-300 top-1/2 -translate-y-1/2 right-6`}
+          onClick={toggleMenu}
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+        >
+          <div className="relative w-4 h-4 flex items-center justify-center">
+            <span
+              className={`absolute w-4 h-[0.1rem] bg-[var(--foreground)] transition-all duration-300 transform ${
+                isOpen ? "rotate-45" : "translate-y-[-0.15rem]"
+              }`}
+            ></span>
+            <span
+              className={`absolute w-4 h-[0.1rem] bg-[var(--foreground)] transition-all duration-300 transform ${
+                isOpen ? "-rotate-45" : "translate-y-[0.15rem]"
+              }`}
+            ></span>
+          </div>
+        </button>
+      </div>
       {isOpen && (
         <div
           className="absolute top-0 left-0 w-full h-screen z-40 px-6 glass-fullscreen flex flex-col items-center justify-center backdrop-blur-md bg-[var(--background)]"
@@ -74,24 +94,6 @@ export default function Navbar() {
           </div>
         </div>
       )}
-      <button
-        className={`absolute md:hidden text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 z-50 transition-all duration-300 top-[38px] right-[52px]`}
-        onClick={toggleMenu}
-        aria-label={isOpen ? "Close menu" : "Open menu"}
-      >
-        <div className="relative w-4 h-4 flex items-center justify-center">
-          <span
-            className={`absolute w-4 h-[0.1rem] bg-[var(--foreground)] transition-all duration-300 transform ${
-              isOpen ? "rotate-45" : "translate-y-[-0.15rem]"
-            }`}
-          ></span>
-          <span
-            className={`absolute w-4 h-[0.1rem] bg-[var(--foreground)] transition-all duration-300 transform ${
-              isOpen ? "-rotate-45" : "translate-y-[0.15rem]"
-            }`}
-          ></span>
-        </div>
-      </button>
     </div>
   );
 }
