@@ -54,7 +54,7 @@ export default function Navbar() {
       </nav>
       {isOpen && (
         <div
-          className="absolute top-0 left-0 w-full h-screen z-40 px-6 glass flex flex-col items-center justify-center backdrop-blur-md bg-[var(--background)]"
+          className="absolute top-0 left-0 w-full h-screen z-40 px-6 glass-fullscreen flex flex-col items-center justify-center backdrop-blur-md bg-[var(--background)]"
         >
           <ul className="flex flex-col gap-8 list-none m-0 p-0 animate-fade-out">
             {links.map((link, index) => (
