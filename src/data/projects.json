@@ -1,30 +1,26 @@
 [
   {
-    "title": "Project 1",
-    "description": "A project description.",
-    "image": "#",
-    "github": "https://github.com/example/project1",
-    "live": "https://project1.example.com",
-    "tags": ["React", "API", "Demo"],
-    "documentation": "https://docs.example.com/project1",
+    "title": "Pricing Component & Custom Markup",
+    "description": "Developed a reusable, site-wide pricing component and custom markup that replaced legacy code and empowered non-technical teams to configure global pricing, cart links, and popup experiences—boosting A/B testing speed and flexibility. Built with React, vanilla JS, and integrated with a WordPress server database and REST API.",
+    "images": ["/projects/Card_PricingComponent.png", "/projects/Button_PricingComponent.png"],
+    "live": "https://www.malwarebytes.com/premium",
+    "tags": ["React", "Vanilla JS", "WordPress", "REST API", "A/B Testing"],
     "gradientClass": "bg-gradient-to-br from-gray-700 to-gray-500"
   },
   {
-    "title": "Project 2",
-    "description": "A project description.s simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into elec",
-    "image": "/portfolio.jpg",
-    "github": "https://github.com/example/project2",
-    "tags": ["Next.js", "Portfolio"],
-    "documentation": "https://docs.example.com/project2",
+    "title": "SSO Integration for Personalized Access",
+    "description": "Implemented secure Single Sign-On (SSO) functionality using OpenID Connect and OAuth 2.0, allowing users to seamlessly authenticate via internal subscription systems. Built with vanilla JavaScript and WordPress, the solution leveraged a REST API backend to enable tailored user flows, personalized web experiences, and unified identity management across services.",
+    "images": ["/projects/SI_SSO.png", "/projects/SignIn_SSO.png"],
+    "tags": ["Vanilla JS", "WordPress", "REST API", "OAuth 2.0", "OpenID Connect", "Authentication"],
+    "live": "https://www.malwarebytes.com",
     "gradientClass": "bg-gradient-to-br from-gray-700 to-gray-500"
   },
   {
-    "title": "Project 3",
-    "description": "A project description.",
-    "image": "/portfolio.jpg",
-    "live": "https://project3.example.com",
-    "tags": ["AI", "ML", "Showcase"],
-    "documentation": "https://docs.example.com/project3",
+    "title": "This Portfolio",
+    "images": ["/projects/Light_Portfolio.png", "/projects/Dark_Portfolio.png"],
+    "description": "You're looking at it! Built with Next.js, React, and Supabase, this portfolio showcases selected projects and skills with a focus on speed, clarity, and accessibility. A visual feature exploring frontend performance is in the works—stay tuned for something interactive soon.",
+    "github": "https://github.com/nicolewert/portfolio-site",
+    "tags": ["Next.js", "React", "Supabase", "Vercel", "Showcase"],
     "gradientClass": "bg-gradient-to-br from-gray-700 to-gray-500"
   }
 ]

@@ -19,7 +19,7 @@ export default function Home() {
 			</Head>
 			<Navbar />
 			<main className="min-h-screen bg-[var(--background)] w-full">
-				<div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div className="container max-w-7xl xl:max-w-[120rem] mx-auto px-4 sm:px-6 lg:px-8">
 					{/* Hero Section */}
 					<section className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[var(--background)] via-[var(--background)] to-[var(--background)]/80">
 						<div className="glass w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-16 text-center rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg">
@@ -107,28 +107,28 @@ export default function Home() {
 					</section>
 
 					{/* Projects Section */}
-					<section id="projects" className="py-20">
-						<div className="glass px-6 py-16 max-w-6xl mx-auto rounded-2xl">
-							<h2 className="text-4xl lg:text-5xl font-bold text-center text-[var(--foreground)] mb-16">
-								Featured Projects
-							</h2>
-							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-								{projects.slice(0, 3).map((project) => (
-									<ProjectCard key={project.title} {...project} />
-								))}
-							</div>
-							<div className="text-center">
-								<a
-									href="https://github.com/nicolewert"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="icy-button inline-flex items-center justify-center px-8 py-4 text-lg font-medium rounded-xl text-[var(--foreground)] shadow-lg hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-								>
-									See My GitHub
-								</a>
-							</div>
-						</div>
-					</section>
+<section id="projects" className="py-24">
+  <div className="glass px-4 sm:px-10 py-20 max-w-7xl xl:max-w-[120rem] mx-auto rounded-3xl">
+	<h2 className="text-5xl lg:text-6xl font-bold text-center text-[var(--foreground)] mb-20">
+	  Featured Projects
+	</h2>
+	<div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-12 mb-20">
+	  {projects.slice(0, 3).map((project) => (
+		<ProjectCard key={project.title} {...project} large />
+	  ))}
+	</div>
+	<div className="text-center">
+	  <a
+		href="https://github.com/nicolewert"
+		target="_blank"
+		rel="noopener noreferrer"
+		className="icy-button inline-flex items-center justify-center px-10 py-5 text-xl font-medium rounded-2xl text-[var(--foreground)] shadow-lg hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
+	  >
+		See My GitHub
+	  </a>
+	</div>
+  </div>
+</section>
 
 				   {/* Resume Section */}
 				   <section id="resume" className="py-20">
