@@ -132,6 +132,102 @@ export async function getAllCategories(): Promise<Category[]> {
   return data || []
 }
 
+// Get only tags that are used in published posts
+export async function getUsedTags(): Promise<Tag[]> {
+  const { data, error } = await supabase
+    .from('tags')
+    .select(`
+      *,
+      post_tags!inner(
+        post:blog_posts!inner(published)
+      )
+    `)
+    .eq('post_tags.post.published', true)
+    .order('name')
+
+  if (error) {
+    console.error('Error fetching used tags:', error)
+    return []
+  }
+
+  // Remove duplicates and flatten the structure
+  const uniqueTags = data?.reduce((acc: Tag[], current) => {
+    if (!acc.find(tag => tag.id === current.id)) {
+      const { post_tags, ...tag } = current
+      acc.push(tag as Tag)
+    }
+    return acc
+  }, []) || []
+
+  return uniqueTags
+}
+
+// Get only categories that are used in published posts
+export async function getUsedCategories(): Promise<Category[]> {
+  const { data, error } = await supabase
+    .from('categories')
+    .select(`
+      *,
+      post_categories!inner(
+        post:blog_posts!inner(published)
+      )
+    `)
+    .eq('post_categories.post.published', true)
+    .order('name')
+
+  if (error) {
+    console.error('Error fetching used categories:', error)
+    return []
+  }
+
+  // Remove duplicates and flatten the structure
+  const uniqueCategories = data?.reduce((acc: Category[], current) => {
+    if (!acc.find(cat => cat.id === current.id)) {
+      const { post_categories, ...category } = current
+      acc.push(category as Category)
+    }
+    return acc
+  }, []) || []
+
+  return uniqueCategories
+}
+
+// Get tags with usage count, sorted by most used
+export async function getTagsWithUsage(limit: number = 6): Promise<(Tag & { postCount: number })[]> {
+  const { data, error } = await supabase
+    .from('tags')
+    .select(`
+      *,
+      post_tags!inner(
+        post:blog_posts!inner(published)
+      )
+    `)
+    .eq('post_tags.post.published', true)
+
+  if (error) {
+    console.error('Error fetching tags with usage:', error)
+    return []
+  }
+
+  // Group by tag and count posts
+  const tagCounts = data?.reduce((acc: Record<string, Tag & { postCount: number }>, current) => {
+    const { post_tags, ...tag } = current
+    const tagId = tag.id
+    
+    if (!acc[tagId]) {
+      acc[tagId] = { ...tag as Tag, postCount: 0 }
+    }
+    acc[tagId].postCount++
+    
+    return acc
+  }, {}) || {}
+
+  // Convert to array and sort by usage
+  return Object.values(tagCounts)
+    .sort((a, b) => b.postCount - a.postCount)
+    .slice(0, limit)
+}
+
 // Admin blog functions (for content management)
 export async function createBlogPost(postData: CreateBlogPostData): Promise<BlogPost | null> {
   const { tag_ids, category_ids, ...blogPostData } = postData

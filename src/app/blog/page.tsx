@@ -2,7 +2,8 @@ import Navbar from "../../components/Navbar";
 import BlogPostList from "../../components/BlogPostList";
 import Head from "next/head";
 import Link from "next/link";
-import { getPublishedPosts, getAllTags, getAllCategories } from "../../lib/blog";
+import { getPublishedPosts, getUsedCategories, getTagsWithUsage } from "../../lib/blog";
+import ExpandableTagList from "../../components/ExpandableTagList";
 import { Suspense } from "react";
 
 interface BlogPageProps {
@@ -18,10 +19,10 @@ export default async function Blog({ searchParams }: BlogPageProps) {
   const { search, tag, category } = resolvedSearchParams;
   
   // Fetch initial posts and filters
-  const [initialPosts, tags, categories] = await Promise.all([
+  const [initialPosts, categories, allUsedTags] = await Promise.all([
     getPublishedPosts({ search, tag, category, limit: 9 }),
-    getAllTags(),
-    getAllCategories()
+    getUsedCategories(),
+    getTagsWithUsage(50) // Get more tags for progressive disclosure
   ]);
 
   return (
@@ -41,62 +42,53 @@ export default async function Blog({ searchParams }: BlogPageProps) {
             </p>
           </section>
 
-          {/* Filter Tags and Categories */}
-          <div className="max-w-4xl mx-auto mb-8 animate-fade-in delay-100">
-            <div className="glass p-6 rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg">
-              <div className="flex flex-wrap gap-4 justify-center">
-                {/* All Posts */}
-                <Link
-                  href="/blog"
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                    !search && !tag && !category
-                      ? 'bg-[var(--primary)] text-white shadow-lg'
-                      : 'text-[var(--foreground)] hover:bg-[var(--primary)]/10'
-                  }`}
-                >
-                  All Posts
-                </Link>
-
-                {/* Categories */}
-                {categories.map((cat) => (
+          {/* Filter Tags and Categories - Only show if there are published posts */}
+          {initialPosts.total > 0 && (categories.length > 0 || allUsedTags.length > 0) && (
+            <div className="max-w-4xl mx-auto mb-8 animate-fade-in delay-100">
+              <div className="glass p-6 rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg">
+                <div className="flex flex-wrap gap-4 justify-center">
+                  {/* All Posts */}
                   <Link
-                    key={cat.id}
-                    href={`/blog?category=${cat.slug}`}
+                    href="/blog"
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                      category === cat.slug
-                        ? 'text-white shadow-lg'
+                      !search && !tag && !category
+                        ? 'bg-[var(--primary)] text-white shadow-lg'
                         : 'text-[var(--foreground)] hover:bg-[var(--primary)]/10'
                     }`}
-                    style={{
-                      backgroundColor: category === cat.slug ? cat.color : 'transparent',
-                      borderColor: `${cat.color}50`
-                    }}
                   >
-                    {cat.name}
+                    All Posts
                   </Link>
-                ))}
 
-                {/* Popular Tags */}
-                {tags.slice(0, 6).map((t) => (
-                  <Link
-                    key={t.id}
-                    href={`/blog?tag=${t.slug}`}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 ${
-                      tag === t.slug
-                        ? 'text-white shadow-lg'
-                        : 'text-[var(--foreground)] hover:bg-[var(--primary)]/10'
-                    }`}
-                    style={{
-                      backgroundColor: tag === t.slug ? t.color : 'transparent',
-                      borderColor: `${t.color}50`
-                    }}
-                  >
-                    #{t.name}
-                  </Link>
-                ))}
+                  {/* Categories - Only show used categories */}
+                  {categories.map((cat) => (
+                    <Link
+                      key={cat.id}
+                      href={`/blog?category=${cat.slug}`}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                        category === cat.slug
+                          ? 'text-white shadow-lg'
+                          : 'text-[var(--foreground)] hover:bg-[var(--primary)]/10'
+                      }`}
+                      style={{
+                        backgroundColor: category === cat.slug ? cat.color : 'transparent',
+                        borderColor: `${cat.color}50`,
+                        border: '1px solid'
+                      }}
+                    >
+                      {cat.name}
+                    </Link>
+                  ))}
+
+                  {/* Expandable Tags - Shows top 6 with expand option */}
+                  <ExpandableTagList 
+                    tags={allUsedTags} 
+                    currentTag={tag} 
+                    maxVisible={6}
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Blog Posts */}
           <section className="animate-fade-in delay-200">
