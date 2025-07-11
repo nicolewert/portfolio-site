@@ -12,7 +12,7 @@ export default async function Dashboard() {
   // Fetch dashboard data
   const [stats, { posts }] = await Promise.all([
     getBlogStats(),
-    getAllPosts({ limit: 5 })
+    getAllPosts({ limit: 5 }),
   ])
 
   return <AdminDashboard stats={stats} recentPosts={posts} />

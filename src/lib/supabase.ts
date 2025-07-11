@@ -12,8 +12,8 @@ if (!supabaseUrl || !supabaseServiceKey || !supabaseAnonKey) {
 export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
     autoRefreshToken: false,
-    persistSession: false
-  }
+    persistSession: false,
+  },
 })
 
 // Client-side client for public operations

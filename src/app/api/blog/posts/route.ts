@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
 
     const offset = (page - 1) * limit
 
-    const result = includeUnpublished 
+    const result = includeUnpublished
       ? await getAllPosts({ tag, category, search, limit, offset })
       : await getPublishedPosts({ tag, category, search, limit, offset })
 
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body: CreateBlogPostData = await request.json()
-    
+
     // Basic validation
     if (!body.title || !body.content) {
       return NextResponse.json(
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     }
 
     const post = await createBlogPost(body)
-    
+
     if (!post) {
       return NextResponse.json(
         { error: 'Failed to create blog post' },

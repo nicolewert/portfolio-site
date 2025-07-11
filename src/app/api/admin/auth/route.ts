@@ -5,7 +5,7 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'changeme'
 export async function POST(request: NextRequest) {
   try {
     const { password } = await request.json()
-    
+
     if (!password) {
       return NextResponse.json(
         { error: 'Password is required' },
@@ -14,10 +14,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (password !== ADMIN_PASSWORD) {
-      return NextResponse.json(
-        { error: 'Invalid password' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Invalid password' }, { status: 401 })
     }
 
     // Set admin session cookie
@@ -26,7 +23,7 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 60 * 60 * 24 * 7 // 7 days
+      maxAge: 60 * 60 * 24 * 7, // 7 days
     })
 
     return response

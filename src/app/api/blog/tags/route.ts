@@ -17,7 +17,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const { name, color } = await request.json()
-    
+
     if (!name) {
       return NextResponse.json(
         { error: 'Tag name is required' },
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     }
 
     const tag = await createTag(name, color)
-    
+
     if (!tag) {
       return NextResponse.json(
         { error: 'Failed to create tag' },

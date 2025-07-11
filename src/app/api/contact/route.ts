@@ -1,24 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { checkRateLimit, getClientIP } from '@/lib/rateLimit'
-import { validateContactForm, sanitizeInput, contactFormSchema } from '@/lib/validation'
+import {
+  validateContactForm,
+  sanitizeInput,
+  contactFormSchema,
+} from '@/lib/validation'
 
 export async function POST(request: NextRequest) {
   try {
     // Get client IP for rate limiting
     const clientIP = getClientIP(request)
-    
+
     // Check rate limit
     const rateLimit = checkRateLimit(clientIP)
     if (!rateLimit.allowed) {
       return NextResponse.json(
         { error: 'Too many requests. Please try again later.' },
-        { 
+        {
           status: 429,
           headers: {
             'X-RateLimit-Remaining': '0',
-            'X-RateLimit-Reset': new Date(Date.now() + 60 * 60 * 1000).toISOString()
-          }
+            'X-RateLimit-Reset': new Date(
+              Date.now() + 60 * 60 * 1000
+            ).toISOString(),
+          },
         }
       )
     }
@@ -50,7 +56,7 @@ export async function POST(request: NextRequest) {
     const sanitizedData = {
       name: sanitizeInput(validatedData.name),
       email: sanitizeInput(validatedData.email),
-      message: sanitizeInput(validatedData.message)
+      message: sanitizeInput(validatedData.message),
     }
 
     // Store in database
@@ -68,18 +74,17 @@ export async function POST(request: NextRequest) {
 
     // Return success response
     return NextResponse.json(
-      { 
-        message: 'Thanks for reaching out! I\'ll get back to you soon.',
-        success: true 
+      {
+        message: "Thanks for reaching out! I'll get back to you soon.",
+        success: true,
       },
       {
         status: 200,
         headers: {
-          'X-RateLimit-Remaining': rateLimit.remaining.toString()
-        }
+          'X-RateLimit-Remaining': rateLimit.remaining.toString(),
+        },
       }
     )
-
   } catch (error) {
     console.error('Contact form error:', error)
     return NextResponse.json(

@@ -1,6 +1,10 @@
 import { redirect, notFound } from 'next/navigation'
 import { isAdminAuthenticated } from '../../../../../lib/auth'
-import { getAllPosts, getAllTags, getAllCategories } from '../../../../../lib/blog'
+import {
+  getAllPosts,
+  getAllTags,
+  getAllCategories,
+} from '../../../../../lib/blog'
 import AdminPostForm from '../../../../../components/AdminPostForm'
 
 interface EditPostPageProps {
@@ -22,20 +26,20 @@ export default async function EditPost({ params }: EditPostPageProps) {
   const [{ posts }, tags, categories] = await Promise.all([
     getAllPosts({ limit: 1000 }), // Get all posts to find the one we need
     getAllTags(),
-    getAllCategories()
+    getAllCategories(),
   ])
 
-  const post = posts.find(p => p.id === postId)
-  
+  const post = posts.find((p) => p.id === postId)
+
   if (!post) {
     notFound()
   }
 
   return (
-    <AdminPostForm 
+    <AdminPostForm
       post={post}
-      tags={tags} 
-      categories={categories} 
+      tags={tags}
+      categories={categories}
       isEditing={true}
     />
   )

@@ -19,7 +19,7 @@ export default function AdminPostsList({ posts }: AdminPostsListProps) {
     setDeleteLoading(postId)
     try {
       const response = await fetch(`/api/blog/posts/${postId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
       })
 
       if (response.ok) {
@@ -47,8 +47,12 @@ export default function AdminPostsList({ posts }: AdminPostsListProps) {
           <div className="glass p-6 rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg mb-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-[var(--foreground)] mb-2">All Posts</h1>
-                <p className="text-[var(--secondary)]">Manage all your blog posts</p>
+                <h1 className="text-2xl font-bold text-[var(--foreground)] mb-2">
+                  All Posts
+                </h1>
+                <p className="text-[var(--secondary)]">
+                  Manage all your blog posts
+                </p>
               </div>
               <div className="flex flex-wrap gap-3 mt-4 sm:mt-0">
                 <Link
@@ -71,8 +75,12 @@ export default function AdminPostsList({ posts }: AdminPostsListProps) {
           <div className="glass p-8 rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg">
             {posts.length === 0 ? (
               <div className="text-center py-12">
-                <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4">No posts yet</h3>
-                <p className="text-[var(--secondary)] mb-6">Create your first blog post to get started.</p>
+                <h3 className="text-xl font-semibold text-[var(--foreground)] mb-4">
+                  No posts yet
+                </h3>
+                <p className="text-[var(--secondary)] mb-6">
+                  Create your first blog post to get started.
+                </p>
                 <Link
                   href="/admin/posts/new"
                   className="icy-button px-6 py-3 text-[var(--foreground)] font-medium rounded-lg shadow-lg hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
@@ -85,30 +93,50 @@ export default function AdminPostsList({ posts }: AdminPostsListProps) {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-[var(--foreground)]/10">
-                      <th className="text-left py-4 px-2 text-[var(--foreground)] font-semibold">Title</th>
-                      <th className="text-left py-4 px-2 text-[var(--foreground)] font-semibold">Status</th>
-                      <th className="text-left py-4 px-2 text-[var(--foreground)] font-semibold">Created</th>
-                      <th className="text-left py-4 px-2 text-[var(--foreground)] font-semibold">Updated</th>
-                      <th className="text-center py-4 px-2 text-[var(--foreground)] font-semibold">Actions</th>
+                      <th className="text-left py-4 px-2 text-[var(--foreground)] font-semibold">
+                        Title
+                      </th>
+                      <th className="text-left py-4 px-2 text-[var(--foreground)] font-semibold">
+                        Status
+                      </th>
+                      <th className="text-left py-4 px-2 text-[var(--foreground)] font-semibold">
+                        Created
+                      </th>
+                      <th className="text-left py-4 px-2 text-[var(--foreground)] font-semibold">
+                        Updated
+                      </th>
+                      <th className="text-center py-4 px-2 text-[var(--foreground)] font-semibold">
+                        Actions
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {posts.map((post) => (
-                      <tr key={post.id} className="border-b border-[var(--foreground)]/5 hover:bg-[var(--foreground)]/5">
+                      <tr
+                        key={post.id}
+                        className="border-b border-[var(--foreground)]/5 hover:bg-[var(--foreground)]/5"
+                      >
                         <td className="py-4 px-2">
                           <div>
-                            <h3 className="font-medium text-[var(--foreground)] mb-1">{post.title}</h3>
+                            <h3 className="font-medium text-[var(--foreground)] mb-1">
+                              {post.title}
+                            </h3>
                             <p className="text-sm text-[var(--secondary)] truncate max-w-xs">
-                              {post.excerpt || post.content.replace(/<[^>]*>/g, '').substring(0, 100)}
+                              {post.excerpt ||
+                                post.content
+                                  .replace(/<[^>]*>/g, '')
+                                  .substring(0, 100)}
                             </p>
                           </div>
                         </td>
                         <td className="py-4 px-2">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            post.published 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-yellow-100 text-yellow-800'
-                          }`}>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              post.published
+                                ? 'bg-green-100 text-green-800'
+                                : 'bg-yellow-100 text-yellow-800'
+                            }`}
+                          >
                             {post.published ? 'Published' : 'Draft'}
                           </span>
                         </td>
@@ -139,7 +167,9 @@ export default function AdminPostsList({ posts }: AdminPostsListProps) {
                               disabled={deleteLoading === post.id}
                               className="text-xs px-2 py-1 text-red-600 hover:text-red-700 transition-colors disabled:opacity-50"
                             >
-                              {deleteLoading === post.id ? 'Deleting...' : 'Delete'}
+                              {deleteLoading === post.id
+                                ? 'Deleting...'
+                                : 'Delete'}
                             </button>
                           </div>
                         </td>

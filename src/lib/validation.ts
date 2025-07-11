@@ -23,10 +23,7 @@ export const contactFormSchema = z.object({
     .min(10, 'Message must be at least 10 characters long')
     .max(5000, 'Message must be less than 5000 characters')
     .trim(),
-  company: z
-    .string()
-    .optional()
-    .default('') // Honeypot field
+  company: z.string().optional().default(''), // Honeypot field
 })
 
 export type ContactFormData = z.infer<typeof contactFormSchema>
@@ -34,19 +31,24 @@ export type ContactFormData = z.infer<typeof contactFormSchema>
 export function validateContactForm(data: unknown): ValidationResult {
   // Check honeypot field first
   if (data && typeof data === 'object' && 'company' in data) {
-    const companyField = typeof data === 'object' && data !== null && 'company' in data
-      ? (data as { company?: unknown }).company
-      : undefined;
-    if (companyField && typeof companyField === 'string' && companyField.trim() !== '') {
+    const companyField =
+      typeof data === 'object' && data !== null && 'company' in data
+        ? (data as { company?: unknown }).company
+        : undefined
+    if (
+      companyField &&
+      typeof companyField === 'string' &&
+      companyField.trim() !== ''
+    ) {
       return { isValid: false, errors: ['Invalid submission'] }
     }
   }
 
   // Validate with Zod
   const result = contactFormSchema.safeParse(data)
-  
+
   if (!result.success) {
-    const errors = result.error.errors.map(err => err.message)
+    const errors = result.error.errors.map((err) => err.message)
     return { isValid: false, errors }
   }
 
@@ -56,16 +58,16 @@ export function validateContactForm(data: unknown): ValidationResult {
 export function sanitizeInput(input: string): string {
   // First trim and enforce length limit
   let sanitized = input.trim().substring(0, 5000)
-  
+
   // Use DOMPurify to sanitize - strips all HTML but preserves text content
-  sanitized = DOMPurify.sanitize(sanitized, { 
+  sanitized = DOMPurify.sanitize(sanitized, {
     ALLOWED_TAGS: [], // No HTML tags allowed
     ALLOWED_ATTR: [], // No attributes allowed
-    KEEP_CONTENT: true // Keep text content even when removing tags
+    KEEP_CONTENT: true, // Keep text content even when removing tags
   })
-  
+
   // Additional safety: remove null bytes and most control characters
   sanitized = sanitized.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
-  
+
   return sanitized
 }

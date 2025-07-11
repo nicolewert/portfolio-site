@@ -17,7 +17,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const { name, description, color } = await request.json()
-    
+
     if (!name) {
       return NextResponse.json(
         { error: 'Category name is required' },
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     }
 
     const category = await createCategory(name, description, color)
-    
+
     if (!category) {
       return NextResponse.json(
         { error: 'Failed to create category' },

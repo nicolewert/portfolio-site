@@ -93,6 +93,7 @@ The daily email summary runs at 4:00 PM UTC (8:00 AM PT) daily. To change this:
 ## Monitoring
 
 Check your Vercel function logs for any errors with:
+
 - Form submissions: `/api/contact`
 - Daily summaries: `/api/cron/daily-summary`
 
@@ -107,17 +108,20 @@ These limits should be more than sufficient for a personal portfolio site.
 ## Troubleshooting
 
 ### Forms not submitting
+
 1. Check browser console for errors
 2. Verify API endpoints are working: visit `/api/contact` (should return 405 Method Not Allowed)
 3. Check Vercel function logs
 
 ### Emails not sending
+
 1. Verify RESEND_API_KEY is set correctly
 2. Check that your domain is verified in Resend
 3. Look at Vercel cron job logs
 4. Test the cron endpoint manually with proper authorization
 
 ### Database errors
+
 1. Verify Supabase credentials
 2. Check that the table was created correctly
 3. Ensure RLS policies are set up properly

@@ -17,6 +17,7 @@ ADMIN_PASSWORD=your_secure_admin_password
 ## Database Setup
 
 1. Run the migration file in your Supabase SQL editor:
+
    ```bash
    database/migrations/001_create_blog_tables.sql
    ```
@@ -26,22 +27,26 @@ ADMIN_PASSWORD=your_secure_admin_password
 ## Features Implemented
 
 ✅ **Database Schema**
+
 - Blog posts table with full metadata support
 - Tags and categories with many-to-many relationships
 - Row Level Security (RLS) for secure access
 
 ✅ **Public Blog Interface**
+
 - Responsive blog listing page with filtering
 - Individual blog post pages with SEO optimization
 - Tag and category-based navigation
 - Glass-themed design matching your portfolio
 
 ✅ **Admin System**
+
 - Password-protected admin login
 - Admin dashboard with blog statistics
 - Secure session management with HTTP-only cookies
 
 ✅ **API Endpoints**
+
 - `/api/blog/posts` - Blog post CRUD operations
 - `/api/blog/tags` - Tag management
 - `/api/blog/categories` - Category management
