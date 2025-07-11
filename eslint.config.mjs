@@ -11,7 +11,7 @@ const compat = new FlatCompat({
 })
 
 export default [
-  ...compat.extends('next/core-web-vitals'),
+  ...compat.extends('next/core-web-vitals', 'prettier'),
   // Enable type-aware linting for all TS files
   {
     files: ['**/*.ts', '**/*.tsx'],
@@ -22,7 +22,8 @@ export default [
       },
     },
     plugins: {
-      '@typescript-eslint': (await import('@typescript-eslint/eslint-plugin')).default,
+      '@typescript-eslint': (await import('@typescript-eslint/eslint-plugin'))
+        .default,
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
@@ -39,5 +40,3 @@ export default [
     },
   },
 ]
-
-
