@@ -18,7 +18,7 @@ ADMIN_PASSWORD=your_secure_admin_password
 
 1. Run the migration file in your Supabase SQL editor:
    ```bash
-   supabase/migrations/001_create_blog_tables.sql
+   database/migrations/001_create_blog_tables.sql
    ```
 
 2. Update the RLS policies in the migration file with your actual user ID if needed.
