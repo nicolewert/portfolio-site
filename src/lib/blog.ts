@@ -1,4 +1,5 @@
 import { supabase, supabaseAdmin } from './supabase'
+import { generateSlug } from './utils'
 import { 
   BlogPost, 
   Tag, 
@@ -9,14 +10,6 @@ import {
   BlogPostListResponse,
   BlogStats
 } from '../types/blog'
-
-// Helper function to generate slug from title
-export function generateSlug(title: string): string {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '')
-}
 
 // Public blog functions (for readers)
 export async function getPublishedPosts(filters: BlogPostFilters = {}): Promise<BlogPostListResponse> {

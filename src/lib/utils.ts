@@ -41,3 +41,11 @@ export function generateExcerpt(content: string, maxLength: number = 150): strin
   const plainText = content.replace(/<[^>]*>/g, '')
   return truncateText(plainText, maxLength)
 }
+
+// Helper function to generate slug from title
+export function generateSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
