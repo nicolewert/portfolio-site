@@ -1,2 +1,10 @@
-echo "Running pre-commit checks..."
-lint-staged
+echo "🔍 Running pre-commit checks..."
+
+# Run lint-staged for formatting and linting
+npx lint-staged
+
+# Run TypeScript type check on all files
+echo "🔍 Running TypeScript type check..."
+npx pnpm run typecheck
+
+echo "✅ Pre-commit checks passed!"
