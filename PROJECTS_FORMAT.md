@@ -8,8 +8,8 @@ Each project in `src/data/projects.json` should use the following format:
   "description": "Short project description.",
   "live": "https://live-site-url.com",
   "tags": ["Tag1", "Tag2", "Tag3"],
-  "github": "https://github.com/username/repo",           // (optional)
-  "documentation": "https://docs.example.com/project",    // (optional)
+  "github": "https://github.com/username/repo", // (optional)
+  "documentation": "https://docs.example.com/project", // (optional)
   "images": ["/projects/image1.png", "/projects/image2.png"], // (optional)
   "gradientClass": "bg-gradient-to-br from-gray-700 to-gray-500"
 }

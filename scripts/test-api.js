@@ -6,7 +6,7 @@ const testContactForm = async () => {
     name: 'Test User',
     email: 'test@example.com',
     message: 'This is a test message from the contact form.',
-    company: '' // honeypot field should be empty
+    company: '', // honeypot field should be empty
   }
 
   try {
@@ -19,10 +19,10 @@ const testContactForm = async () => {
     })
 
     const result = await response.json()
-    
+
     console.log('Status:', response.status)
     console.log('Response:', result)
-    
+
     if (response.ok) {
       console.log('✅ Contact form submission successful!')
     } else {
@@ -38,7 +38,7 @@ const testHoneypot = async () => {
     name: 'Bot User',
     email: 'bot@spam.com',
     message: 'This is spam',
-    company: 'Spam Company' // honeypot field filled - should be rejected
+    company: 'Spam Company', // honeypot field filled - should be rejected
   }
 
   try {
@@ -51,11 +51,11 @@ const testHoneypot = async () => {
     })
 
     const result = await response.json()
-    
+
     console.log('\\nHoneypot Test:')
     console.log('Status:', response.status)
     console.log('Response:', result)
-    
+
     if (response.status === 400) {
       console.log('✅ Honeypot protection working!')
     } else {

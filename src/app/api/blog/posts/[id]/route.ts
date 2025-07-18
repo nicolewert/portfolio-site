@@ -9,14 +9,14 @@ export async function PUT(
   try {
     const params = await context.params
     const body: Partial<UpdateBlogPostData> = await request.json()
-    
+
     const updateData: UpdateBlogPostData = {
       id: params.id,
-      ...body
+      ...body,
     }
 
     const post = await updateBlogPost(updateData)
-    
+
     if (!post) {
       return NextResponse.json(
         { error: 'Failed to update blog post' },
@@ -41,7 +41,7 @@ export async function DELETE(
   try {
     const params = await context.params
     const success = await deleteBlogPost(params.id)
-    
+
     if (!success) {
       return NextResponse.json(
         { error: 'Failed to delete blog post' },

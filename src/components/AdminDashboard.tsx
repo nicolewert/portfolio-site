@@ -12,7 +12,10 @@ interface AdminDashboardProps {
   recentPosts: BlogPost[]
 }
 
-export default function AdminDashboard({ stats, recentPosts }: AdminDashboardProps) {
+export default function AdminDashboard({
+  stats,
+  recentPosts,
+}: AdminDashboardProps) {
   const [loggingOut, setLoggingOut] = useState(false)
   const router = useRouter()
 
@@ -32,7 +35,10 @@ export default function AdminDashboard({ stats, recentPosts }: AdminDashboardPro
     <>
       <Head>
         <title>Admin Dashboard | Nicole Wert</title>
-        <meta name="description" content="Admin dashboard for Nicole Wert's blog" />
+        <meta
+          name="description"
+          content="Admin dashboard for Nicole Wert's blog"
+        />
         <meta name="robots" content="noindex, nofollow" />
       </Head>
       <div className="min-h-screen bg-[var(--background)] p-4">
@@ -41,8 +47,12 @@ export default function AdminDashboard({ stats, recentPosts }: AdminDashboardPro
           <div className="glass p-6 rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg mb-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-[var(--foreground)] mb-2">Admin Dashboard</h1>
-                <p className="text-[var(--secondary)]">Manage your blog content</p>
+                <h1 className="text-2xl font-bold text-[var(--foreground)] mb-2">
+                  Admin Dashboard
+                </h1>
+                <p className="text-[var(--secondary)]">
+                  Manage your blog content
+                </p>
               </div>
               <div className="flex flex-wrap gap-3 mt-4 sm:mt-0">
                 <Link
@@ -77,31 +87,53 @@ export default function AdminDashboard({ stats, recentPosts }: AdminDashboardPro
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
             <div className="glass p-6 rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg">
-              <h3 className="text-sm font-medium text-[var(--secondary)] mb-2">Total Posts</h3>
-              <p className="text-3xl font-bold text-[var(--foreground)]">{stats.totalPosts}</p>
+              <h3 className="text-sm font-medium text-[var(--secondary)] mb-2">
+                Total Posts
+              </h3>
+              <p className="text-3xl font-bold text-[var(--foreground)]">
+                {stats.totalPosts}
+              </p>
             </div>
             <div className="glass p-6 rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg">
-              <h3 className="text-sm font-medium text-[var(--secondary)] mb-2">Published</h3>
-              <p className="text-3xl font-bold text-green-600">{stats.publishedPosts}</p>
+              <h3 className="text-sm font-medium text-[var(--secondary)] mb-2">
+                Published
+              </h3>
+              <p className="text-3xl font-bold text-green-600">
+                {stats.publishedPosts}
+              </p>
             </div>
             <div className="glass p-6 rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg">
-              <h3 className="text-sm font-medium text-[var(--secondary)] mb-2">Drafts</h3>
-              <p className="text-3xl font-bold text-yellow-600">{stats.draftPosts}</p>
+              <h3 className="text-sm font-medium text-[var(--secondary)] mb-2">
+                Drafts
+              </h3>
+              <p className="text-3xl font-bold text-yellow-600">
+                {stats.draftPosts}
+              </p>
             </div>
             <div className="glass p-6 rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg">
-              <h3 className="text-sm font-medium text-[var(--secondary)] mb-2">Tags</h3>
-              <p className="text-3xl font-bold text-[var(--primary)]">{stats.totalTags}</p>
+              <h3 className="text-sm font-medium text-[var(--secondary)] mb-2">
+                Tags
+              </h3>
+              <p className="text-3xl font-bold text-[var(--primary)]">
+                {stats.totalTags}
+              </p>
             </div>
             <div className="glass p-6 rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg">
-              <h3 className="text-sm font-medium text-[var(--secondary)] mb-2">Categories</h3>
-              <p className="text-3xl font-bold text-[var(--primary)]">{stats.totalCategories}</p>
+              <h3 className="text-sm font-medium text-[var(--secondary)] mb-2">
+                Categories
+              </h3>
+              <p className="text-3xl font-bold text-[var(--primary)]">
+                {stats.totalCategories}
+              </p>
             </div>
           </div>
 
           {/* Recent Posts */}
           <div className="glass p-8 rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-[var(--foreground)]">Recent Posts</h2>
+              <h2 className="text-xl font-bold text-[var(--foreground)]">
+                Recent Posts
+              </h2>
               <Link
                 href="/admin/posts"
                 className="text-[var(--primary)] hover:text-[var(--foreground)] transition-colors font-medium"
@@ -109,7 +141,7 @@ export default function AdminDashboard({ stats, recentPosts }: AdminDashboardPro
                 View All →
               </Link>
             </div>
-            
+
             {recentPosts.length === 0 ? (
               <div className="text-center py-8">
                 <p className="text-[var(--secondary)] mb-4">No posts yet</p>
@@ -123,17 +155,24 @@ export default function AdminDashboard({ stats, recentPosts }: AdminDashboardPro
             ) : (
               <div className="space-y-4">
                 {recentPosts.map((post) => (
-                  <div key={post.id} className="flex items-center justify-between p-4 rounded-lg bg-[var(--background)]/50 border border-[var(--foreground)]/5">
+                  <div
+                    key={post.id}
+                    className="flex items-center justify-between p-4 rounded-lg bg-[var(--background)]/50 border border-[var(--foreground)]/5"
+                  >
                     <div className="flex-1">
-                      <h3 className="font-medium text-[var(--foreground)] mb-1">{post.title}</h3>
+                      <h3 className="font-medium text-[var(--foreground)] mb-1">
+                        {post.title}
+                      </h3>
                       <div className="flex items-center gap-3 text-sm text-[var(--secondary)]">
                         <span>{formatDate(post.created_at)}</span>
                         <span>•</span>
-                        <span className={`px-2 py-1 rounded-full text-xs ${
-                          post.published 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-yellow-100 text-yellow-800'
-                        }`}>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs ${
+                            post.published
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-yellow-100 text-yellow-800'
+                          }`}
+                        >
                           {post.published ? 'Published' : 'Draft'}
                         </span>
                       </div>

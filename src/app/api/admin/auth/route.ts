@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'changeme'
+import { verifyPassword, generateJWT, checkRateLimit } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
   try {
     const { password } = await request.json()
-    
+
     if (!password) {
       return NextResponse.json(
         { error: 'Password is required' },
@@ -13,20 +12,35 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (password !== ADMIN_PASSWORD) {
+    // Rate limiting check
+    const clientIP =
+      request.headers.get('x-forwarded-for') ||
+      request.headers.get('x-real-ip') ||
+      'unknown'
+
+    if (!checkRateLimit(clientIP)) {
       return NextResponse.json(
-        { error: 'Invalid password' },
-        { status: 401 }
+        { error: 'Too many login attempts. Please try again later.' },
+        { status: 429 }
       )
     }
 
-    // Set admin session cookie
+    // Verify password using bcrypt
+    const isValidPassword = await verifyPassword(password)
+    if (!isValidPassword) {
+      return NextResponse.json({ error: 'Invalid password' }, { status: 401 })
+    }
+
+    // Generate secure JWT token
+    const token = generateJWT()
+
+    // Set admin session cookie with JWT
     const response = NextResponse.json({ success: true })
-    response.cookies.set('admin-session', 'authenticated', {
+    response.cookies.set('admin-session', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 60 * 60 * 24 * 7 // 7 days
+      maxAge: 60 * 60 * 24 * 7, // 7 days
     })
 
     return response

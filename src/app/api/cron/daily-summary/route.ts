@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { sendDailySummaryEmail } from '@/lib/emailTemplate'
@@ -11,7 +10,7 @@ export async function POST(request: NextRequest) {
     // Verify cron secret to prevent unauthorized access
     const authHeader = request.headers.get('authorization')
     const cronSecret = process.env.CRON_SECRET
-    
+
     if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
@@ -37,9 +36,9 @@ export async function POST(request: NextRequest) {
 
     // If no submissions, return early
     if (!submissions || submissions.length === 0) {
-      return NextResponse.json({ 
+      return NextResponse.json({
         message: 'No submissions to process',
-        count: 0 
+        count: 0,
       })
     }
 
@@ -48,18 +47,20 @@ export async function POST(request: NextRequest) {
     const emailResult = await sendDailySummaryEmail(submissions)
     if (!emailResult.success) {
       console.error('[CRON] Email sending failed:', emailResult.error)
-      return NextResponse.json({ 
-        error: 'Failed to send email',
-        details: emailResult.error 
-      }, { status: 500 })
+      return NextResponse.json(
+        {
+          error: 'Failed to send email',
+          details: emailResult.error,
+        },
+        { status: 500 }
+      )
     }
     console.log(`[CRON] Email sent with ID: ${emailResult.messageId}`)
     return NextResponse.json({
       message: 'Daily summary sent successfully',
       count: submissions.length,
-      messageId: emailResult.messageId
+      messageId: emailResult.messageId,
     })
-
   } catch (error) {
     console.error('[CRON] Cron job error:', error)
     return NextResponse.json(

@@ -3,7 +3,7 @@ export function formatDate(dateString: string): string {
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   })
 }
 
@@ -36,7 +36,10 @@ export function truncateText(text: string, maxLength: number): string {
   return text.substring(0, maxLength).trim() + '...'
 }
 
-export function generateExcerpt(content: string, maxLength: number = 150): string {
+export function generateExcerpt(
+  content: string,
+  maxLength: number = 150
+): string {
   // Remove HTML tags and extract plain text
   const plainText = content.replace(/<[^>]*>/g, '')
   return truncateText(plainText, maxLength)

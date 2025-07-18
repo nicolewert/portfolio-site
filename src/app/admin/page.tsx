@@ -48,13 +48,20 @@ export default function AdminLogin() {
       <div className="min-h-screen bg-[var(--background)] flex items-center justify-center p-4">
         <div className="glass max-w-md w-full p-8 rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-[var(--foreground)] mb-2">Admin Login</h1>
-            <p className="text-[var(--secondary)]">Enter your password to access the admin dashboard</p>
+            <h1 className="text-2xl font-bold text-[var(--foreground)] mb-2">
+              Admin Login
+            </h1>
+            <p className="text-[var(--secondary)]">
+              Enter your password to access the admin dashboard
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-[var(--foreground)] mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-[var(--foreground)] mb-2"
+              >
                 Password
               </label>
               <input

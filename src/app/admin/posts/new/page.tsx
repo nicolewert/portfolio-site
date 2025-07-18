@@ -12,14 +12,8 @@ export default async function NewPost() {
   // Fetch tags and categories for the form
   const [tags, categories] = await Promise.all([
     getAllTags(),
-    getAllCategories()
+    getAllCategories(),
   ])
 
-  return (
-    <AdminPostForm 
-      tags={tags} 
-      categories={categories} 
-      isEditing={false}
-    />
-  )
+  return <AdminPostForm tags={tags} categories={categories} isEditing={false} />
 }

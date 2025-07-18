@@ -1,39 +1,39 @@
 import { supabase, supabaseAdmin } from './supabase'
 import { generateSlug } from './utils'
-import { 
-  BlogPost, 
-  Tag, 
-  Category, 
-  CreateBlogPostData, 
-  UpdateBlogPostData, 
-  BlogPostFilters, 
+import {
+  BlogPost,
+  Tag,
+  Category,
+  CreateBlogPostData,
+  UpdateBlogPostData,
+  BlogPostFilters,
   BlogPostListResponse,
-  BlogStats
+  BlogStats,
 } from '../types/blog'
 
 // Public blog functions (for readers)
-export async function getPublishedPosts(filters: BlogPostFilters = {}): Promise<BlogPostListResponse> {
-  const { 
-    tag, 
-    category, 
-    search, 
-    limit = 10, 
-    offset = 0 
-  } = filters
+export async function getPublishedPosts(
+  filters: BlogPostFilters = {}
+): Promise<BlogPostListResponse> {
+  const { tag, category, search, limit = 10, offset = 0 } = filters
 
   let query = supabase
     .from('blog_posts')
-    .select(`
+    .select(
+      `
       *,
       tags:post_tags(tag:tags(*)),
       categories:post_categories(category:categories(*))
-    `)
+    `
+    )
     .eq('published', true)
     .order('created_at', { ascending: false })
 
   // Apply filters
   if (search) {
-    query = query.or(`title.ilike.%${search}%,content.ilike.%${search}%,excerpt.ilike.%${search}%`)
+    query = query.or(
+      `title.ilike.%${search}%,content.ilike.%${search}%,excerpt.ilike.%${search}%`
+    )
   }
 
   if (tag) {
@@ -51,8 +51,7 @@ export async function getPublishedPosts(filters: BlogPostFilters = {}): Promise<
     .eq('published', true)
 
   // Apply pagination
-  const { data: posts, error } = await query
-    .range(offset, offset + limit - 1)
+  const { data: posts, error } = await query.range(offset, offset + limit - 1)
 
   if (error) {
     console.error('Error fetching blog posts:', error)
@@ -61,15 +60,18 @@ export async function getPublishedPosts(filters: BlogPostFilters = {}): Promise<
       total: 0,
       page: Math.floor(offset / limit) + 1,
       limit,
-      hasMore: false
+      hasMore: false,
     }
   }
 
   // Transform the data to match our interface
-  const transformedPosts: BlogPost[] = posts.map(post => ({
+  const transformedPosts: BlogPost[] = posts.map((post) => ({
     ...post,
     tags: post.tags?.map((pt: { tag: Tag }) => pt.tag).filter(Boolean) || [],
-    categories: post.categories?.map((pc: { category: Category }) => pc.category).filter(Boolean) || []
+    categories:
+      post.categories
+        ?.map((pc: { category: Category }) => pc.category)
+        .filter(Boolean) || [],
   }))
 
   return {
@@ -77,18 +79,20 @@ export async function getPublishedPosts(filters: BlogPostFilters = {}): Promise<
     total: count || 0,
     page: Math.floor(offset / limit) + 1,
     limit,
-    hasMore: (offset + limit) < (count || 0)
+    hasMore: offset + limit < (count || 0),
   }
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   const { data, error } = await supabase
     .from('blog_posts')
-    .select(`
+    .select(
+      `
       *,
       tags:post_tags(tag:tags(*)),
       categories:post_categories(category:categories(*))
-    `)
+    `
+    )
     .eq('slug', slug)
     .eq('published', true)
     .single()
@@ -100,15 +104,15 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   return {
     ...data,
     tags: data.tags?.map((pt: { tag: Tag }) => pt.tag).filter(Boolean) || [],
-    categories: data.categories?.map((pc: { category: Category }) => pc.category).filter(Boolean) || []
+    categories:
+      data.categories
+        ?.map((pc: { category: Category }) => pc.category)
+        .filter(Boolean) || [],
   }
 }
 
 export async function getAllTags(): Promise<Tag[]> {
-  const { data, error } = await supabase
-    .from('tags')
-    .select('*')
-    .order('name')
+  const { data, error } = await supabase.from('tags').select('*').order('name')
 
   if (error) {
     console.error('Error fetching tags:', error)
@@ -136,12 +140,14 @@ export async function getAllCategories(): Promise<Category[]> {
 export async function getUsedTags(): Promise<Tag[]> {
   const { data, error } = await supabase
     .from('tags')
-    .select(`
+    .select(
+      `
       *,
       post_tags!inner(
         post:blog_posts!inner(published)
       )
-    `)
+    `
+    )
     .eq('post_tags.post.published', true)
     .order('name')
 
@@ -151,13 +157,14 @@ export async function getUsedTags(): Promise<Tag[]> {
   }
 
   // Remove duplicates and flatten the structure
-  const uniqueTags = data?.reduce((acc: Tag[], current) => {
-    if (!acc.find(tag => tag.id === current.id)) {
-      const { post_tags, ...tag } = current
-      acc.push(tag as Tag)
-    }
-    return acc
-  }, []) || []
+  const uniqueTags =
+    data?.reduce((acc: Tag[], current) => {
+      if (!acc.find((tag) => tag.id === current.id)) {
+        const { post_tags, ...tag } = current
+        acc.push(tag as Tag)
+      }
+      return acc
+    }, []) || []
 
   return uniqueTags
 }
@@ -166,12 +173,14 @@ export async function getUsedTags(): Promise<Tag[]> {
 export async function getUsedCategories(): Promise<Category[]> {
   const { data, error } = await supabase
     .from('categories')
-    .select(`
+    .select(
+      `
       *,
       post_categories!inner(
         post:blog_posts!inner(published)
       )
-    `)
+    `
+    )
     .eq('post_categories.post.published', true)
     .order('name')
 
@@ -181,27 +190,32 @@ export async function getUsedCategories(): Promise<Category[]> {
   }
 
   // Remove duplicates and flatten the structure
-  const uniqueCategories = data?.reduce((acc: Category[], current) => {
-    if (!acc.find(cat => cat.id === current.id)) {
-      const { post_categories, ...category } = current
-      acc.push(category as Category)
-    }
-    return acc
-  }, []) || []
+  const uniqueCategories =
+    data?.reduce((acc: Category[], current) => {
+      if (!acc.find((cat) => cat.id === current.id)) {
+        const { post_categories, ...category } = current
+        acc.push(category as Category)
+      }
+      return acc
+    }, []) || []
 
   return uniqueCategories
 }
 
 // Get tags with usage count, sorted by most used
-export async function getTagsWithUsage(limit: number = 6): Promise<(Tag & { postCount: number })[]> {
+export async function getTagsWithUsage(
+  limit: number = 6
+): Promise<(Tag & { postCount: number })[]> {
   const { data, error } = await supabase
     .from('tags')
-    .select(`
+    .select(
+      `
       *,
       post_tags!inner(
         post:blog_posts!inner(published)
       )
-    `)
+    `
+    )
     .eq('post_tags.post.published', true)
 
   if (error) {
@@ -210,17 +224,21 @@ export async function getTagsWithUsage(limit: number = 6): Promise<(Tag & { post
   }
 
   // Group by tag and count posts
-  const tagCounts = data?.reduce((acc: Record<string, Tag & { postCount: number }>, current) => {
-    const { post_tags, ...tag } = current
-    const tagId = tag.id
-    
-    if (!acc[tagId]) {
-      acc[tagId] = { ...tag as Tag, postCount: 0 }
-    }
-    acc[tagId].postCount++
-    
-    return acc
-  }, {}) || {}
+  const tagCounts =
+    data?.reduce(
+      (acc: Record<string, Tag & { postCount: number }>, current) => {
+        const { post_tags, ...tag } = current
+        const tagId = tag.id
+
+        if (!acc[tagId]) {
+          acc[tagId] = { ...(tag as Tag), postCount: 0 }
+        }
+        acc[tagId].postCount++
+
+        return acc
+      },
+      {}
+    ) || {}
 
   // Convert to array and sort by usage
   return Object.values(tagCounts)
@@ -229,7 +247,9 @@ export async function getTagsWithUsage(limit: number = 6): Promise<(Tag & { post
 }
 
 // Admin blog functions (for content management)
-export async function createBlogPost(postData: CreateBlogPostData): Promise<BlogPost | null> {
+export async function createBlogPost(
+  postData: CreateBlogPostData
+): Promise<BlogPost | null> {
   const { tag_ids, category_ids, ...blogPostData } = postData
 
   // Create the blog post
@@ -237,7 +257,7 @@ export async function createBlogPost(postData: CreateBlogPostData): Promise<Blog
     .from('blog_posts')
     .insert({
       ...blogPostData,
-      slug: blogPostData.slug || generateSlug(blogPostData.title)
+      slug: blogPostData.slug || generateSlug(blogPostData.title),
     })
     .select()
     .single()
@@ -249,9 +269,9 @@ export async function createBlogPost(postData: CreateBlogPostData): Promise<Blog
 
   // Add tags if provided
   if (tag_ids && tag_ids.length > 0) {
-    const tagInserts = tag_ids.map(tag_id => ({
+    const tagInserts = tag_ids.map((tag_id) => ({
       post_id: post.id,
-      tag_id
+      tag_id,
     }))
 
     const { error: tagError } = await supabaseAdmin
@@ -265,9 +285,9 @@ export async function createBlogPost(postData: CreateBlogPostData): Promise<Blog
 
   // Add categories if provided
   if (category_ids && category_ids.length > 0) {
-    const categoryInserts = category_ids.map(category_id => ({
+    const categoryInserts = category_ids.map((category_id) => ({
       post_id: post.id,
-      category_id
+      category_id,
     }))
 
     const { error: categoryError } = await supabaseAdmin
@@ -282,7 +302,9 @@ export async function createBlogPost(postData: CreateBlogPostData): Promise<Blog
   return post
 }
 
-export async function updateBlogPost(postData: UpdateBlogPostData): Promise<BlogPost | null> {
+export async function updateBlogPost(
+  postData: UpdateBlogPostData
+): Promise<BlogPost | null> {
   const { id, tag_ids, category_ids, ...updateData } = postData
 
   // Update the blog post
@@ -301,16 +323,13 @@ export async function updateBlogPost(postData: UpdateBlogPostData): Promise<Blog
   // Update tags if provided
   if (tag_ids !== undefined) {
     // Remove existing tags
-    await supabaseAdmin
-      .from('post_tags')
-      .delete()
-      .eq('post_id', id)
+    await supabaseAdmin.from('post_tags').delete().eq('post_id', id)
 
     // Add new tags
     if (tag_ids.length > 0) {
-      const tagInserts = tag_ids.map(tag_id => ({
+      const tagInserts = tag_ids.map((tag_id) => ({
         post_id: id,
-        tag_id
+        tag_id,
       }))
 
       const { error: tagError } = await supabaseAdmin
@@ -326,16 +345,13 @@ export async function updateBlogPost(postData: UpdateBlogPostData): Promise<Blog
   // Update categories if provided
   if (category_ids !== undefined) {
     // Remove existing categories
-    await supabaseAdmin
-      .from('post_categories')
-      .delete()
-      .eq('post_id', id)
+    await supabaseAdmin.from('post_categories').delete().eq('post_id', id)
 
     // Add new categories
     if (category_ids.length > 0) {
-      const categoryInserts = category_ids.map(category_id => ({
+      const categoryInserts = category_ids.map((category_id) => ({
         post_id: id,
-        category_id
+        category_id,
       }))
 
       const { error: categoryError } = await supabaseAdmin
@@ -352,10 +368,7 @@ export async function updateBlogPost(postData: UpdateBlogPostData): Promise<Blog
 }
 
 export async function deleteBlogPost(id: string): Promise<boolean> {
-  const { error } = await supabaseAdmin
-    .from('blog_posts')
-    .delete()
-    .eq('id', id)
+  const { error } = await supabaseAdmin.from('blog_posts').delete().eq('id', id)
 
   if (error) {
     console.error('Error deleting blog post:', error)
@@ -365,21 +378,20 @@ export async function deleteBlogPost(id: string): Promise<boolean> {
   return true
 }
 
-export async function getAllPosts(filters: BlogPostFilters = {}): Promise<BlogPostListResponse> {
-  const { 
-    published, 
-    search, 
-    limit = 10, 
-    offset = 0 
-  } = filters
+export async function getAllPosts(
+  filters: BlogPostFilters = {}
+): Promise<BlogPostListResponse> {
+  const { published, search, limit = 10, offset = 0 } = filters
 
   let query = supabaseAdmin
     .from('blog_posts')
-    .select(`
+    .select(
+      `
       *,
       tags:post_tags(tag:tags(*)),
       categories:post_categories(category:categories(*))
-    `)
+    `
+    )
     .order('created_at', { ascending: false })
 
   // Apply filters
@@ -388,7 +400,9 @@ export async function getAllPosts(filters: BlogPostFilters = {}): Promise<BlogPo
   }
 
   if (search) {
-    query = query.or(`title.ilike.%${search}%,content.ilike.%${search}%,excerpt.ilike.%${search}%`)
+    query = query.or(
+      `title.ilike.%${search}%,content.ilike.%${search}%,excerpt.ilike.%${search}%`
+    )
   }
 
   // Get total count for pagination
@@ -397,8 +411,7 @@ export async function getAllPosts(filters: BlogPostFilters = {}): Promise<BlogPo
     .select('*', { count: 'exact', head: true })
 
   // Apply pagination
-  const { data: posts, error } = await query
-    .range(offset, offset + limit - 1)
+  const { data: posts, error } = await query.range(offset, offset + limit - 1)
 
   if (error) {
     console.error('Error fetching all blog posts:', error)
@@ -407,15 +420,18 @@ export async function getAllPosts(filters: BlogPostFilters = {}): Promise<BlogPo
       total: 0,
       page: Math.floor(offset / limit) + 1,
       limit,
-      hasMore: false
+      hasMore: false,
     }
   }
 
   // Transform the data to match our interface
-  const transformedPosts: BlogPost[] = posts.map(post => ({
+  const transformedPosts: BlogPost[] = posts.map((post) => ({
     ...post,
     tags: post.tags?.map((pt: { tag: Tag }) => pt.tag).filter(Boolean) || [],
-    categories: post.categories?.map((pc: { category: Category }) => pc.category).filter(Boolean) || []
+    categories:
+      post.categories
+        ?.map((pc: { category: Category }) => pc.category)
+        .filter(Boolean) || [],
   }))
 
   return {
@@ -423,7 +439,7 @@ export async function getAllPosts(filters: BlogPostFilters = {}): Promise<BlogPo
     total: count || 0,
     page: Math.floor(offset / limit) + 1,
     limit,
-    hasMore: (offset + limit) < (count || 0)
+    hasMore: offset + limit < (count || 0),
   }
 }
 
@@ -434,14 +450,28 @@ export async function getBlogStats(): Promise<BlogStats> {
     { count: draftPosts },
     { count: totalTags },
     { count: totalCategories },
-    { data: recentPosts }
+    { data: recentPosts },
   ] = await Promise.all([
-    supabaseAdmin.from('blog_posts').select('*', { count: 'exact', head: true }),
-    supabaseAdmin.from('blog_posts').select('*', { count: 'exact', head: true }).eq('published', true),
-    supabaseAdmin.from('blog_posts').select('*', { count: 'exact', head: true }).eq('published', false),
+    supabaseAdmin
+      .from('blog_posts')
+      .select('*', { count: 'exact', head: true }),
+    supabaseAdmin
+      .from('blog_posts')
+      .select('*', { count: 'exact', head: true })
+      .eq('published', true),
+    supabaseAdmin
+      .from('blog_posts')
+      .select('*', { count: 'exact', head: true })
+      .eq('published', false),
     supabaseAdmin.from('tags').select('*', { count: 'exact', head: true }),
-    supabaseAdmin.from('categories').select('*', { count: 'exact', head: true }),
-    supabaseAdmin.from('blog_posts').select('*').order('created_at', { ascending: false }).limit(5)
+    supabaseAdmin
+      .from('categories')
+      .select('*', { count: 'exact', head: true }),
+    supabaseAdmin
+      .from('blog_posts')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(5),
   ])
 
   return {
@@ -450,18 +480,21 @@ export async function getBlogStats(): Promise<BlogStats> {
     draftPosts: draftPosts || 0,
     totalTags: totalTags || 0,
     totalCategories: totalCategories || 0,
-    recentPosts: recentPosts || []
+    recentPosts: recentPosts || [],
   }
 }
 
 // Tag and category management
-export async function createTag(name: string, color: string = '#3b5bdb'): Promise<Tag | null> {
+export async function createTag(
+  name: string,
+  color: string = '#3b5bdb'
+): Promise<Tag | null> {
   const { data, error } = await supabaseAdmin
     .from('tags')
     .insert({
       name,
       slug: generateSlug(name),
-      color
+      color,
     })
     .select()
     .single()
@@ -474,14 +507,18 @@ export async function createTag(name: string, color: string = '#3b5bdb'): Promis
   return data
 }
 
-export async function createCategory(name: string, description?: string, color: string = '#b3c7e6'): Promise<Category | null> {
+export async function createCategory(
+  name: string,
+  description?: string,
+  color: string = '#b3c7e6'
+): Promise<Category | null> {
   const { data, error } = await supabaseAdmin
     .from('categories')
     .insert({
       name,
       slug: generateSlug(name),
       description,
-      color
+      color,
     })
     .select()
     .single()
