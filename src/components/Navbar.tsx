@@ -98,7 +98,7 @@ export default function Navbar() {
       </div>
       {isOpen && (
         <div
-          className="fixed top-0 left-0 w-full h-screen h-[100dvh] z-40"
+          className="fixed top-0 left-0 w-full h-[100dvh] z-40"
           style={{
             touchAction: 'none',
             backgroundColor:

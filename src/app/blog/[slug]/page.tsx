@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import Head from 'next/head'
+import Image from 'next/image'
 import Navbar from '../../../components/Navbar'
 import { getPostBySlug, getPublishedPosts } from '../../../lib/blog'
 import { formatDate } from '../../../lib/utils'
@@ -107,9 +108,11 @@ export default async function BlogPost({ params }: BlogPostPageProps) {
             {/* Featured Image */}
             {post.featured_image_url && (
               <div className="mb-8 rounded-xl overflow-hidden">
-                <img
+                <Image
                   src={post.featured_image_url}
                   alt={post.title}
+                  width={800}
+                  height={400}
                   className="w-full h-64 sm:h-96 object-cover"
                 />
               </div>

@@ -82,9 +82,37 @@ export default function FloatingParticles() {
     createParticles()
     animate()
 
+    const debounce = (func: Function, wait: number) => {
+      let timeout: NodeJS.Timeout
+      return function executedFunction(...args: unknown[]) {
+        const later = () => {
+          clearTimeout(timeout)
+          func(...args)
+        }
+        clearTimeout(timeout)
+        timeout = setTimeout(later, wait)
+      }
+    }
+
     const handleResize = () => {
+      const oldWidth = canvas.width
+      const oldHeight = canvas.height
+
       resizeCanvas()
-      createParticles()
+
+      // Only adjust particle count if screen size category changed
+      const newParticleCount = canvas.width < 768 ? 30 : 50
+      const currentParticleCount = particlesRef.current.length
+
+      if (newParticleCount !== currentParticleCount) {
+        createParticles()
+      } else {
+        // Scale existing particles to new canvas dimensions
+        particlesRef.current.forEach((particle) => {
+          particle.x = (particle.x / oldWidth) * canvas.width
+          particle.y = (particle.y / oldHeight) * canvas.height
+        })
+      }
     }
 
     const handleThemeChange = () => {
@@ -108,10 +136,11 @@ export default function FloatingParticles() {
       attributeFilter: ['class'],
     })
 
-    window.addEventListener('resize', handleResize)
+    const debouncedResize = debounce(handleResize, 150)
+    window.addEventListener('resize', debouncedResize)
 
     return () => {
-      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('resize', debouncedResize)
       observer.disconnect()
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current)
