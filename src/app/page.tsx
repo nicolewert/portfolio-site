@@ -2,6 +2,7 @@ import Navbar from '../components/Navbar'
 import ProjectCard from '../components/ProjectCard'
 import ResumeSection from '../components/ResumeSection'
 import ContactForm from '../components/ContactForm'
+import FloatingParticles from '../components/FloatingParticles'
 import Head from 'next/head'
 import { SiLeetcode, SiGithub, SiLinkedin } from 'react-icons/si'
 import projectsData from '../data/projects.json'
@@ -20,8 +21,9 @@ export default function Home() {
       <main className="min-h-screen bg-[var(--background)] w-full">
         <div className="container max-w-7xl xl:max-w-[120rem] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section */}
-          <section className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[var(--background)] via-[var(--background)] to-[var(--background)]/80">
-            <div className="glass w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-16 text-center rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg">
+          <section className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[var(--background)] via-[var(--background)] to-[var(--background)]/80 overflow-hidden">
+            <FloatingParticles />
+            <div className="glass w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-16 text-center rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg relative z-10">
               <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-[var(--foreground)] animate-fade-in">
                 Nicole Wert
                 <span className="text-xl sm:text-2xl lg:text-3xl font-medium block mt-4 text-[var(--secondary)]">
