@@ -44,7 +44,10 @@ export async function POST(request: NextRequest) {
     const validation = validateContactForm(formData)
     if (!validation.isValid) {
       return NextResponse.json(
-        { error: 'Please check your input and try again.' },
+        {
+          error: 'Please check your input and try again.',
+          fieldErrors: validation.errors,
+        },
         { status: 400 }
       )
     }

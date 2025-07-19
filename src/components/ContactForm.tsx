@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useFormValidation } from '@/hooks/useFormValidation'
 
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false)
@@ -12,8 +13,17 @@ export default function ContactForm() {
     company: '', // honeypot field
   })
 
+  const { errors, validateField, validateForm, hasAttemptedSubmit } =
+    useFormValidation()
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Validate form before proceeding
+    const validation = validateForm(formData)
+    if (!validation.isValid) {
+      return // Errors will be displayed by the validation hook
+    }
 
     // Check localStorage throttling
     const lastSubmission = localStorage.getItem('lastContactSubmission')
@@ -42,7 +52,13 @@ export default function ContactForm() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Something went wrong')
+        // If we have field-specific errors from the API, handle them differently
+        if (data.fieldErrors && Array.isArray(data.fieldErrors)) {
+          setError(data.fieldErrors.join(', '))
+        } else {
+          throw new Error(data.error || 'Something went wrong')
+        }
+        return
       }
 
       // Success
@@ -67,6 +83,15 @@ export default function ContactForm() {
       ...prev,
       [name]: value,
     }))
+
+    // Only validate field on change if user has attempted submit AND this field has an existing error
+    if (
+      hasAttemptedSubmit &&
+      name !== 'company' &&
+      errors[name as keyof typeof errors]
+    ) {
+      validateField(name, value)
+    }
   }
 
   return (
@@ -97,9 +122,17 @@ export default function ContactForm() {
               name="company"
               value={formData.company}
               onChange={handleInputChange}
-              style={{ display: 'none' }}
+              style={{
+                position: 'absolute',
+                left: '-9999px',
+                width: '1px',
+                height: '1px',
+                opacity: 0,
+                overflow: 'hidden',
+              }}
               tabIndex={-1}
-              autoComplete="off"
+              autoComplete="new-password"
+              aria-hidden="true"
             />
 
             <div className="space-y-6">
@@ -109,13 +142,18 @@ export default function ContactForm() {
                 </label>
                 <input
                   required
-                  className="w-full p-3 rounded-xl bg-[var(--card)] text-[var(--foreground)] border border-[var(--accent)]/20 transition-all focus:ring-2 focus:ring-[var(--primary)]/50 focus:border-[var(--primary)] outline-none"
+                  className={`w-full p-3 rounded-xl bg-[var(--card)] text-[var(--foreground)] border transition-all focus:ring-2 focus:ring-[var(--primary)]/50 focus:border-[var(--primary)] outline-none ${
+                    errors.name ? 'border-red-400' : 'border-[var(--accent)]/20'
+                  }`}
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
                   disabled={loading}
                 />
+                {errors.name && (
+                  <p className="text-red-400 text-sm mt-1">{errors.name}</p>
+                )}
               </div>
 
               <div>
@@ -124,13 +162,20 @@ export default function ContactForm() {
                 </label>
                 <input
                   required
-                  className="w-full p-3 rounded-xl bg-[var(--card)] text-[var(--foreground)] border border-[var(--accent)]/20 transition-all focus:ring-2 focus:ring-[var(--primary)]/50 focus:border-[var(--primary)] outline-none"
+                  className={`w-full p-3 rounded-xl bg-[var(--card)] text-[var(--foreground)] border transition-all focus:ring-2 focus:ring-[var(--primary)]/50 focus:border-[var(--primary)] outline-none ${
+                    errors.email
+                      ? 'border-red-400'
+                      : 'border-[var(--accent)]/20'
+                  }`}
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
                   disabled={loading}
                 />
+                {errors.email && (
+                  <p className="text-red-400 text-sm mt-1">{errors.email}</p>
+                )}
               </div>
 
               <div>
@@ -139,12 +184,19 @@ export default function ContactForm() {
                 </label>
                 <textarea
                   required
-                  className="w-full p-3 rounded-xl bg-[var(--card)] text-[var(--foreground)] border border-[var(--accent)]/20 transition-all focus:ring-2 focus:ring-[var(--primary)]/50 focus:border-[var(--primary)] outline-none min-h-[150px]"
+                  className={`w-full p-3 rounded-xl bg-[var(--card)] text-[var(--foreground)] border transition-all focus:ring-2 focus:ring-[var(--primary)]/50 focus:border-[var(--primary)] outline-none min-h-[150px] ${
+                    errors.message
+                      ? 'border-red-400'
+                      : 'border-[var(--accent)]/20'
+                  }`}
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
                   disabled={loading}
                 />
+                {errors.message && (
+                  <p className="text-red-400 text-sm mt-1">{errors.message}</p>
+                )}
               </div>
             </div>
 
