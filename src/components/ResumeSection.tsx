@@ -1,4 +1,34 @@
+'use client'
+
+import { useState } from 'react'
+
 export default function ResumeSection() {
+  const [showAllSkills, setShowAllSkills] = useState(false)
+
+  const skills = [
+    'TypeScript',
+    'JavaScript',
+    'Python',
+    'PHP',
+    'React',
+    'Next.js',
+    'Tailwind CSS',
+    'Accessibility (WCAG)',
+    'Responsive Design',
+    'API Design',
+    'REST',
+    'Docker',
+    'Github Actions',
+    'Cloud Deployment',
+    'GenAI Prototyping',
+    'Prompt Engineering',
+    'Design Patterns',
+    'DSA',
+    'System Design',
+  ]
+
+  const visibleSkills = showAllSkills ? skills : skills.slice(0, 8)
+
   return (
     <div className="w-full max-w-4xl mx-auto rounded-2xl overflow-hidden">
       <div className="px-8 py-12 md:p-12">
@@ -10,7 +40,7 @@ export default function ResumeSection() {
             <a
               href="/Nicole-Wert_Resume.pdf"
               download
-              className="group flex items-center justify-center w-12 h-12 rounded-full bg-[var(--accent)]/10 hover:bg-[var(--accent)]/20 transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
+              className="group flex items-center justify-center w-12 h-12 rounded-full hover:bg-[var(--accent)]/20 transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
               aria-label="Download Resume PDF"
             >
               <svg
@@ -62,35 +92,61 @@ export default function ResumeSection() {
             <h3 className="text-xl font-semibold text-[var(--foreground)]">
               Skills
             </h3>
-            <div className="flex flex-wrap gap-2 text-[var(--foreground)]/80">
-              {[
-                'TypeScript',
-                'JavaScript',
-                'Python',
-                'PHP',
-                'React',
-                'Next.js',
-                'Tailwind CSS',
-                'Accessibility (WCAG)',
-                'Responsive Design',
-                'API Design',
-                'REST',
-                'Docker',
-                'Github Actions',
-                'Cloud Deployment',
-                'GenAI Prototyping',
-                'Prompt Engineering',
-                'Design Patterns',
-                'DSA',
-                'System Design',
-              ].map((skill) => (
-                <div
-                  key={skill}
-                  className="px-3 py-1.5 rounded-full bg-[var(--accent)]/10 text-center font-medium whitespace-nowrap shadow-sm"
+            <div className="space-y-4">
+              <div className="flex flex-wrap gap-2 text-[var(--foreground)]/80">
+                {visibleSkills.map((skill) => (
+                  <div
+                    key={skill}
+                    className="px-3 py-1.5 rounded-full bg-[var(--accent)]/10 hover:text-[var(--primary)] hover:bg-[var(--primary)]/20 hover:scale-110 text-center font-medium whitespace-nowrap shadow-sm transition-all duration-300 ease-in-out cursor-pointer"
+                  >
+                    {skill}
+                  </div>
+                ))}
+              </div>
+
+              {/* Toggle button - only show on mobile when there are more skills */}
+              {skills.length > 8 && (
+                <button
+                  onClick={() => setShowAllSkills(!showAllSkills)}
+                  className="md:hidden flex items-center gap-2 text-[var(--primary)] hover:text-[var(--primary)]/80 transition-colors duration-200 text-sm font-medium"
                 >
-                  {skill}
-                </div>
-              ))}
+                  {showAllSkills ? (
+                    <>
+                      Show less
+                      <svg
+                        className="w-4 h-4 transform rotate-180"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </>
+                  ) : (
+                    <>
+                      Show more ({skills.length - 8} more)
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </>
+                  )}
+                </button>
+              )}
             </div>
           </div>
         </div>

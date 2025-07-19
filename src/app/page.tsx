@@ -113,7 +113,7 @@ export default function Home() {
                 ))}
               </div>
               <div className="text-center">
-                <p className="text-xl font-medium text-[var(--foreground)]">
+                <p className="text-xl font-medium text-[var(--foreground)] hover:scale-110 transition-transform duration-300 cursor-pointer">
                   Want to see more?{' '}
                   <a
                     href="https://github.com/nicolewert"
