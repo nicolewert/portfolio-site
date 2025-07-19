@@ -25,8 +25,9 @@ describe('DarkModeToggle', () => {
     const button = screen.getByRole('button', { name: /switch to dark mode/i })
     expect(button).toBeInTheDocument()
 
-    // Check that it shows the correct text for light mode
-    expect(button).toHaveTextContent('☀️ Light')
+    // Check that it shows the moon icon for light mode (to switch to dark)
+    const moonIcon = button.querySelector('svg')
+    expect(moonIcon).toBeInTheDocument()
   })
 
   it('calls toggleTheme when clicked', async () => {
@@ -43,6 +44,10 @@ describe('DarkModeToggle', () => {
     render(<DarkModeToggle mobile={true} />)
 
     const button = screen.getByRole('button', { name: /switch to dark mode/i })
-    expect(button).toHaveClass('px-4', 'py-2', 'w-full', 'justify-center')
+    expect(button).toHaveClass('w-12', 'h-12')
+
+    // Check that the icon is larger in mobile mode
+    const icon = button.querySelector('svg')
+    expect(icon).toHaveClass('w-5', 'h-5')
   })
 })

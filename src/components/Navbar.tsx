@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import DarkModeToggle from './DarkModeToggle'
+import { useTheme } from '../contexts/ThemeContext'
 
 const links = [
   { href: '/#projects', label: 'Projects' },
@@ -12,6 +13,7 @@ const links = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const { theme } = useTheme()
 
   useEffect(() => {
     if (isOpen) {
@@ -31,22 +33,22 @@ export default function Navbar() {
   }
 
   return (
-    <div className="fixed top-0 left-0 w-full z-50 px-4 pt-2">
+    <div className="fixed top-0 left-0 w-full z-50 px-4 pt-1">
       <div className="relative">
-        <nav className="w-full flex items-center justify-between px-6 py-4 border-b border-white/10 backdrop-blur-md rounded-lg glass">
+        <nav className="w-full flex items-center justify-between px-4 py-2 border-b border-white/10 backdrop-blur-md rounded-lg glass">
           <Link
             href="/"
-            className="text-xl font-bold text-shadow-lg text-[var(--foreground)] hover:text-[var(--primary)] transition-colors"
+            className="text-lg font-bold text-shadow-lg text-[var(--foreground)] hover:text-[var(--primary)] transition-colors"
           >
             Nicole Wert
           </Link>
-          <div className="hidden md:flex items-center gap-6 text-base">
-            <ul className="flex gap-6 list-none m-0 p-0">
+          <div className="hidden md:flex items-center gap-4 text-sm">
+            <ul className="flex gap-4 list-none m-0 p-0">
               {links.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="no-underline text-[var(--foreground)] hover:text-[var(--primary)] transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
+                    className="no-underline text-[var(--foreground)] hover:text-[var(--primary)] transition-colors font-medium focus:outline-none"
                   >
                     {link.label}
                   </Link>
@@ -57,7 +59,7 @@ export default function Navbar() {
           </div>
         </nav>
         <button
-          className={`absolute md:hidden text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 z-50 transition-all duration-300 top-1/2 -translate-y-1/2 right-6`}
+          className={`absolute md:hidden text-[var(--foreground)] focus:outline-none z-50 transition-all duration-300 top-1/2 -translate-y-1/2 right-4`}
           onClick={toggleMenu}
           aria-label={isOpen ? 'Close menu' : 'Open menu'}
         >
@@ -76,8 +78,8 @@ export default function Navbar() {
         </button>
       </div>
       {isOpen && (
-        <div className="absolute top-0 left-0 w-full h-screen z-40 px-6 glass-fullscreen flex flex-col items-center justify-center backdrop-blur-md bg-[var(--background)]">
-          <ul className="flex flex-col gap-8 list-none m-0 p-0 animate-fade-out">
+        <div className="absolute top-0 left-0 w-full h-screen z-40 px-6 glass-fullscreen flex flex-col items-center justify-center backdrop-blur-md bg-[var(--background)] dark:bg-black/80">
+          <ul className="flex flex-col gap-8 list-none m-0 p-0 animate-fade-out text-center">
             {links.map((link, index) => (
               <li
                 key={link.href}
@@ -85,7 +87,8 @@ export default function Navbar() {
               >
                 <Link
                   href={link.href}
-                  className="no-underline text-[var(--foreground)] hover:text-[var(--primary)] transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
+                  className="no-underline hover:!text-[var(--primary)] hover:bg-[var(--primary)]/10 transition-all duration-300 font-medium focus:outline-none text-lg px-6 py-3 rounded-lg block"
+                  style={{ color: theme === 'dark' ? 'white' : 'black' }}
                   onClick={() => setIsOpen(false)}
                 >
                   {link.label}
@@ -93,7 +96,9 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-          <div className={`mt-8 animate-slide-up delay-${links.length * 100}`}>
+          <div
+            className={`mt-8 animate-slide-up delay-${links.length * 100} flex justify-center`}
+          >
             <DarkModeToggle mobile />
           </div>
         </div>
