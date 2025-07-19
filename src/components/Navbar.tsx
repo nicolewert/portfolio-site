@@ -17,14 +17,36 @@ export default function Navbar() {
 
   useEffect(() => {
     if (isOpen) {
+      // Store current scroll position
+      const scrollY = window.scrollY
+
+      // Apply enhanced scroll lock
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.width = '100%'
       document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
     } else {
-      document.body.style.overflow = 'unset'
+      // Restore scroll position
+      const scrollY = document.body.style.top
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1)
+      }
     }
 
     // Cleanup function to ensure scroll is restored when component unmounts
     return () => {
-      document.body.style.overflow = 'unset'
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
     }
   }, [isOpen])
 
@@ -78,28 +100,40 @@ export default function Navbar() {
         </button>
       </div>
       {isOpen && (
-        <div className="absolute top-0 left-0 w-full h-screen z-40 px-6 glass-fullscreen flex flex-col items-center justify-center backdrop-blur-md bg-[var(--background)] dark:bg-black/80">
-          <ul className="flex flex-col gap-8 list-none m-0 p-0 animate-fade-out text-center">
-            {links.map((link, index) => (
-              <li
-                key={link.href}
-                className={`animate-slide-up delay-${index * 100}`}
-              >
-                <Link
-                  href={link.href}
-                  className="no-underline hover:!text-[var(--primary)] hover:bg-[var(--primary)]/10 transition-all duration-300 font-medium focus:outline-none text-lg px-6 py-3 rounded-lg block"
-                  style={{ color: theme === 'dark' ? 'white' : 'black' }}
-                  onClick={() => setIsOpen(false)}
+        <div
+          className="fixed top-0 left-0 w-full h-screen h-[100dvh] z-40"
+          style={{
+            touchAction: 'none',
+            backgroundColor:
+              theme === 'dark'
+                ? 'rgba(26, 34, 51, 0.85)'
+                : 'rgba(219, 229, 245, 0.45)',
+          }}
+          onTouchMove={(e) => e.preventDefault()}
+        >
+          <div className="w-full h-full px-6 glass-fullscreen flex flex-col items-center justify-center backdrop-blur-md">
+            <ul className="flex flex-col gap-8 list-none m-0 p-0 animate-fade-out text-center">
+              {links.map((link, index) => (
+                <li
+                  key={link.href}
+                  className={`animate-slide-up delay-${index * 100}`}
                 >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <div
-            className={`mt-8 animate-slide-up delay-${links.length * 100} flex justify-center`}
-          >
-            <DarkModeToggle mobile />
+                  <Link
+                    href={link.href}
+                    className="no-underline hover:!text-[var(--primary)] hover:bg-[var(--primary)]/10 transition-all duration-300 font-medium focus:outline-none text-lg px-6 py-3 rounded-lg block"
+                    style={{ color: theme === 'dark' ? 'white' : 'black' }}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div
+              className={`mt-8 animate-slide-up delay-${links.length * 100} flex justify-center`}
+            >
+              <DarkModeToggle mobile />
+            </div>
           </div>
         </div>
       )}
