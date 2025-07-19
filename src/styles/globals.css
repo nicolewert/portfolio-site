@@ -249,3 +249,37 @@ html.dark .social-icon-outline:hover {
   filter: drop-shadow(0 4px 8px rgba(179, 199, 230, 0.4))
     drop-shadow(0 0 16px rgba(179, 199, 230, 0.3));
 }
+
+/* Shiny text animation */
+@keyframes shine {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+.animate-shiny {
+  background: linear-gradient(
+    110deg,
+    var(--foreground) 45%,
+    rgba(255, 255, 255, 0.8) 50%,
+    var(--foreground) 55%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 10s ease-in-out infinite;
+
+  /* Fallback for browsers that don't support background-clip: text */
+  color: var(--foreground);
+}
+
+/* Enhanced support check */
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .animate-shiny {
+    color: transparent;
+  }
+}
