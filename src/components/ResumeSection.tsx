@@ -1,18 +1,33 @@
 export default function ResumeSection() {
   return (
-    <div className="glass w-full max-w-4xl mx-auto rounded-2xl overflow-hidden">
+    <div className="w-full max-w-4xl mx-auto rounded-2xl overflow-hidden">
       <div className="px-8 py-12 md:p-12">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-[var(--foreground)]">
-            Resume
-          </h2>
-          <a
-            href="/Nicole-Wert_Resume.pdf"
-            download
-            className="icy-button inline-block px-8 py-4 rounded-xl font-medium text-[var(--foreground)] shadow-lg hover:scale-[1.02] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-          >
-            Download Resume (PDF)
-          </a>
+          <div className="flex items-center justify-center gap-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--foreground)]">
+              Resume
+            </h2>
+            <a
+              href="/Nicole-Wert_Resume.pdf"
+              download
+              className="group flex items-center justify-center w-12 h-12 rounded-full bg-[var(--accent)]/10 hover:bg-[var(--accent)]/20 transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
+              aria-label="Download Resume PDF"
+            >
+              <svg
+                className="w-6 h-6 text-[var(--foreground)] group-hover:animate-bounce"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </a>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-[1fr_2fr] gap-12">

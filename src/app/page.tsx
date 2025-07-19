@@ -101,7 +101,7 @@ export default function Home() {
 
           {/* Projects Section */}
           <section id="projects" className="py-24">
-            <div className="glass px-4 sm:px-10 py-20 max-w-7xl xl:max-w-[120rem] mx-auto rounded-3xl">
+            <div className="px-4 sm:px-10 py-20 max-w-7xl xl:max-w-[120rem] mx-auto rounded-3xl">
               <h2 className="text-5xl lg:text-6xl font-bold text-center text-[var(--foreground)] mb-20">
                 Featured Projects
               </h2>
@@ -111,14 +111,30 @@ export default function Home() {
                 ))}
               </div>
               <div className="text-center">
-                <a
-                  href="https://github.com/nicolewert"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="icy-button inline-flex items-center justify-center px-10 py-5 text-xl font-medium rounded-2xl text-[var(--foreground)] shadow-lg hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                >
-                  See My GitHub
-                </a>
+                <p className="text-xl font-medium text-[var(--foreground)]">
+                  Want to see more?{' '}
+                  <a
+                    href="https://github.com/nicolewert"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-2 font-bold text-[var(--foreground)] hover:text-[var(--primary)] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 rounded"
+                  >
+                    GitHub
+                    <svg
+                      className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                      />
+                    </svg>
+                  </a>
+                </p>
               </div>
             </div>
           </section>
