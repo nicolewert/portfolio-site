@@ -90,7 +90,7 @@ export default function ProjectCard(props: ProjectCardProps) {
     >
       {/* Image carousel */}
       <div
-        className={`w-full ${large ? 'h-48 sm:h-96' : 'h-32 sm:h-48'} relative overflow-hidden flex-shrink-0 ${gradientClass} flex items-center justify-center cursor-pointer`}
+        className={`w-full ${large ? 'h-48 sm:h-96' : 'h-32 sm:h-48'} relative flex-shrink-0 cursor-pointer pt-3 px-3`}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -101,14 +101,18 @@ export default function ProjectCard(props: ProjectCardProps) {
         style={{ userSelect: 'none' }}
       >
         {images[currentImage] !== '#' ? (
-          <Image
-            src={images[currentImage]}
-            alt={title}
-            fill
-            className="object-cover transition-all duration-300"
-          />
+          <div className="relative w-full h-full rounded-t-lg overflow-hidden">
+            <Image
+              src={images[currentImage]}
+              alt={title}
+              fill
+              className="object-cover transition-all duration-300"
+            />
+          </div>
         ) : (
-          <div className="text-white text-lg font-medium">{title}</div>
+          <div className="text-white text-lg font-medium flex items-center justify-center w-full h-full">
+            {title}
+          </div>
         )}
         {/* Dots for images */}
         {imageCount > 1 && (
@@ -142,7 +146,7 @@ export default function ProjectCard(props: ProjectCardProps) {
           <div className="sm:flex-grow mb-4 relative">
             <div
               ref={descRef}
-              className="max-h-20 sm:max-h-32 overflow-y-auto custom-scrollbar pr-1 description-scrollable relative"
+              className="max-h-40 sm:max-h-32 overflow-y-auto custom-scrollbar pr-1 description-scrollable relative"
               id={`desc-scroll-${title.replace(/\s+/g, '-')}`}
               onScroll={(e) => {
                 const el = e.currentTarget
