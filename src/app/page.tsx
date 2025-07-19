@@ -2,8 +2,9 @@ import Navbar from '../components/Navbar'
 import ProjectCard from '../components/ProjectCard'
 import ResumeSection from '../components/ResumeSection'
 import ContactForm from '../components/ContactForm'
+import FloatingParticles from '../components/FloatingParticles'
 import Head from 'next/head'
-import { SiLeetcode } from 'react-icons/si'
+import { SiLeetcode, SiGithub, SiLinkedin } from 'react-icons/si'
 import projectsData from '../data/projects.json'
 import Image from 'next/image'
 
@@ -20,8 +21,9 @@ export default function Home() {
       <main className="min-h-screen bg-[var(--background)] w-full">
         <div className="container max-w-7xl xl:max-w-[120rem] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section */}
-          <section className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[var(--background)] via-[var(--background)] to-[var(--background)]/80">
-            <div className="glass w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-16 text-center rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg">
+          <section className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[var(--background)] via-[var(--background)] to-[var(--background)]/80 overflow-hidden">
+            <FloatingParticles />
+            <div className="glass w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-16 text-center rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg relative z-10">
               <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-[var(--foreground)] animate-fade-in">
                 Nicole Wert
                 <span className="text-xl sm:text-2xl lg:text-3xl font-medium block mt-4 text-[var(--secondary)]">
@@ -51,43 +53,28 @@ export default function Home() {
                   href="https://www.linkedin.com/in/nicole-wert-205981187/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[var(--foreground)] hover:text-[var(--primary)] transition-colors duration-300"
+                  className="group"
+                  aria-label="LinkedIn Profile"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    stroke="currentColor"
-                    strokeWidth="0.5"
-                    viewBox="0 0 24 24"
-                    className="w-7 h-7 hover:scale-110 transition-transform duration-300"
-                  >
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm13.5 11.268h-3v-5.604c0-1.337-.026-3.064-1.867-3.064-1.868 0-2.156 1.459-2.156 2.967v5.701h-3v-10h2.888v1.367h.041c.403-.764 1.388-1.567 2.857-1.567 3.053 0 3.617 2.01 3.617 4.623v5.577z" />
-                  </svg>
+                  <SiLinkedin className="w-7 h-7 social-icon" />
                 </a>
                 <a
                   href="https://github.com/nicolewert"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[var(--foreground)] hover:text-[var(--primary)] transition-colors duration-300"
+                  className="group"
+                  aria-label="GitHub Profile"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    stroke="currentColor"
-                    strokeWidth="0.5"
-                    viewBox="0 0 24 24"
-                    className="w-7 h-7 hover:scale-110 transition-transform duration-300"
-                  >
-                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.11.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.083-.729.083-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.468-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23a11.52 11.52 0 013.003-.404c1.018.005 2.042.138 3.003.404 2.292-1.552 3.3-1.23 3.3-1.23.653 1.653.242 2.873.118 3.176.77.84 1.236 1.911 1.236 3.221 0 4.61-2.803 5.625-5.475 5.921.43.372.823 1.102.823 2.222v3.293c0 .322.218.694.825.576C20.565 22.092 24 17.594 24 12.297 24 5.373 18.63.297 12 .297z" />
-                  </svg>
+                  <SiGithub className="w-7 h-7 social-icon" />
                 </a>
                 <a
                   href="https://leetcode.com/u/nicalexxandra/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[var(--foreground)] hover:text-[var(--primary)] transition-colors duration-300"
+                  className="group"
+                  aria-label="LeetCode Profile"
                 >
-                  <SiLeetcode className="w-6 h-6 sm:w-7 sm:h-7 text-[var(--foreground)] hover:scale-110 transition-transform duration-300" />
+                  <SiLeetcode className="w-7 h-7 social-icon" />
                 </a>
               </div>
             </div>
@@ -115,8 +102,8 @@ export default function Home() {
           </section>
 
           {/* Projects Section */}
-          <section id="projects" className="py-24">
-            <div className="glass px-4 sm:px-10 py-20 max-w-7xl xl:max-w-[120rem] mx-auto rounded-3xl">
+          <section id="projects" className="py-12 sm:py-24">
+            <div className="px-4 sm:px-10 py-10 sm:py-20 max-w-7xl xl:max-w-[120rem] mx-auto rounded-3xl">
               <h2 className="text-5xl lg:text-6xl font-bold text-center text-[var(--foreground)] mb-20">
                 Featured Projects
               </h2>
@@ -126,25 +113,41 @@ export default function Home() {
                 ))}
               </div>
               <div className="text-center">
-                <a
-                  href="https://github.com/nicolewert"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="icy-button inline-flex items-center justify-center px-10 py-5 text-xl font-medium rounded-2xl text-[var(--foreground)] shadow-lg hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                >
-                  See My GitHub
-                </a>
+                <p className="text-xl font-medium text-[var(--foreground)] hover:scale-110 transition-transform duration-300 cursor-pointer">
+                  Want to see more?{' '}
+                  <a
+                    href="https://github.com/nicolewert"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-2 font-bold text-[var(--foreground)] hover:text-[var(--primary)] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 rounded"
+                  >
+                    GitHub
+                    <svg
+                      className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                      />
+                    </svg>
+                  </a>
+                </p>
               </div>
             </div>
           </section>
 
           {/* Resume Section */}
-          <section id="resume" className="py-20">
+          <section id="resume" className="py-8 sm:py-16">
             <ResumeSection />
           </section>
 
           {/* Contact Section */}
-          <section id="contact" className="py-20">
+          <section id="contact" className="py-10 sm:py-20">
             <ContactForm />
           </section>
         </div>

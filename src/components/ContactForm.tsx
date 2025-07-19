@@ -73,7 +73,7 @@ export default function ContactForm() {
     <div className="glass w-full max-w-2xl mx-auto rounded-2xl overflow-hidden">
       <div className="px-8 py-12 md:p-12">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-[var(--foreground)]">
+          <h2 className="text-3xl md:text-4xl font-bold animate-shiny">
             Get In Touch
           </h2>
         </div>

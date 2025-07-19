@@ -6,6 +6,7 @@
   --card: #f7faff;
   --accent: #b3c7e6;
   --primary: #3b5bdb;
+  --secondary: #6b7893;
   --button-glass: rgba(255, 255, 255, 0.8);
   --button-border: rgba(255, 255, 255, 0.7);
   --button-highlight: rgba(255, 255, 255, 0.9);
@@ -17,6 +18,7 @@ html.dark {
   --card: #232b3a;
   --accent: #3b5bdb;
   --primary: #b3c7e6;
+  --secondary: #94a3b8;
   --button-glass: rgba(59, 91, 219, 0.8);
   --button-border: rgba(179, 199, 230, 0.3);
   --button-highlight: rgba(179, 199, 230, 0.1);
@@ -46,31 +48,43 @@ body {
 
 .glass {
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 12px 24px rgba(0, 0, 0, 0.06),
+    0 24px 48px rgba(0, 0, 0, 0.04);
 }
 
 .glass-fullscreen {
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 12px 24px rgba(0, 0, 0, 0.06),
+    0 24px 48px rgba(0, 0, 0, 0.04);
 }
 
 html.dark .glass {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    0 12px 32px rgba(0, 0, 0, 0.25),
+    0 24px 64px rgba(0, 0, 0, 0.2);
 }
 
 html.dark .glass-fullscreen {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    0 12px 32px rgba(0, 0, 0, 0.25),
+    0 24px 64px rgba(0, 0, 0, 0.2);
 }
 
 /* Micro-animations */
@@ -130,12 +144,13 @@ html.dark .glass-fullscreen {
 
 .icy-button {
   background: var(--button-glass);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--button-border);
   box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 4px 16px rgba(0, 0, 0, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.04),
     inset 0 1px 0 var(--button-highlight);
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.2s ease;
@@ -145,8 +160,9 @@ html.dark .glass-fullscreen {
   background: var(--button-glass);
   transform: translateY(-1px);
   box-shadow:
-    0 6px 8px -1px rgba(0, 0, 0, 0.12),
-    0 4px 6px -1px rgba(0, 0, 0, 0.07),
+    0 4px 12px rgba(0, 0, 0, 0.12),
+    0 8px 24px rgba(0, 0, 0, 0.08),
+    0 16px 32px rgba(0, 0, 0, 0.06),
     inset 0 1px 0 var(--button-highlight);
 }
 
@@ -188,4 +204,82 @@ html.dark .glass-fullscreen {
     rgba(0, 0, 0, 0) 0%,
     rgba(24, 24, 27, 0.28) 100%
   );
+}
+
+/* Enhanced Social Icons - Filled React Icons */
+.social-icon {
+  color: var(--foreground);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.8;
+}
+
+.social-icon:hover {
+  color: var(--primary);
+  opacity: 1;
+  filter: drop-shadow(0 4px 8px rgba(59, 91, 219, 0.3))
+    drop-shadow(0 0 12px rgba(59, 91, 219, 0.2));
+  transform: translateY(-2px) scale(1.1);
+}
+
+html.dark .social-icon:hover {
+  filter: drop-shadow(0 4px 8px rgba(179, 199, 230, 0.4))
+    drop-shadow(0 0 16px rgba(179, 199, 230, 0.3));
+}
+
+.social-icon-outline {
+  fill: none;
+  stroke: var(--foreground);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.social-icon-outline:hover {
+  stroke: var(--primary);
+  stroke-width: 2;
+  filter: drop-shadow(0 4px 8px rgba(59, 91, 219, 0.3))
+    drop-shadow(0 0 12px rgba(59, 91, 219, 0.2));
+  transform: translateY(-2px) scale(1.1);
+}
+
+html.dark .social-icon-outline:hover {
+  filter: drop-shadow(0 4px 8px rgba(179, 199, 230, 0.4))
+    drop-shadow(0 0 16px rgba(179, 199, 230, 0.3));
+}
+
+/* Shiny text animation */
+@keyframes shine {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+.animate-shiny {
+  background: linear-gradient(
+    110deg,
+    var(--foreground) 45%,
+    rgba(255, 255, 255, 0.8) 50%,
+    var(--foreground) 55%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 10s ease-in-out infinite;
+
+  /* Fallback for browsers that don't support background-clip: text */
+  color: var(--foreground);
+}
+
+/* Enhanced support check */
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .animate-shiny {
+    color: transparent;
+  }
 }
