@@ -13,40 +13,37 @@ const links = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [scrollPosition, setScrollPosition] = useState(0)
   const { theme } = useTheme()
 
   useEffect(() => {
-    if (isOpen) {
-      // Store current scroll position
-      const scrollY = window.scrollY
+    // SSR safety check
+    if (typeof window === 'undefined') return
 
-      // Apply enhanced scroll lock
-      document.body.style.position = 'fixed'
-      document.body.style.top = `-${scrollY}px`
-      document.body.style.width = '100%'
+    if (isOpen) {
+      // Store current scroll position in state
+      setScrollPosition(window.scrollY)
+
+      // Apply layered scroll lock - prevent scrolling without moving content
       document.body.style.overflow = 'hidden'
       document.documentElement.style.overflow = 'hidden'
     } else {
-      // Restore scroll position
-      const scrollY = document.body.style.top
-      document.body.style.position = ''
-      document.body.style.top = ''
-      document.body.style.width = ''
+      // Restore scroll and remove lock
       document.body.style.overflow = ''
       document.documentElement.style.overflow = ''
 
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1)
+      // Use stored scroll position for reliable restoration
+      if (scrollPosition > 0) {
+        window.scrollTo({ top: scrollPosition, behavior: 'instant' })
       }
     }
 
     // Cleanup function to ensure scroll is restored when component unmounts
     return () => {
-      document.body.style.position = ''
-      document.body.style.top = ''
-      document.body.style.width = ''
-      document.body.style.overflow = ''
-      document.documentElement.style.overflow = ''
+      if (typeof window !== 'undefined') {
+        document.body.style.overflow = ''
+        document.documentElement.style.overflow = ''
+      }
     }
   }, [isOpen])
 
@@ -110,6 +107,8 @@ export default function Navbar() {
                 : 'rgba(219, 229, 245, 0.45)',
           }}
           onTouchMove={(e) => e.preventDefault()}
+          onTouchStart={(e) => e.preventDefault()}
+          onWheel={(e) => e.preventDefault()}
         >
           <div className="w-full h-full px-6 glass-fullscreen flex flex-col items-center justify-center backdrop-blur-md">
             <ul className="flex flex-col gap-8 list-none m-0 p-0 animate-fade-out text-center">

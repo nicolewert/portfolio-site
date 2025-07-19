@@ -70,6 +70,9 @@ body {
   touch-action: none;
   overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
+  /* Ensure overlay captures all interactions */
+  pointer-events: auto;
+  user-select: none;
 }
 
 html.dark .glass {
