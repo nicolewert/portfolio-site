@@ -27,7 +27,9 @@ export default function ResumeSection() {
     'System Design',
   ]
 
-  const visibleSkills = showAllSkills ? skills : skills.slice(0, 8)
+  // Show 8 on mobile, 20 on desktop, all when expanded
+  const mobileVisibleSkills = showAllSkills ? skills : skills.slice(0, 8)
+  const desktopVisibleSkills = showAllSkills ? skills : skills.slice(0, 20)
 
   return (
     <div className="w-full max-w-4xl mx-auto rounded-2xl overflow-hidden">
@@ -93,8 +95,9 @@ export default function ResumeSection() {
               Skills
             </h3>
             <div className="space-y-4">
-              <div className="flex flex-wrap gap-2 text-[var(--foreground)]/80">
-                {visibleSkills.map((skill) => (
+              {/* Mobile skills display */}
+              <div className="flex flex-wrap gap-2 text-[var(--foreground)]/80 md:hidden">
+                {mobileVisibleSkills.map((skill) => (
                   <div
                     key={skill}
                     className="px-3 py-1.5 rounded-full bg-[var(--accent)]/10 hover:text-[var(--primary)] hover:bg-[var(--primary)]/20 hover:scale-110 text-center font-medium whitespace-nowrap shadow-sm transition-all duration-300 ease-in-out cursor-pointer"
@@ -104,49 +107,107 @@ export default function ResumeSection() {
                 ))}
               </div>
 
-              {/* Toggle button - only show on mobile when there are more skills */}
-              {skills.length > 8 && (
-                <button
-                  onClick={() => setShowAllSkills(!showAllSkills)}
-                  className="md:hidden flex items-center gap-2 text-[var(--primary)] hover:text-[var(--primary)]/80 transition-colors duration-200 text-sm font-medium"
-                >
-                  {showAllSkills ? (
-                    <>
-                      Show less
-                      <svg
-                        className="w-4 h-4 transform rotate-180"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </>
-                  ) : (
-                    <>
-                      Show more ({skills.length - 8} more)
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </>
-                  )}
-                </button>
-              )}
+              {/* Desktop skills display */}
+              <div className="hidden md:flex flex-wrap gap-2 text-[var(--foreground)]/80">
+                {desktopVisibleSkills.map((skill) => (
+                  <div
+                    key={skill}
+                    className="px-3 py-1.5 rounded-full bg-[var(--accent)]/10 hover:text-[var(--primary)] hover:bg-[var(--primary)]/20 hover:scale-110 text-center font-medium whitespace-nowrap shadow-sm transition-all duration-300 ease-in-out cursor-pointer"
+                  >
+                    {skill}
+                  </div>
+                ))}
+              </div>
+
+              {/* Toggle button - show on mobile when >8 skills, on desktop when >20 skills */}
+              <div className="block md:hidden">
+                {skills.length > 8 && (
+                  <button
+                    onClick={() => setShowAllSkills(!showAllSkills)}
+                    className="flex items-center gap-2 text-[var(--primary)] hover:text-[var(--primary)]/80 transition-colors duration-200 text-sm font-medium"
+                  >
+                    {showAllSkills ? (
+                      <>
+                        Show less
+                        <svg
+                          className="w-4 h-4 transform rotate-180"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </>
+                    ) : (
+                      <>
+                        Show more ({skills.length - 8} more)
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
+              <div className="hidden md:block">
+                {skills.length > 20 && (
+                  <button
+                    onClick={() => setShowAllSkills(!showAllSkills)}
+                    className="flex items-center gap-2 text-[var(--primary)] hover:text-[var(--primary)]/80 transition-colors duration-200 text-sm font-medium"
+                  >
+                    {showAllSkills ? (
+                      <>
+                        Show less
+                        <svg
+                          className="w-4 h-4 transform rotate-180"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </>
+                    ) : (
+                      <>
+                        Show more ({skills.length - 20} more)
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -102,8 +102,8 @@ export default function Home() {
           </section>
 
           {/* Projects Section */}
-          <section id="projects" className="py-24">
-            <div className="px-4 sm:px-10 py-20 max-w-7xl xl:max-w-[120rem] mx-auto rounded-3xl">
+          <section id="projects" className="py-12 sm:py-24">
+            <div className="px-4 sm:px-10 py-10 sm:py-20 max-w-7xl xl:max-w-[120rem] mx-auto rounded-3xl">
               <h2 className="text-5xl lg:text-6xl font-bold text-center text-[var(--foreground)] mb-20">
                 Featured Projects
               </h2>
@@ -142,12 +142,12 @@ export default function Home() {
           </section>
 
           {/* Resume Section */}
-          <section id="resume" className="py-20">
+          <section id="resume" className="py-8 sm:py-16">
             <ResumeSection />
           </section>
 
           {/* Contact Section */}
-          <section id="contact" className="py-20">
+          <section id="contact" className="py-10 sm:py-20">
             <ContactForm />
           </section>
         </div>
