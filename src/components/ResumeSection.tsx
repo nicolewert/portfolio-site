@@ -35,18 +35,52 @@ export default function ResumeSection() {
     <div className="w-full max-w-4xl mx-auto rounded-2xl overflow-hidden">
       <div className="px-8 py-12 md:p-12">
         <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-[var(--foreground)]">
+          {/* Mobile layout - stacked */}
+          <div className="flex flex-col items-center gap-4 md:hidden">
+            <h2 className="text-3xl font-bold text-[var(--foreground)]">
               Resume
             </h2>
             <a
               href="/Nicole-Wert_Resume.pdf"
               download
-              className="group flex items-center justify-center w-12 h-12 rounded-full hover:bg-[var(--accent)]/20 transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
+              className="group flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 shadow-lg"
               aria-label="Download Resume PDF"
             >
+              <span className="text-[var(--foreground)] font-medium">
+                Download
+              </span>
               <svg
-                className="w-6 h-6 text-[var(--foreground)] group-hover:animate-bounce"
+                className="w-5 h-5 text-[var(--foreground)] group-hover:animate-bounce"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </a>
+          </div>
+
+          {/* Desktop layout - side by side */}
+          <div className="hidden md:flex items-center justify-center gap-4">
+            <h2 className="text-4xl font-bold text-[var(--foreground)]">
+              Resume
+            </h2>
+            <a
+              href="/Nicole-Wert_Resume.pdf"
+              download
+              className="group flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 shadow-lg"
+              aria-label="Download Resume PDF"
+            >
+              <span className="text-[var(--foreground)] font-medium">
+                Download
+              </span>
+              <svg
+                className="w-5 h-5 text-[var(--foreground)] group-hover:animate-bounce"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth={2}

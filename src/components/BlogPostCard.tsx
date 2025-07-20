@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { BlogPost } from '@/types/blog'
 import { formatDate } from '@/lib/utils'
 
@@ -21,9 +22,11 @@ export default function BlogPostCard({
         {/* Featured Image */}
         {post.featured_image_url && (
           <div className="mb-4 rounded-xl overflow-hidden">
-            <img
+            <Image
               src={post.featured_image_url}
               alt={post.title}
+              width={400}
+              height={200}
               className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
             />
           </div>
