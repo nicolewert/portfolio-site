@@ -19,88 +19,85 @@ export default function Home() {
       </Head>
       <Navbar />
       <main className="min-h-screen bg-[var(--background)] w-full">
-        <div className="container max-w-7xl xl:max-w-[120rem] mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Hero Section */}
-          <section className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[var(--background)] via-[var(--background)] to-[var(--background)]/80 overflow-hidden">
-            <FloatingParticles />
-            <div className="glass w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-16 text-center rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg relative z-10">
-              <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-[var(--foreground)] animate-fade-in">
-                Nicole Wert
-                <span className="text-xl sm:text-2xl lg:text-3xl font-medium block mt-4 text-[var(--secondary)]">
-                  Software Engineer · AI Enthusiast · Problem Solver
-                </span>
-              </h1>
-              <Image
-                src="/profile_picture.png"
-                alt="Nicole Wert"
-                width={128}
-                height={128}
-                className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mt-4 sm:mt-6 rounded-full border-2 border-[var(--foreground)]/10 shadow-xl dark:shadow-[var(--foreground)]/5 hover:scale-105 transition-transform duration-300 ease-in-out"
-                priority
-              />
-              <p className="mt-4 sm:mt-8 text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-2xl mx-auto">
-                <span className="text-[var(--foreground)] font-bold">
-                  Welcome
-                </span>
-                <span className="text-[var(--secondary)]">
-                  {' '}
-                  to my portfolio.
-                </span>
-              </p>
-              {/* Social Links */}
-              <div className="mt-4 sm:mt-8 flex justify-center gap-4 sm:gap-6">
-                <a
-                  href="https://www.linkedin.com/in/nicole-wert-205981187/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group"
-                  aria-label="LinkedIn Profile"
-                >
-                  <SiLinkedin className="w-7 h-7 social-icon" />
-                </a>
-                <a
-                  href="https://github.com/nicolewert"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group"
-                  aria-label="GitHub Profile"
-                >
-                  <SiGithub className="w-7 h-7 social-icon" />
-                </a>
-                <a
-                  href="https://leetcode.com/u/nicalexxandra/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group"
-                  aria-label="LeetCode Profile"
-                >
-                  <SiLeetcode className="w-7 h-7 social-icon" />
-                </a>
-              </div>
-            </div>
-            {/* Scroll Indicator */}
-            <a
-              href="#projects"
-              className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce cursor-pointer hover:scale-110 transition-transform duration-300 focus:outline-none"
-              aria-label="Scroll to projects section"
-            >
-              <span className="text-[var(--secondary)]/60 dark:text-[var(--secondary)]/50 text-[10px] sm:text-sm mb-1 sm:mb-2 font-medium">
-                Scroll
+        {/* Hero Section */}
+        <section className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[var(--background)] via-[var(--background)] to-[var(--background)]/80 overflow-hidden px-4 sm:px-6 lg:px-8">
+          <FloatingParticles />
+          <div className="glass w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-16 text-center rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg relative z-10">
+            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-[var(--foreground)] animate-fade-in">
+              Nicole Wert
+              <span className="text-xl sm:text-2xl lg:text-3xl font-medium block mt-4 text-[var(--secondary)]">
+                Software Engineer · AI Enthusiast · Problem Solver
               </span>
-              <svg
-                className="w-4 h-4 sm:w-6 sm:h-6 text-[var(--secondary)]/60 dark:text-[var(--secondary)]/50"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+            </h1>
+            <Image
+              src="/profile_picture.png"
+              alt="Nicole Wert"
+              width={128}
+              height={128}
+              className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mt-4 sm:mt-6 rounded-full border-2 border-[var(--foreground)]/10 shadow-xl dark:shadow-[var(--foreground)]/5 hover:scale-105 transition-transform duration-300 ease-in-out"
+              priority
+            />
+            <p className="mt-4 sm:mt-8 text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-2xl mx-auto">
+              <span className="text-[var(--foreground)] font-bold">
+                Welcome
+              </span>
+              <span className="text-[var(--secondary)]"> to my portfolio.</span>
+            </p>
+            {/* Social Links */}
+            <div className="mt-4 sm:mt-8 flex justify-center gap-4 sm:gap-6">
+              <a
+                href="https://www.linkedin.com/in/nicole-wert-205981187/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group"
+                aria-label="LinkedIn Profile"
               >
-                <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-              </svg>
-            </a>
-          </section>
+                <SiLinkedin className="w-7 h-7 social-icon" />
+              </a>
+              <a
+                href="https://github.com/nicolewert"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group"
+                aria-label="GitHub Profile"
+              >
+                <SiGithub className="w-7 h-7 social-icon" />
+              </a>
+              <a
+                href="https://leetcode.com/u/nicalexxandra/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group"
+                aria-label="LeetCode Profile"
+              >
+                <SiLeetcode className="w-7 h-7 social-icon" />
+              </a>
+            </div>
+          </div>
+          {/* Scroll Indicator */}
+          <a
+            href="#projects"
+            className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce cursor-pointer hover:scale-110 transition-transform duration-300 focus:outline-none"
+            aria-label="Scroll to projects section"
+          >
+            <span className="text-[var(--secondary)]/60 dark:text-[var(--secondary)]/50 text-[10px] sm:text-sm mb-1 sm:mb-2 font-medium">
+              Scroll
+            </span>
+            <svg
+              className="w-4 h-4 sm:w-6 sm:h-6 text-[var(--secondary)]/60 dark:text-[var(--secondary)]/50"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+          </a>
+        </section>
 
+        <div className="container max-w-7xl xl:max-w-[120rem] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Projects Section */}
           <section id="projects" className="py-12 sm:py-24">
             <div className="px-4 sm:px-10 py-10 sm:py-20 max-w-7xl xl:max-w-[120rem] mx-auto rounded-3xl">
