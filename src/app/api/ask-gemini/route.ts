@@ -9,12 +9,36 @@ interface KeyProject {
   technologies: string[]
 }
 
+interface RateLimit {
+  count: number
+  resetTime: Date
+}
+
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 })
 
+const rateLimitMap = new Map<string, RateLimit>()
+const DAILY_LIMIT = 5
+
 export async function POST(req: NextRequest) {
   const { message } = await req.json()
+
+  const clientIP =
+    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    req.headers.get('x-real-ip') ||
+    'unknown'
+
+  const rateLimitCheck = checkRateLimit(clientIP)
+  if (!rateLimitCheck.allowed) {
+    return NextResponse.json(
+      {
+        text: "You've reached the daily question limit for this AI assistant. For more detailed conversations about Nicole's work, please [contact me directly](/portfolio#contact)!",
+        rateLimited: true,
+      },
+      { status: 429 }
+    )
+  }
 
   const prompt = `${getContext()}\n\nUser: ${message}`
 
@@ -30,6 +54,25 @@ export async function POST(req: NextRequest) {
     result.candidates?.[0]?.content?.parts?.[0]?.text ||
     "Sorry, I couldn't generate a response."
   return NextResponse.json({ text })
+}
+
+function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
+  const now = new Date()
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+  const existing = rateLimitMap.get(ip)
+
+  if (!existing || existing.resetTime < todayStart) {
+    rateLimitMap.set(ip, { count: 1, resetTime: todayStart })
+    return { allowed: true, remaining: DAILY_LIMIT - 1 }
+  }
+
+  if (existing.count >= DAILY_LIMIT) {
+    return { allowed: false, remaining: 0 }
+  }
+
+  existing.count++
+  return { allowed: true, remaining: DAILY_LIMIT - existing.count }
 }
 
 const getContext = () => {
