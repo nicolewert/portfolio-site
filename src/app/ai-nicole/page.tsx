@@ -5,6 +5,91 @@ import Image from 'next/image'
 import { useTheme } from '../../contexts/ThemeContext'
 import DarkModeToggle from '../../components/DarkModeToggle'
 
+const FormattedMessage = ({
+  content,
+  theme,
+}: {
+  content: string
+  theme: string
+}) => {
+  const formatText = (text: string) => {
+    // Split by double line breaks to create paragraphs
+    const paragraphs = text.split(/\n\s*\n/)
+
+    return paragraphs.map((paragraph, pIndex) => {
+      // Check if it's a bullet point list
+      if (
+        paragraph.includes('•') ||
+        paragraph.includes('-') ||
+        /^\d+\./.test(paragraph)
+      ) {
+        const lines = paragraph.split('\n').filter((line) => line.trim())
+        return (
+          <div key={pIndex} className="mb-3">
+            {lines.map((line, lIndex) => {
+              const trimmed = line.trim()
+              if (
+                trimmed.startsWith('•') ||
+                trimmed.startsWith('-') ||
+                /^\d+\./.test(trimmed)
+              ) {
+                return (
+                  <div key={lIndex} className="flex items-start gap-2 mb-1">
+                    <span
+                      className={`text-xs mt-1 ${theme === 'dark' ? 'text-cyan-400' : 'text-cyan-600'}`}
+                    >
+                      {trimmed.startsWith('•')
+                        ? '•'
+                        : trimmed.startsWith('-')
+                          ? '•'
+                          : '•'}
+                    </span>
+                    <span className="flex-1">
+                      {trimmed.replace(/^[•\-]|\d+\.\s*/, '').trim()}
+                    </span>
+                  </div>
+                )
+              }
+              return (
+                <div key={lIndex} className="mb-1">
+                  {trimmed}
+                </div>
+              )
+            })}
+          </div>
+        )
+      }
+
+      // Regular paragraph - split long ones
+      const sentences = paragraph.split(/(?<=[.!?])\s+/)
+      if (sentences.length > 2) {
+        // Break into smaller chunks
+        const chunks = []
+        for (let i = 0; i < sentences.length; i += 2) {
+          chunks.push(sentences.slice(i, i + 2).join(' '))
+        }
+        return (
+          <div key={pIndex} className="mb-3">
+            {chunks.map((chunk, cIndex) => (
+              <div key={cIndex} className="mb-2">
+                {chunk}
+              </div>
+            ))}
+          </div>
+        )
+      }
+
+      return (
+        <div key={pIndex} className="mb-3">
+          {paragraph}
+        </div>
+      )
+    })
+  }
+
+  return <div>{formatText(content)}</div>
+}
+
 export default function AINicole() {
   const { theme } = useTheme()
   const [message, setMessage] = useState('')
@@ -292,7 +377,11 @@ export default function AINicole() {
                             : 'bg-gradient-to-r from-white/60 to-purple-50/50 border-purple-300/40 text-slate-700'
                       }`}
                     >
-                      {msg.content}
+                      {msg.role === 'assistant' ? (
+                        <FormattedMessage content={msg.content} theme={theme} />
+                      ) : (
+                        msg.content
+                      )}
                     </div>
                   </div>
                 ))}
