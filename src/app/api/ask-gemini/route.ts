@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-function checkRateLimit(ip) {
+function checkRateLimit(ip: string) {
   const now = new Date()
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
@@ -101,7 +101,7 @@ function checkRateLimit(ip) {
   return { allowed: true, remaining: DAILY_LIMIT - existing.count }
 }
 
-function validateInput(message) {
+function validateInput(message: string | unknown[]) {
   // Check if message exists and is a string
   if (!message || typeof message !== 'string') {
     return 'Please provide a valid message.'
@@ -155,7 +155,7 @@ const getContext = () => {
         Key Projects:
         ${ai_summary.key_projects
           .map(
-            (project) =>
+            (project: KeyProject) =>
               `- ${project.name}: ${project.summary} (Technologies: ${project.technologies.join(', ')})`
           )
           .join('\n        ')}
