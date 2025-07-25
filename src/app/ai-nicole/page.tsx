@@ -216,13 +216,13 @@ export default function AINicole() {
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row h-screen">
+      <div className="flex flex-col max-[1180px]:landscape:flex-row lg:flex-row h-screen">
         {/* Left side - Holographic Profile */}
-        <div className="w-full lg:w-1/3 flex flex-col items-center justify-center p-2 sm:p-4 lg:p-8 min-h-[25vh] sm:min-h-[30vh] md:min-h-[35vh] lg:min-h-0">
+        <div className="w-full max-[1180px]:landscape:w-1/3 lg:w-1/3 flex flex-col items-center justify-center p-2 max-[1180px]:landscape:p-2 sm:p-4 lg:p-8 min-h-[25vh] max-[1180px]:landscape:min-h-0 sm:min-h-[30vh] md:min-h-[35vh] lg:min-h-0">
           <div className="holographic-frame relative">
             {/* Glass frame with prismatic glow effect */}
             <div
-              className={`relative w-24 h-24 xs:w-32 xs:h-32 sm:w-56 sm:h-56 lg:w-64 lg:h-64 rounded-3xl backdrop-blur-xl shadow-2xl ${
+              className={`relative w-24 h-24 max-[1180px]:landscape:w-20 max-[1180px]:landscape:h-20 xs:w-32 xs:h-32 sm:w-56 sm:h-56 lg:w-64 lg:h-64 rounded-3xl backdrop-blur-xl shadow-2xl ${
                 theme === 'dark'
                   ? 'bg-gradient-to-br from-cyan-400/10 to-purple-500/5 border border-cyan-400/30'
                   : 'bg-gradient-to-br from-white/70 to-cyan-100/80 border border-cyan-400/60'
@@ -277,7 +277,7 @@ export default function AINicole() {
             </div>
 
             {/* Prismatic status indicator */}
-            <div className="absolute -bottom-3 sm:-bottom-4 left-1/2 transform -translate-x-1/2 hidden sm:block">
+            <div className="absolute -bottom-3 sm:-bottom-4 left-1/2 transform -translate-x-1/2 hidden sm:block max-[1180px]:landscape:hidden">
               <div
                 className={`glass-tag px-2 sm:px-3 lg:px-4 py-1 sm:py-2 rounded-full backdrop-blur-md border text-xs sm:text-sm font-medium ${
                   theme === 'dark'
@@ -291,7 +291,7 @@ export default function AINicole() {
           </div>
 
           <h1
-            className={`text-lg sm:text-3xl lg:text-4xl font-bold mt-2 sm:mt-6 lg:mt-12 mb-1 sm:mb-2 lg:mb-4 text-center bg-gradient-to-r bg-clip-text text-transparent ${
+            className={`text-lg max-[1180px]:landscape:text-sm sm:text-3xl lg:text-4xl font-bold mt-2 max-[1180px]:landscape:mt-1 sm:mt-6 lg:mt-12 mb-1 max-[1180px]:landscape:mb-1 sm:mb-2 lg:mb-4 text-center bg-gradient-to-r bg-clip-text text-transparent ${
               theme === 'dark'
                 ? 'from-cyan-300 via-white to-purple-300'
                 : 'from-cyan-600 via-slate-800 to-purple-600'
@@ -300,7 +300,7 @@ export default function AINicole() {
             Chat with Nicole AI
           </h1>
           <p
-            className={`text-center max-w-sm text-sm lg:text-base hidden sm:block ${
+            className={`text-center max-w-sm text-sm lg:text-base hidden sm:block max-[1180px]:landscape:hidden ${
               theme === 'dark' ? 'text-cyan-200/80' : 'text-slate-600'
             }`}
           >
@@ -308,7 +308,7 @@ export default function AINicole() {
           </p>
 
           {/* Portfolio Link - Mobile */}
-          <div className="flex justify-center mt-2 sm:mt-4 lg:hidden">
+          <div className="flex justify-center mt-2 max-[1180px]:landscape:mt-1 sm:mt-4 lg:hidden">
             <a
               href="/portfolio"
               className={`flex items-center gap-1 px-3 py-1 rounded-full backdrop-blur-md border shadow-lg transition-all duration-300 hover:scale-105 ${
@@ -345,10 +345,10 @@ export default function AINicole() {
         </div>
 
         {/* Right side - Chat Interface */}
-        <div className="flex-1 flex flex-col p-2 sm:p-4 lg:p-8 lg:justify-center">
+        <div className="flex-1 flex flex-col p-2 max-[1180px]:landscape:p-2 sm:p-4 lg:p-8 lg:justify-center">
           {/* Prismatic chat container */}
           <div
-            className={`glass-chat backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[65vh] sm:h-[55vh] md:h-[60vh] lg:flex-1 lg:max-h-[calc(100vh-8rem)] ${
+            className={`glass-chat backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[65vh] max-[1180px]:landscape:h-[85vh] sm:h-[55vh] md:h-[60vh] lg:flex-1 lg:max-h-[calc(100vh-8rem)] ${
               theme === 'dark'
                 ? 'bg-gradient-to-br from-cyan-500/5 to-purple-500/5 border border-cyan-400/20'
                 : 'bg-gradient-to-br from-white/60 to-cyan-100/70 border border-cyan-400/50'
