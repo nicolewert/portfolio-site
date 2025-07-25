@@ -2,16 +2,91 @@
   "name": "Nicole Wert",
   "role": "Full-Stack Software Engineer",
   "location": "San Francisco Bay Area",
-  "skills": ["React", "Next.js", "TypeScript", "Supabase", "AI integration"],
+  "skills": [
+    "React",
+    "Next.js",
+    "TypeScript",
+    "Supabase",
+    "AI integration",
+    "Vanilla JS",
+    "WordPress",
+    "REST API",
+    "OAuth 2.0",
+    "OpenID Connect"
+  ],
+  "interests": ["AI product design", "frontend innovation", "scalable systems"],
+
   "projects": [
     {
-      "name": "Pikle",
-      "description": "A real-time polling app for educators, creators, and teams. Features fast interaction, analytics, and integrations like Zoom and Slack."
+      "title": "Pricing Component & Custom Markup",
+      "description": "Developed a reusable, site-wide pricing component and custom markup that replaced legacy code and empowered non-technical teams to configure global pricing, cart links, and popup experiences—boosting A/B testing speed and flexibility. Built with React, vanilla JS, and integrated with a WordPress server database and REST API.",
+      "images": [
+        "/projects/Card_PricingComponent.png",
+        "/projects/Button_PricingComponent.png"
+      ],
+      "live": "https://www.malwarebytes.com/premium",
+      "tags": ["React", "Vanilla JS", "WordPress", "REST API", "A/B Testing"],
+      "gradientClass": "bg-gradient-to-br from-gray-700 to-gray-500"
     },
     {
-      "name": "Portfolio Website",
-      "description": "Personal site built with Next.js and Supabase, showcasing projects and GenAI-powered chat."
+      "title": "SSO Integration for Personalized Access",
+      "description": "Implemented secure Single Sign-On (SSO) functionality using OpenID Connect and OAuth 2.0, allowing users to seamlessly authenticate via internal subscription systems. Built with vanilla JavaScript and WordPress, the solution leveraged a REST API backend to enable tailored user flows, personalized web experiences, and unified identity management across services.",
+      "images": ["/projects/LoggedIn_SSO.png", "/projects/SignIn_SSO.png"],
+      "tags": [
+        "Vanilla JS",
+        "WordPress",
+        "REST API",
+        "OAuth 2.0",
+        "OpenID Connect",
+        "Authentication"
+      ],
+      "live": "https://www.malwarebytes.com",
+      "gradientClass": "bg-gradient-to-br from-gray-700 to-gray-500"
+    },
+    {
+      "title": "This Portfolio",
+      "images": [
+        "/projects/Light_Portfolio.png",
+        "/projects/Dark_Portfolio.png"
+      ],
+      "description": "You're looking at it! Built with Next.js, React, and Supabase, this portfolio showcases selected projects and skills with a focus on speed, clarity, and accessibility. Features an AI-powered chatbot with glass futuristic interface for interactive exploration of Nicole's work.",
+      "github": "https://github.com/nicolewert/portfolio-site",
+      "tags": [
+        "Next.js",
+        "React",
+        "Supabase",
+        "Vercel",
+        "AI Chatbot",
+        "Glassmorphism"
+      ],
+      "gradientClass": "bg-gradient-to-br from-gray-700 to-gray-500"
     }
   ],
-  "interests": ["AI product design", "frontend innovation", "scalable systems"]
+
+  "ai_summary": {
+    "about": "Nicole Wert is a Full-Stack Software Engineer in the San Francisco Bay Area, specializing in React, Next.js, TypeScript, and AI integration. She's passionate about AI product design, frontend innovation, and scalable systems.",
+    "key_projects": [
+      {
+        "name": "Pricing Component & Custom Markup",
+        "summary": "Built reusable React pricing components with WordPress integration, empowering non-technical teams and boosting A/B testing flexibility",
+        "technologies": ["React", "Vanilla JS", "WordPress", "REST API"]
+      },
+      {
+        "name": "SSO Integration",
+        "summary": "Implemented secure Single Sign-On with OAuth 2.0 and OpenID Connect for personalized user experiences",
+        "technologies": [
+          "Vanilla JS",
+          "WordPress",
+          "OAuth 2.0",
+          "OpenID Connect"
+        ]
+      },
+      {
+        "name": "AI-Powered Portfolio",
+        "summary": "Built this interactive portfolio with Next.js and AI chatbot featuring glass futuristic interface",
+        "technologies": ["Next.js", "React", "Supabase", "AI Integration"]
+      }
+    ],
+    "expertise": "Frontend development with React/Next.js, backend API integration, authentication systems, AI-powered user interfaces, and modern web technologies"
+  }
 }

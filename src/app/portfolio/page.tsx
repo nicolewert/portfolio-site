@@ -5,10 +5,10 @@ import ContactForm from '../../components/ContactForm'
 import FloatingParticles from '../../components/FloatingParticles'
 import Head from 'next/head'
 import { SiLeetcode, SiGithub, SiLinkedin } from 'react-icons/si'
-import projectsData from '../../data/projects.json'
+import aboutMeData from '../../data/about-me.json'
 import Image from 'next/image'
 
-const projects = projectsData
+const projects = aboutMeData.projects
 
 export default function Portfolio() {
   return (
