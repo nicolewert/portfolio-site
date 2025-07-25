@@ -152,7 +152,7 @@ export default function AINicole() {
 
   return (
     <main
-      className={backgroundClass}
+      className={`${backgroundClass} overflow-x-hidden`}
       style={{
         background:
           theme === 'dark'
@@ -216,9 +216,9 @@ export default function AINicole() {
         </div>
       </div>
 
-      <div className="flex flex-col max-[1180px]:landscape:flex-row lg:flex-row h-screen">
+      <div className="flex flex-col max-[1180px]:landscape:flex-row lg:flex-row h-screen w-full overflow-x-hidden">
         {/* Left side - Holographic Profile */}
-        <div className="w-full max-[1180px]:landscape:w-1/3 lg:w-1/3 flex flex-col items-center justify-center p-2 max-[1180px]:landscape:p-2 sm:p-4 lg:p-8 min-h-[25vh] max-[1180px]:landscape:min-h-0 sm:min-h-[30vh] md:min-h-[35vh] lg:min-h-0">
+        <div className="w-full max-[1180px]:landscape:w-1/3 lg:w-1/3 flex flex-col items-center justify-center p-2 max-[1180px]:landscape:p-2 sm:p-4 lg:p-8 min-h-[25vh] max-[1180px]:landscape:min-h-0 sm:min-h-[30vh] md:min-h-[35vh] lg:min-h-0 flex-shrink-0">
           <div className="holographic-frame relative">
             {/* Glass frame with prismatic glow effect */}
             <div
@@ -345,7 +345,7 @@ export default function AINicole() {
         </div>
 
         {/* Right side - Chat Interface */}
-        <div className="flex-1 flex flex-col p-2 max-[1180px]:landscape:p-2 sm:p-4 lg:p-8 lg:justify-center">
+        <div className="flex-1 flex flex-col p-2 max-[1180px]:landscape:p-2 sm:p-4 lg:p-8 lg:justify-center min-w-0">
           {/* Prismatic chat container */}
           <div
             className={`glass-chat backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[65vh] max-[1180px]:landscape:h-[85vh] sm:h-[55vh] md:h-[60vh] lg:flex-1 lg:max-h-[calc(100vh-8rem)] ${
@@ -355,7 +355,7 @@ export default function AINicole() {
             }`}
           >
             {/* Chat messages */}
-            <div className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto">
+            <div className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto overflow-x-hidden">
               <div className="flex flex-col space-y-3 sm:space-y-4">
                 {messages.map((msg, index) => (
                   <div
@@ -367,7 +367,7 @@ export default function AINicole() {
                         msg.role === 'user'
                           ? 'max-w-[280px] sm:max-w-xs lg:max-w-md'
                           : 'max-w-[280px] sm:max-w-xs lg:max-w-md'
-                      } px-3 lg:px-4 py-2 lg:py-3 rounded-2xl backdrop-blur-md border text-sm lg:text-base break-words ${
+                      } px-3 lg:px-4 py-2 lg:py-3 rounded-2xl backdrop-blur-md border text-sm lg:text-base break-words word-wrap overflow-wrap-anywhere ${
                         msg.role === 'user'
                           ? theme === 'dark'
                             ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-400/40 text-cyan-100'
