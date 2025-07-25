@@ -2,8 +2,11 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { useTheme } from '../../contexts/ThemeContext'
+import DarkModeToggle from '../../components/DarkModeToggle'
 
 export default function AINicole() {
+  const { theme } = useTheme()
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([
     {
@@ -47,30 +50,85 @@ export default function AINicole() {
     setIsLoading(false)
   }
 
-  return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 overflow-hidden relative">
-      {/* Futuristic background effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,_rgba(120,119,198,0.1),_transparent_50%),radial-gradient(circle_at_80%_20%,_rgba(255,255,255,0.05),_transparent_50%)]" />
-      <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]" />
+  // Theme-aware gradient backgrounds using your portfolio theme colors
+  const backgroundClass =
+    theme === 'dark'
+      ? 'min-h-screen overflow-hidden relative'
+      : 'min-h-screen overflow-hidden relative'
 
-      {/* Navigation */}
-      <div className="fixed top-6 right-6 z-50">
-        <a
-          href="/portfolio"
-          className="glass-button px-6 py-3 rounded-xl text-white/90 hover:text-white backdrop-blur-md bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-300 font-medium"
+  return (
+    <main
+      className={backgroundClass}
+      style={{
+        background:
+          theme === 'dark'
+            ? 'linear-gradient(135deg, #0a0e1a 0%, #151b2e 25%, #1a1f2e 50%, #0f1419 75%, #0a0e1a 100%)'
+            : 'linear-gradient(135deg, #f0f4ff 0%, #fafbff 25%, #e8f0ff 50%, #f0f8ff 75%, #f0f4ff 100%)',
+      }}
+    >
+      {/* Prismatic background effects */}
+      <div
+        className={`absolute inset-0 ${
+          theme === 'dark'
+            ? 'bg-[radial-gradient(circle_at_20%_80%,_rgba(0,255,255,0.15),_transparent_50%),radial-gradient(circle_at_80%_20%,_rgba(139,92,246,0.1),_transparent_50%),radial-gradient(circle_at_50%_0%,_rgba(255,0,128,0.08),_transparent_70%)]'
+            : 'bg-[radial-gradient(circle_at_20%_80%,_rgba(0,212,255,0.25),_transparent_50%),radial-gradient(circle_at_80%_20%,_rgba(199,125,255,0.3),_transparent_50%),radial-gradient(circle_at_50%_0%,_rgba(255,107,157,0.2),_transparent_70%)]'
+        }`}
+      />
+      {/* Animated prismatic grid */}
+      <div
+        className={`absolute inset-0 bg-[size:60px_60px] ${
+          theme === 'dark'
+            ? 'bg-[radial-gradient(circle,rgba(0,255,255,0.03)_1px,transparent_1px)]'
+            : 'bg-[radial-gradient(circle,rgba(0,212,255,0.08)_1px,transparent_1px)]'
+        }`}
+      />
+
+      {/* Navigation Panel */}
+      <div className="fixed bottom-6 left-6 z-50">
+        <div
+          className={`flex items-center gap-3 px-4 py-3 rounded-2xl backdrop-blur-md border shadow-lg transition-all duration-300 ${
+            theme === 'dark'
+              ? 'bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border-cyan-400/30'
+              : 'bg-gradient-to-r from-white/70 to-cyan-50/60 border-cyan-400/40'
+          }`}
         >
-          View Portfolio →
-        </a>
+          <DarkModeToggle />
+          <div
+            className={`w-px h-6 ${theme === 'dark' ? 'bg-cyan-400/30' : 'bg-cyan-400/40'}`}
+          />
+          <a
+            href="/portfolio"
+            className={`text-sm font-medium transition-all duration-300 hover:scale-105 ${
+              theme === 'dark'
+                ? 'text-cyan-300 hover:text-cyan-200'
+                : 'text-cyan-800 hover:text-cyan-900'
+            }`}
+          >
+            View Portfolio →
+          </a>
+        </div>
       </div>
 
       <div className="flex h-screen">
         {/* Left side - Holographic Profile */}
         <div className="w-1/3 flex flex-col items-center justify-center p-8">
           <div className="holographic-frame relative">
-            {/* Glass frame with glow effect */}
-            <div className="relative w-64 h-64 rounded-3xl backdrop-blur-xl bg-gradient-to-br from-white/20 to-white/5 border border-white/30 shadow-2xl">
-              {/* Inner glow */}
-              <div className="absolute inset-1 rounded-3xl bg-gradient-to-br from-blue-400/20 to-purple-400/20 animate-pulse" />
+            {/* Glass frame with prismatic glow effect */}
+            <div
+              className={`relative w-64 h-64 rounded-3xl backdrop-blur-xl shadow-2xl ${
+                theme === 'dark'
+                  ? 'bg-gradient-to-br from-cyan-400/10 to-purple-500/5 border border-cyan-400/30'
+                  : 'bg-gradient-to-br from-white/70 to-cyan-100/80 border border-cyan-400/60'
+              }`}
+            >
+              {/* Prismatic inner glow */}
+              <div
+                className={`absolute inset-1 rounded-3xl animate-pulse ${
+                  theme === 'dark'
+                    ? 'bg-gradient-to-br from-cyan-400/20 via-purple-500/15 to-pink-500/10'
+                    : 'bg-gradient-to-br from-cyan-400/35 via-purple-400/30 to-pink-400/25'
+                }`}
+              />
 
               {/* Profile picture */}
               <div className="absolute inset-4 rounded-2xl overflow-hidden">
@@ -86,33 +144,73 @@ export default function AINicole() {
                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent animate-shimmer" />
               </div>
 
-              {/* Corner accents */}
-              <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-cyan-400/60 rounded-tl-lg" />
-              <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-cyan-400/60 rounded-tr-lg" />
-              <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-cyan-400/60 rounded-bl-lg" />
-              <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-cyan-400/60 rounded-br-lg" />
+              {/* Prismatic corner accents */}
+              <div
+                className={`absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 rounded-tl-lg ${
+                  theme === 'dark' ? 'border-cyan-400/80' : 'border-cyan-600/90'
+                }`}
+              />
+              <div
+                className={`absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 rounded-tr-lg ${
+                  theme === 'dark'
+                    ? 'border-purple-400/80'
+                    : 'border-purple-600/90'
+                }`}
+              />
+              <div
+                className={`absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 rounded-bl-lg ${
+                  theme === 'dark' ? 'border-pink-400/80' : 'border-pink-600/90'
+                }`}
+              />
+              <div
+                className={`absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 rounded-br-lg ${
+                  theme === 'dark' ? 'border-cyan-400/80' : 'border-cyan-600/90'
+                }`}
+              />
             </div>
 
-            {/* Status indicator */}
+            {/* Prismatic status indicator */}
             <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
-              <div className="glass-tag px-4 py-2 rounded-full backdrop-blur-md bg-green-500/20 border border-green-400/40 text-green-300 text-sm font-medium">
+              <div
+                className={`glass-tag px-4 py-2 rounded-full backdrop-blur-md border text-sm font-medium ${
+                  theme === 'dark'
+                    ? 'bg-gradient-to-r from-cyan-500/20 to-green-400/20 border-cyan-400/40 text-cyan-300'
+                    : 'bg-gradient-to-r from-white/80 to-cyan-50/60 border-cyan-500/60 text-cyan-900 shadow-lg'
+                }`}
+              >
                 ● Nicole AI Online
               </div>
             </div>
           </div>
 
-          <h1 className="text-4xl font-bold text-white mt-12 mb-4 text-center">
+          <h1
+            className={`text-4xl font-bold mt-12 mb-4 text-center bg-gradient-to-r bg-clip-text text-transparent ${
+              theme === 'dark'
+                ? 'from-cyan-300 via-white to-purple-300'
+                : 'from-cyan-600 via-slate-800 to-purple-600'
+            }`}
+          >
             Chat with Nicole AI
           </h1>
-          <p className="text-blue-200/80 text-center max-w-sm">
+          <p
+            className={`text-center max-w-sm ${
+              theme === 'dark' ? 'text-cyan-200/80' : 'text-slate-600'
+            }`}
+          >
             Ask me anything about Nicole&apos;s skills, projects, or experience
           </p>
         </div>
 
         {/* Right side - Chat Interface */}
         <div className="flex-1 flex flex-col p-8">
-          {/* Chat container */}
-          <div className="glass-chat flex-1 backdrop-blur-xl bg-white/5 border border-white/20 rounded-3xl shadow-2xl overflow-hidden">
+          {/* Prismatic chat container */}
+          <div
+            className={`glass-chat flex-1 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden ${
+              theme === 'dark'
+                ? 'bg-gradient-to-br from-cyan-500/5 to-purple-500/5 border border-cyan-400/20'
+                : 'bg-gradient-to-br from-white/60 to-cyan-100/70 border border-cyan-400/50'
+            }`}
+          >
             {/* Chat messages */}
             <div className="flex-1 p-6 overflow-y-auto space-y-4 max-h-[calc(100vh-200px)]">
               {messages.map((msg, index) => (
@@ -123,8 +221,12 @@ export default function AINicole() {
                   <div
                     className={`glass-message max-w-xs lg:max-w-md px-4 py-3 rounded-2xl backdrop-blur-md border ${
                       msg.role === 'user'
-                        ? 'bg-blue-500/20 border-blue-400/40 text-blue-100'
-                        : 'bg-white/10 border-white/20 text-white/90'
+                        ? theme === 'dark'
+                          ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-400/40 text-cyan-100'
+                          : 'bg-gradient-to-r from-cyan-400/30 to-blue-400/30 border-cyan-500/50 text-cyan-800'
+                        : theme === 'dark'
+                          ? 'bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-400/20 text-purple-100'
+                          : 'bg-gradient-to-r from-white/60 to-purple-50/50 border-purple-300/40 text-slate-700'
                     }`}
                   >
                     {msg.content}
@@ -134,11 +236,29 @@ export default function AINicole() {
 
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="glass-message bg-white/10 border-white/20 px-4 py-3 rounded-2xl backdrop-blur-md border">
+                  <div
+                    className={`glass-message px-4 py-3 rounded-2xl backdrop-blur-md border ${
+                      theme === 'dark'
+                        ? 'bg-white/10 border-white/20'
+                        : 'bg-white/50 border-slate-200/50'
+                    }`}
+                  >
                     <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce" />
-                      <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce delay-100" />
-                      <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce delay-200" />
+                      <div
+                        className={`w-2 h-2 rounded-full animate-bounce ${
+                          theme === 'dark' ? 'bg-white/60' : 'bg-slate-400'
+                        }`}
+                      />
+                      <div
+                        className={`w-2 h-2 rounded-full animate-bounce delay-100 ${
+                          theme === 'dark' ? 'bg-white/60' : 'bg-slate-400'
+                        }`}
+                      />
+                      <div
+                        className={`w-2 h-2 rounded-full animate-bounce delay-200 ${
+                          theme === 'dark' ? 'bg-white/60' : 'bg-slate-400'
+                        }`}
+                      />
                     </div>
                   </div>
                 </div>
@@ -146,7 +266,11 @@ export default function AINicole() {
             </div>
 
             {/* Input area */}
-            <div className="p-6 border-t border-white/10">
+            <div
+              className={`p-6 border-t ${
+                theme === 'dark' ? 'border-white/10' : 'border-slate-200/30'
+              }`}
+            >
               <div className="flex space-x-4">
                 <input
                   type="text"
@@ -154,13 +278,21 @@ export default function AINicole() {
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder="Ask me about Nicole..."
-                  className="flex-1 glass-input px-4 py-3 rounded-xl backdrop-blur-md bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50"
+                  className={`flex-1 glass-input px-4 py-3 rounded-xl backdrop-blur-md border focus:outline-none focus:ring-2 transition-all duration-300 ${
+                    theme === 'dark'
+                      ? 'bg-white/10 border-white/20 text-white placeholder-white/60 focus:ring-cyan-400/50 focus:border-cyan-400/50'
+                      : 'bg-white/40 border-slate-200/50 text-slate-700 placeholder-slate-500 focus:ring-blue-400/50 focus:border-blue-400/50'
+                  }`}
                   disabled={isLoading}
                 />
                 <button
                   onClick={sendMessage}
                   disabled={isLoading || !message.trim()}
-                  className="glass-button px-6 py-3 rounded-xl backdrop-blur-md bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                  className={`glass-button px-6 py-3 rounded-xl backdrop-blur-md border transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium ${
+                    theme === 'dark'
+                      ? 'bg-cyan-500/20 border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/30'
+                      : 'bg-blue-400/30 border-blue-500/50 text-blue-700 hover:bg-blue-400/40'
+                  }`}
                 >
                   Send
                 </button>
