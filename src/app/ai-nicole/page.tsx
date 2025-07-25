@@ -218,7 +218,7 @@ export default function AINicole() {
 
       <div className="flex flex-col lg:flex-row h-screen">
         {/* Left side - Holographic Profile */}
-        <div className="w-full lg:w-1/3 flex flex-col items-center justify-center p-2 sm:p-4 lg:p-8 min-h-[18vh] sm:min-h-[40vh] lg:min-h-0">
+        <div className="w-full lg:w-1/3 flex flex-col items-center justify-center p-2 sm:p-4 lg:p-8 min-h-[25vh] sm:min-h-[30vh] md:min-h-[35vh] lg:min-h-0">
           <div className="holographic-frame relative">
             {/* Glass frame with prismatic glow effect */}
             <div
@@ -308,7 +308,7 @@ export default function AINicole() {
           </p>
 
           {/* Portfolio Link - Mobile */}
-          <div className="flex justify-center mt-1 lg:hidden">
+          <div className="flex justify-center mt-2 sm:mt-4 lg:hidden">
             <a
               href="/portfolio"
               className={`flex items-center gap-1 px-3 py-1 rounded-full backdrop-blur-md border shadow-lg transition-all duration-300 hover:scale-105 ${
@@ -345,10 +345,10 @@ export default function AINicole() {
         </div>
 
         {/* Right side - Chat Interface */}
-        <div className="flex-1 flex flex-col p-4 lg:p-8 lg:justify-center">
+        <div className="flex-1 flex flex-col p-2 sm:p-4 lg:p-8 lg:justify-center">
           {/* Prismatic chat container */}
           <div
-            className={`glass-chat backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[70vh] lg:flex-1 lg:max-h-[calc(100vh-8rem)] ${
+            className={`glass-chat backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[65vh] sm:h-[55vh] md:h-[60vh] lg:flex-1 lg:max-h-[calc(100vh-8rem)] ${
               theme === 'dark'
                 ? 'bg-gradient-to-br from-cyan-500/5 to-purple-500/5 border border-cyan-400/20'
                 : 'bg-gradient-to-br from-white/60 to-cyan-100/70 border border-cyan-400/50'
