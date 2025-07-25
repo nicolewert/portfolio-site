@@ -12,7 +12,7 @@ export default function AINicole() {
     {
       role: 'assistant',
       content:
-        'Hi! I&apos;m Nicole&apos;s AI assistant. Ask me anything about her skills, projects, or experience!',
+        "Hi! I'm Nicole's AI assistant. Ask me anything about her skills, projects, or experience!",
     },
   ])
   const [isLoading, setIsLoading] = useState(false)
@@ -83,8 +83,8 @@ export default function AINicole() {
         }`}
       />
 
-      {/* Navigation Panel */}
-      <div className="fixed bottom-6 left-6 z-50">
+      {/* Navigation Panel - Desktop */}
+      <div className="fixed bottom-4 left-4 lg:bottom-6 lg:left-6 z-50 hidden lg:block">
         <div
           className={`flex items-center gap-3 px-4 py-3 rounded-2xl backdrop-blur-md border shadow-lg transition-all duration-300 ${
             theme === 'dark'
@@ -109,13 +109,26 @@ export default function AINicole() {
         </div>
       </div>
 
-      <div className="flex h-screen">
+      {/* Theme Toggle - Mobile (Top Right) */}
+      <div className="fixed top-4 right-4 z-50 lg:hidden">
+        <div
+          className={`p-0.5 rounded-full backdrop-blur-md border shadow-lg transition-all duration-300 ${
+            theme === 'dark'
+              ? 'bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border-cyan-400/30'
+              : 'bg-gradient-to-r from-white/70 to-cyan-50/60 border-cyan-400/40'
+          }`}
+        >
+          <DarkModeToggle />
+        </div>
+      </div>
+
+      <div className="flex flex-col lg:flex-row h-screen">
         {/* Left side - Holographic Profile */}
-        <div className="w-1/3 flex flex-col items-center justify-center p-8">
+        <div className="w-full lg:w-1/3 flex flex-col items-center justify-center p-2 sm:p-4 lg:p-8 min-h-[18vh] sm:min-h-[40vh] lg:min-h-0">
           <div className="holographic-frame relative">
             {/* Glass frame with prismatic glow effect */}
             <div
-              className={`relative w-64 h-64 rounded-3xl backdrop-blur-xl shadow-2xl ${
+              className={`relative w-24 h-24 xs:w-32 xs:h-32 sm:w-56 sm:h-56 lg:w-64 lg:h-64 rounded-3xl backdrop-blur-xl shadow-2xl ${
                 theme === 'dark'
                   ? 'bg-gradient-to-br from-cyan-400/10 to-purple-500/5 border border-cyan-400/30'
                   : 'bg-gradient-to-br from-white/70 to-cyan-100/80 border border-cyan-400/60'
@@ -170,9 +183,9 @@ export default function AINicole() {
             </div>
 
             {/* Prismatic status indicator */}
-            <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
+            <div className="absolute -bottom-3 sm:-bottom-4 left-1/2 transform -translate-x-1/2 hidden sm:block">
               <div
-                className={`glass-tag px-4 py-2 rounded-full backdrop-blur-md border text-sm font-medium ${
+                className={`glass-tag px-2 sm:px-3 lg:px-4 py-1 sm:py-2 rounded-full backdrop-blur-md border text-xs sm:text-sm font-medium ${
                   theme === 'dark'
                     ? 'bg-gradient-to-r from-cyan-500/20 to-green-400/20 border-cyan-400/40 text-cyan-300'
                     : 'bg-gradient-to-r from-white/80 to-cyan-50/60 border-cyan-500/60 text-cyan-900 shadow-lg'
@@ -184,7 +197,7 @@ export default function AINicole() {
           </div>
 
           <h1
-            className={`text-4xl font-bold mt-12 mb-4 text-center bg-gradient-to-r bg-clip-text text-transparent ${
+            className={`text-lg sm:text-3xl lg:text-4xl font-bold mt-2 sm:mt-6 lg:mt-12 mb-1 sm:mb-2 lg:mb-4 text-center bg-gradient-to-r bg-clip-text text-transparent ${
               theme === 'dark'
                 ? 'from-cyan-300 via-white to-purple-300'
                 : 'from-cyan-600 via-slate-800 to-purple-600'
@@ -193,33 +206,73 @@ export default function AINicole() {
             Chat with Nicole AI
           </h1>
           <p
-            className={`text-center max-w-sm ${
+            className={`text-center max-w-sm text-sm lg:text-base hidden sm:block ${
               theme === 'dark' ? 'text-cyan-200/80' : 'text-slate-600'
             }`}
           >
             Ask me anything about Nicole&apos;s skills, projects, or experience
           </p>
+
+          {/* Portfolio Link - Mobile */}
+          <div className="flex justify-center mt-1 lg:hidden">
+            <a
+              href="/portfolio"
+              className={`flex items-center gap-1 px-3 py-1 rounded-full backdrop-blur-md border shadow-lg transition-all duration-300 hover:scale-105 ${
+                theme === 'dark'
+                  ? 'bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border-cyan-400/30 text-cyan-300 hover:text-cyan-200'
+                  : 'bg-gradient-to-r from-white/70 to-cyan-50/60 border-cyan-400/40 text-cyan-800 hover:text-cyan-900'
+              }`}
+            >
+              <span className="text-xs font-medium">Portfolio</span>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7 17L17 7"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M7 7H17V17"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </a>
+          </div>
         </div>
 
         {/* Right side - Chat Interface */}
-        <div className="flex-1 flex flex-col p-8">
+        <div className="flex-1 flex flex-col p-4 lg:p-8">
           {/* Prismatic chat container */}
           <div
-            className={`glass-chat flex-1 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden ${
+            className={`glass-chat flex-1 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden flex flex-col ${
               theme === 'dark'
                 ? 'bg-gradient-to-br from-cyan-500/5 to-purple-500/5 border border-cyan-400/20'
                 : 'bg-gradient-to-br from-white/60 to-cyan-100/70 border border-cyan-400/50'
             }`}
           >
             {/* Chat messages */}
-            <div className="flex-1 p-6 overflow-y-auto space-y-4 max-h-[calc(100vh-200px)]">
+            <div className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto space-y-3 sm:space-y-4">
               {messages.map((msg, index) => (
                 <div
                   key={index}
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`glass-message max-w-xs lg:max-w-md px-4 py-3 rounded-2xl backdrop-blur-md border ${
+                    className={`glass-message ${
+                      msg.role === 'user'
+                        ? 'max-w-[280px] sm:max-w-xs lg:max-w-md'
+                        : 'max-w-full sm:max-w-xs lg:max-w-md'
+                    } px-3 lg:px-4 py-2 lg:py-3 rounded-2xl backdrop-blur-md border text-sm lg:text-base ${
                       msg.role === 'user'
                         ? theme === 'dark'
                           ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-400/40 text-cyan-100'
@@ -267,18 +320,18 @@ export default function AINicole() {
 
             {/* Input area */}
             <div
-              className={`p-6 border-t ${
+              className={`p-3 sm:p-4 lg:p-6 border-t ${
                 theme === 'dark' ? 'border-white/10' : 'border-slate-200/30'
               }`}
             >
-              <div className="flex space-x-4">
+              <div className="flex space-x-1 sm:space-x-2 lg:space-x-4">
                 <input
                   type="text"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder="Ask me about Nicole..."
-                  className={`flex-1 glass-input px-4 py-3 rounded-xl backdrop-blur-md border focus:outline-none focus:ring-2 transition-all duration-300 ${
+                  className={`flex-1 glass-input px-2 sm:px-3 lg:px-4 py-2 lg:py-3 rounded-lg sm:rounded-xl backdrop-blur-md border focus:outline-none focus:ring-2 transition-all duration-300 text-sm lg:text-base ${
                     theme === 'dark'
                       ? 'bg-white/10 border-white/20 text-white placeholder-white/60 focus:ring-cyan-400/50 focus:border-cyan-400/50'
                       : 'bg-white/40 border-slate-200/50 text-slate-700 placeholder-slate-500 focus:ring-blue-400/50 focus:border-blue-400/50'
@@ -288,7 +341,7 @@ export default function AINicole() {
                 <button
                   onClick={sendMessage}
                   disabled={isLoading || !message.trim()}
-                  className={`glass-button px-6 py-3 rounded-xl backdrop-blur-md border transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium ${
+                  className={`glass-button px-2 sm:px-4 lg:px-6 py-2 lg:py-3 rounded-lg sm:rounded-xl backdrop-blur-md border transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm lg:text-base ${
                     theme === 'dark'
                       ? 'bg-cyan-500/20 border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/30'
                       : 'bg-blue-400/30 border-blue-500/50 text-blue-700 hover:bg-blue-400/40'
