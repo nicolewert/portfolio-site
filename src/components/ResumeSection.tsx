@@ -1,31 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import aboutMe from '../data/about-me.json'
 
 export default function ResumeSection() {
   const [showAllSkills, setShowAllSkills] = useState(false)
 
-  const skills = [
-    'TypeScript',
-    'JavaScript',
-    'Python',
-    'PHP',
-    'React',
-    'Next.js',
-    'Tailwind CSS',
-    'Accessibility (WCAG)',
-    'Responsive Design',
-    'API Design',
-    'REST',
-    'Docker',
-    'Github Actions',
-    'Cloud Deployment',
-    'GenAI Prototyping',
-    'Prompt Engineering',
-    'Design Patterns',
-    'DSA',
-    'System Design',
-  ]
+  const skills = aboutMe.skills
 
   // Show 8 on mobile, 20 on desktop, all when expanded
   const mobileVisibleSkills = showAllSkills ? skills : skills.slice(0, 8)

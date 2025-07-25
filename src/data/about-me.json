@@ -3,16 +3,25 @@
   "role": "Full-Stack Software Engineer",
   "location": "San Francisco Bay Area",
   "skills": [
+    "TypeScript",
+    "JavaScript",
+    "Python",
+    "PHP",
     "React",
     "Next.js",
-    "TypeScript",
-    "Supabase",
-    "AI integration",
-    "Vanilla JS",
-    "WordPress",
-    "REST API",
-    "OAuth 2.0",
-    "OpenID Connect"
+    "Tailwind CSS",
+    "Accessibility (WCAG)",
+    "Responsive Design",
+    "API Design",
+    "REST",
+    "Docker",
+    "Github Actions",
+    "Cloud Deployment",
+    "GenAI Prototyping",
+    "Prompt Engineering",
+    "Design Patterns",
+    "DSA",
+    "System Design"
   ],
   "interests": ["AI product design", "frontend innovation", "scalable systems"],
 
@@ -64,7 +73,7 @@
   ],
 
   "ai_summary": {
-    "about": "Nicole Wert is a Full-Stack Software Engineer in the San Francisco Bay Area, specializing in React, Next.js, TypeScript, and AI integration. She's passionate about AI product design, frontend innovation, and scalable systems.",
+    "about": "Nicole Wert is a Full-Stack Software Engineer in the San Francisco Bay Area, specializing in React, Next.js, TypeScript, and AI integration. She's passionate about AI product design, frontend innovation, and scalable systems. She has 3+ years of experience.",
     "key_projects": [
       {
         "name": "Pricing Component & Custom Markup",
