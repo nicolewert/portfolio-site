@@ -16,6 +16,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@google/genai": "^1.10.0",
     "@supabase/supabase-js": "^2.50.3",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/postcss": "^4.1.11",
