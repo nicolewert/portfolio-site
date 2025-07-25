@@ -1,0 +1,17 @@
+{
+  "name": "Nicole Wert",
+  "role": "Full-Stack Software Engineer",
+  "location": "San Francisco Bay Area",
+  "skills": ["React", "Next.js", "TypeScript", "Supabase", "AI integration"],
+  "projects": [
+    {
+      "name": "Pikle",
+      "description": "A real-time polling app for educators, creators, and teams. Features fast interaction, analytics, and integrations like Zoom and Slack."
+    },
+    {
+      "name": "Portfolio Website",
+      "description": "Personal site built with Next.js and Supabase, showcasing projects and GenAI-powered chat."
+    }
+  ],
+  "interests": ["AI product design", "frontend innovation", "scalable systems"]
+}
