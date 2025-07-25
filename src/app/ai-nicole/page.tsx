@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { useTheme } from '../../contexts/ThemeContext'
 import DarkModeToggle from '../../components/DarkModeToggle'
@@ -16,6 +16,15 @@ export default function AINicole() {
     },
   ])
   const [isLoading, setIsLoading] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
 
   const sendMessage = async () => {
     if (!message.trim()) return
@@ -251,71 +260,76 @@ export default function AINicole() {
         </div>
 
         {/* Right side - Chat Interface */}
-        <div className="flex-1 flex flex-col p-4 lg:p-8">
+        <div className="flex-1 flex flex-col p-4 lg:p-8 lg:justify-center">
           {/* Prismatic chat container */}
           <div
-            className={`glass-chat flex-1 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden flex flex-col ${
+            className={`glass-chat backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[70vh] lg:flex-1 lg:max-h-[calc(100vh-8rem)] ${
               theme === 'dark'
                 ? 'bg-gradient-to-br from-cyan-500/5 to-purple-500/5 border border-cyan-400/20'
                 : 'bg-gradient-to-br from-white/60 to-cyan-100/70 border border-cyan-400/50'
             }`}
           >
             {/* Chat messages */}
-            <div className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto space-y-3 sm:space-y-4">
-              {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
+            <div className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto">
+              <div className="flex flex-col space-y-3 sm:space-y-4">
+                {messages.map((msg, index) => (
                   <div
-                    className={`glass-message ${
-                      msg.role === 'user'
-                        ? 'max-w-[280px] sm:max-w-xs lg:max-w-md'
-                        : 'max-w-full sm:max-w-xs lg:max-w-md'
-                    } px-3 lg:px-4 py-2 lg:py-3 rounded-2xl backdrop-blur-md border text-sm lg:text-base ${
-                      msg.role === 'user'
-                        ? theme === 'dark'
-                          ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-400/40 text-cyan-100'
-                          : 'bg-gradient-to-r from-cyan-400/30 to-blue-400/30 border-cyan-500/50 text-cyan-800'
-                        : theme === 'dark'
-                          ? 'bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-400/20 text-purple-100'
-                          : 'bg-gradient-to-r from-white/60 to-purple-50/50 border-purple-300/40 text-slate-700'
-                    }`}
+                    key={index}
+                    className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
-                    {msg.content}
-                  </div>
-                </div>
-              ))}
-
-              {isLoading && (
-                <div className="flex justify-start">
-                  <div
-                    className={`glass-message px-4 py-3 rounded-2xl backdrop-blur-md border ${
-                      theme === 'dark'
-                        ? 'bg-white/10 border-white/20'
-                        : 'bg-white/50 border-slate-200/50'
-                    }`}
-                  >
-                    <div className="flex space-x-1">
-                      <div
-                        className={`w-2 h-2 rounded-full animate-bounce ${
-                          theme === 'dark' ? 'bg-white/60' : 'bg-slate-400'
-                        }`}
-                      />
-                      <div
-                        className={`w-2 h-2 rounded-full animate-bounce delay-100 ${
-                          theme === 'dark' ? 'bg-white/60' : 'bg-slate-400'
-                        }`}
-                      />
-                      <div
-                        className={`w-2 h-2 rounded-full animate-bounce delay-200 ${
-                          theme === 'dark' ? 'bg-white/60' : 'bg-slate-400'
-                        }`}
-                      />
+                    <div
+                      className={`glass-message ${
+                        msg.role === 'user'
+                          ? 'max-w-[280px] sm:max-w-xs lg:max-w-md'
+                          : 'max-w-[280px] sm:max-w-xs lg:max-w-md'
+                      } px-3 lg:px-4 py-2 lg:py-3 rounded-2xl backdrop-blur-md border text-sm lg:text-base break-words ${
+                        msg.role === 'user'
+                          ? theme === 'dark'
+                            ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-400/40 text-cyan-100'
+                            : 'bg-gradient-to-r from-cyan-400/30 to-blue-400/30 border-cyan-500/50 text-cyan-800'
+                          : theme === 'dark'
+                            ? 'bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-400/20 text-purple-100'
+                            : 'bg-gradient-to-r from-white/60 to-purple-50/50 border-purple-300/40 text-slate-700'
+                      }`}
+                    >
+                      {msg.content}
                     </div>
                   </div>
-                </div>
-              )}
+                ))}
+
+                {isLoading && (
+                  <div className="flex justify-start">
+                    <div
+                      className={`glass-message px-4 py-3 rounded-2xl backdrop-blur-md border ${
+                        theme === 'dark'
+                          ? 'bg-white/10 border-white/20'
+                          : 'bg-white/50 border-slate-200/50'
+                      }`}
+                    >
+                      <div className="flex space-x-1">
+                        <div
+                          className={`w-2 h-2 rounded-full animate-bounce ${
+                            theme === 'dark' ? 'bg-white/60' : 'bg-slate-400'
+                          }`}
+                        />
+                        <div
+                          className={`w-2 h-2 rounded-full animate-bounce delay-100 ${
+                            theme === 'dark' ? 'bg-white/60' : 'bg-slate-400'
+                          }`}
+                        />
+                        <div
+                          className={`w-2 h-2 rounded-full animate-bounce delay-200 ${
+                            theme === 'dark' ? 'bg-white/60' : 'bg-slate-400'
+                          }`}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Invisible element to scroll to */}
+                <div ref={messagesEndRef} />
+              </div>
             </div>
 
             {/* Input area */}
