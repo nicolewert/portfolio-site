@@ -5,9 +5,9 @@ import DarkModeToggle from './DarkModeToggle'
 import { useTheme } from '../contexts/ThemeContext'
 
 const links = [
-  { href: '/#projects', label: 'Projects' },
-  { href: '/#resume', label: 'Resume' },
-  { href: '/#contact', label: 'Contact' },
+  { href: '/portfolio#projects', label: 'Projects' },
+  { href: '/portfolio#resume', label: 'Resume' },
+  { href: '/portfolio#contact', label: 'Contact' },
   { href: '/blog', label: 'Blog' },
 ]
 

@@ -18,25 +18,34 @@ export default function Portfolio() {
         <meta name="description" content="Nicole Wert's portfolio website" />
       </Head>
       <Navbar />
-      <main className="min-h-screen bg-[var(--background)] w-full">
+      <main className="min-h-screen bg-[var(--background)] w-full relative">
+        {/* Animated Gradient Mesh Background */}
+        <div className="fixed inset-0 pointer-events-none">
+          <div className="absolute inset-0 animate-gradient-mesh bg-[radial-gradient(circle_at_25%_75%,_rgba(0,150,255,0.4),_transparent_30%),radial-gradient(circle_at_75%_25%,_rgba(180,80,255,0.45),_transparent_30%),radial-gradient(circle_at_50%_0%,_rgba(255,80,150,0.35),_transparent_50%)] dark:bg-[radial-gradient(circle_at_25%_75%,_rgba(0,255,255,0.06),_transparent_50%),radial-gradient(circle_at_75%_25%,_rgba(139,92,246,0.04),_transparent_50%),radial-gradient(circle_at_50%_0%,_rgba(255,0,128,0.03),_transparent_70%)]" />
+        </div>
+
         {/* Hero Section */}
-        <section className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[var(--background)] via-[var(--background)] to-[var(--background)]/80 overflow-hidden px-4 sm:px-6 lg:px-8">
-          <FloatingParticles />
+        <section className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden px-4 sm:px-6 lg:px-8">
           <div className="glass w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-16 text-center rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg relative z-10">
-            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-[var(--foreground)] animate-fade-in">
-              Nicole Wert
+            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight animate-fade-in">
+              <span className="bg-gradient-to-r from-[var(--primary)] via-[var(--foreground)] to-[var(--accent)] bg-clip-text text-transparent">
+                Nicole Wert
+              </span>
               <span className="text-xl sm:text-2xl lg:text-3xl font-medium block mt-4 text-[var(--secondary)]">
                 Software Engineer · AI Enthusiast · Problem Solver
               </span>
             </h1>
-            <Image
-              src="/profile_picture.png"
-              alt="Nicole Wert"
-              width={128}
-              height={128}
-              className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mt-4 sm:mt-6 rounded-full border-2 border-[var(--foreground)]/10 shadow-xl dark:shadow-[var(--foreground)]/5 hover:scale-105 transition-transform duration-300 ease-in-out"
-              priority
-            />
+            <div className="relative w-24 h-24 sm:w-32 sm:h-32 mx-auto mt-4 sm:mt-6">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[var(--primary)]/15 via-[var(--accent)]/15 to-[var(--secondary)]/15 blur-sm animate-pulse" />
+              <Image
+                src="/profile_picture.png"
+                alt="Nicole Wert"
+                width={128}
+                height={128}
+                className="relative w-full h-full rounded-full border-2 border-[var(--primary)]/30 shadow-xl hover:scale-105 transition-transform duration-300 ease-in-out"
+                priority
+              />
+            </div>
             <p className="mt-4 sm:mt-8 text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-2xl mx-auto">
               <span className="text-[var(--foreground)] font-bold">
                 Welcome
