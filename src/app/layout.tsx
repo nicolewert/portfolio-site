@@ -16,6 +16,16 @@ export const metadata: Metadata = {
     'Portfolio website of Nicole Wert – Software Engineer, creative technologist, and problem solver. Explore projects, technical skills, and experience in web development, cloud, and GenAI.',
 }
 
+export function generateViewport() {
+  return {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    interactiveWidget: 'resizes-content',
+  }
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
