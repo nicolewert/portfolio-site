@@ -10,6 +10,7 @@
     "PHP",
     "React",
     "Next.js",
+    "Node.js",
     "Tailwind CSS",
     "Accessibility (WCAG)",
     "Responsive Design",
@@ -81,7 +82,7 @@
       {
         "name": "Pricing Component & Custom Markup",
         "summary": "Built reusable React pricing components with WordPress integration, empowering non-technical teams and boosting A/B testing flexibility",
-        "technologies": ["React", "Vanilla JS", "WordPress", "REST API"]
+        "technologies": ["React", "Vanilla JS", "WordPress", "REST API", "PHP"]
       },
       {
         "name": "SSO Integration",
@@ -90,7 +91,8 @@
           "Vanilla JS",
           "WordPress",
           "OAuth 2.0",
-          "OpenID Connect"
+          "OpenID Connect",
+          "PHP"
         ]
       },
       {
