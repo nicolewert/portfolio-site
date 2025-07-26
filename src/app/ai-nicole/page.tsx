@@ -101,6 +101,8 @@ export default function AINicole() {
     },
   ])
   const [isLoading, setIsLoading] = useState(false)
+  const [keyboardHeight, setKeyboardHeight] = useState(0)
+  const [isDesktop, setIsDesktop] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -110,6 +112,55 @@ export default function AINicole() {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  // Keyboard height detection for mobile
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const checkIsDesktop = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+
+    const handleViewportChange = () => {
+      checkIsDesktop()
+      if (window.visualViewport && window.innerWidth < 1024) {
+        const keyboardHeight = window.innerHeight - window.visualViewport.height
+        setKeyboardHeight(Math.max(0, keyboardHeight))
+      }
+    }
+
+    checkIsDesktop()
+
+    // VirtualKeyboard API enhancement (modern browsers)
+    if ('virtualKeyboard' in navigator) {
+      try {
+        const nav = navigator as Navigator & {
+          virtualKeyboard?: { overlaysContent: boolean }
+        }
+        if (nav.virtualKeyboard) {
+          nav.virtualKeyboard.overlaysContent = true
+        }
+      } catch (e) {
+        // Ignore if not supported
+      }
+    }
+
+    window.addEventListener('resize', checkIsDesktop)
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleViewportChange)
+      return () => {
+        window.removeEventListener('resize', checkIsDesktop)
+        window.visualViewport?.removeEventListener(
+          'resize',
+          handleViewportChange
+        )
+      }
+    }
+
+    return () => {
+      window.removeEventListener('resize', checkIsDesktop)
+    }
+  }, [])
 
   const sendMessage = async () => {
     if (!message.trim()) return
@@ -147,12 +198,12 @@ export default function AINicole() {
   // Theme-aware gradient backgrounds using your portfolio theme colors
   const backgroundClass =
     theme === 'dark'
-      ? 'min-h-screen overflow-hidden relative'
-      : 'min-h-screen overflow-hidden relative'
+      ? 'h-screen w-screen overflow-hidden relative'
+      : 'h-screen w-screen overflow-hidden relative'
 
   return (
     <main
-      className={`${backgroundClass} overflow-x-hidden`}
+      className={backgroundClass}
       style={{
         background:
           theme === 'dark'
@@ -204,7 +255,7 @@ export default function AINicole() {
       </div>
 
       {/* Theme Toggle - Mobile (Top Right) */}
-      <div className="fixed top-4 right-4 z-50 lg:hidden">
+      <div className="fixed top-4 right-4 z-50 lg:hidden landscape:max-lg:hidden">
         <div
           className={`p-0.5 rounded-full backdrop-blur-md border shadow-lg transition-all duration-300 ${
             theme === 'dark'
@@ -216,13 +267,109 @@ export default function AINicole() {
         </div>
       </div>
 
-      <div className="flex flex-col max-[1180px]:landscape:flex-row lg:flex-row h-screen w-full overflow-x-hidden">
-        {/* Left side - Holographic Profile */}
-        <div className="w-full max-[1180px]:landscape:w-1/3 lg:w-1/3 flex flex-col items-center justify-center p-2 max-[1180px]:landscape:p-2 sm:p-4 lg:p-8 min-h-[25vh] max-[1180px]:landscape:min-h-0 sm:min-h-[30vh] md:min-h-[35vh] lg:min-h-0 flex-shrink-0">
+      {/* Glass Prism Header Bar - Mobile Landscape Only */}
+      <div className="hidden landscape:max-lg:flex fixed top-0 left-0 right-0 z-40 h-16">
+        <div
+          className={`w-full backdrop-blur-xl border-b shadow-lg ${
+            theme === 'dark'
+              ? 'bg-gradient-to-r from-cyan-500/10 via-purple-500/5 to-cyan-500/10 border-cyan-400/30'
+              : 'bg-gradient-to-r from-white/80 via-cyan-50/60 to-white/80 border-cyan-400/50'
+          }`}
+        >
+          <div className="flex items-center justify-between h-full px-4">
+            {/* Compact Profile Section */}
+            <div className="flex items-center gap-3">
+              {/* Mini Profile Picture with Glass Frame */}
+              <div className="relative">
+                <div
+                  className={`relative w-10 h-10 rounded-2xl backdrop-blur-md shadow-lg ${
+                    theme === 'dark'
+                      ? 'bg-gradient-to-br from-cyan-400/20 to-purple-500/10 border border-cyan-400/40'
+                      : 'bg-gradient-to-br from-white/70 to-cyan-100/60 border border-cyan-400/60'
+                  }`}
+                >
+                  {/* Mini Profile Picture */}
+                  <div className="absolute inset-1 rounded-xl overflow-hidden">
+                    <Image
+                      src="/profile_picture.png"
+                      alt="Nicole Wert"
+                      width={32}
+                      height={32}
+                      className="w-full h-full object-cover filter brightness-110 contrast-110"
+                      priority
+                    />
+                    {/* Mini holographic overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent" />
+                  </div>
+
+                  {/* Mini prismatic corners */}
+                  <div
+                    className={`absolute top-0.5 left-0.5 w-1.5 h-1.5 border-t border-l rounded-tl-md ${
+                      theme === 'dark'
+                        ? 'border-cyan-400/80'
+                        : 'border-cyan-600/90'
+                    }`}
+                  />
+                  <div
+                    className={`absolute top-0.5 right-0.5 w-1.5 h-1.5 border-t border-r rounded-tr-md ${
+                      theme === 'dark'
+                        ? 'border-purple-400/80'
+                        : 'border-purple-600/90'
+                    }`}
+                  />
+                </div>
+              </div>
+
+              {/* Compact Title */}
+              <h1
+                className={`text-base font-bold bg-gradient-to-r bg-clip-text text-transparent ${
+                  theme === 'dark'
+                    ? 'from-cyan-300 via-white to-purple-300'
+                    : 'from-cyan-600 via-slate-800 to-purple-600'
+                }`}
+              >
+                Chat with Nicole AI
+              </h1>
+            </div>
+
+            {/* Right Side - Status & Theme */}
+            <div className="flex items-center gap-3">
+              {/* Status Indicator */}
+              <div
+                className={`flex items-center gap-1.5 px-2 py-1 rounded-full backdrop-blur-md border text-xs font-medium ${
+                  theme === 'dark'
+                    ? 'bg-gradient-to-r from-cyan-500/20 to-green-400/20 border-cyan-400/40 text-cyan-300'
+                    : 'bg-gradient-to-r from-white/80 to-cyan-50/60 border-cyan-500/60 text-cyan-900'
+                }`}
+              >
+                <div
+                  className={`w-1.5 h-1.5 rounded-full ${theme === 'dark' ? 'bg-green-400' : 'bg-green-500'}`}
+                />
+                <span>Online</span>
+              </div>
+
+              {/* Theme Toggle */}
+              <div
+                className={`p-1 rounded-full backdrop-blur-md border ${
+                  theme === 'dark'
+                    ? 'bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border-cyan-400/30'
+                    : 'bg-gradient-to-r from-white/70 to-cyan-50/60 border-cyan-400/40'
+                }`}
+              >
+                <DarkModeToggle />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col landscape:max-lg:flex-row lg:flex-row h-full w-full">
+        {/* Left side - Holographic Profile - Hidden in Mobile Landscape */}
+        <div className="w-full lg:w-1/3 flex flex-col items-center justify-center p-2 landscape:max-lg:p-1 sm:p-4 lg:p-8 min-h-[25vh] landscape:max-lg:min-h-0 lg:min-h-0 flex-shrink-0 landscape:max-lg:hidden">
           <div className="holographic-frame relative">
             {/* Glass frame with prismatic glow effect */}
             <div
-              className={`relative w-24 h-24 max-[1180px]:landscape:w-20 max-[1180px]:landscape:h-20 xs:w-32 xs:h-32 sm:w-56 sm:h-56 lg:w-64 lg:h-64 rounded-3xl backdrop-blur-xl shadow-2xl ${
+              className={`relative w-24 h-24 max-lg:landscape:w-16 max-lg:landscape:h-16 xs:w-32 xs:h-32 sm:w-56 sm:h-56 lg:w-64 lg:h-64 xl:w-80 xl:h-80 2xl:w-96 2xl:h-96 rounded-3xl backdrop-blur-xl shadow-2xl ${
                 theme === 'dark'
                   ? 'bg-gradient-to-br from-cyan-400/10 to-purple-500/5 border border-cyan-400/30'
                   : 'bg-gradient-to-br from-white/70 to-cyan-100/80 border border-cyan-400/60'
@@ -277,7 +424,7 @@ export default function AINicole() {
             </div>
 
             {/* Prismatic status indicator */}
-            <div className="absolute -bottom-3 sm:-bottom-4 left-1/2 transform -translate-x-1/2 hidden sm:block max-[1180px]:landscape:hidden">
+            <div className="absolute -bottom-3 sm:-bottom-4 left-1/2 transform -translate-x-1/2 hidden sm:block max-lg:landscape:hidden lg:block">
               <div
                 className={`glass-tag px-2 sm:px-3 lg:px-4 py-1 sm:py-2 rounded-full backdrop-blur-md border text-xs sm:text-sm font-medium ${
                   theme === 'dark'
@@ -291,7 +438,7 @@ export default function AINicole() {
           </div>
 
           <h1
-            className={`text-lg max-[1180px]:landscape:text-sm sm:text-3xl lg:text-4xl font-bold mt-2 max-[1180px]:landscape:mt-1 sm:mt-6 lg:mt-12 mb-1 max-[1180px]:landscape:mb-1 sm:mb-2 lg:mb-4 text-center bg-gradient-to-r bg-clip-text text-transparent ${
+            className={`text-lg max-lg:landscape:text-base sm:text-3xl lg:text-4xl font-bold mt-2 max-lg:landscape:mt-1 sm:mt-6 lg:mt-12 mb-1 max-lg:landscape:mb-0 sm:mb-2 lg:mb-4 text-center bg-gradient-to-r bg-clip-text text-transparent ${
               theme === 'dark'
                 ? 'from-cyan-300 via-white to-purple-300'
                 : 'from-cyan-600 via-slate-800 to-purple-600'
@@ -300,7 +447,7 @@ export default function AINicole() {
             Chat with Nicole AI
           </h1>
           <p
-            className={`text-center max-w-sm text-sm lg:text-base hidden sm:block max-[1180px]:landscape:hidden ${
+            className={`text-center max-w-sm text-sm lg:text-base hidden sm:block max-lg:landscape:hidden lg:block ${
               theme === 'dark' ? 'text-cyan-200/80' : 'text-slate-600'
             }`}
           >
@@ -308,7 +455,7 @@ export default function AINicole() {
           </p>
 
           {/* Portfolio Link - Mobile */}
-          <div className="flex justify-center mt-2 max-[1180px]:landscape:mt-1 sm:mt-4 lg:hidden">
+          <div className="flex justify-center mt-2 max-lg:landscape:mt-1 sm:mt-4 lg:hidden">
             <a
               href="/portfolio"
               className={`flex items-center gap-1 px-3 py-1 rounded-full backdrop-blur-md border shadow-lg transition-all duration-300 hover:scale-105 ${
@@ -345,17 +492,26 @@ export default function AINicole() {
         </div>
 
         {/* Right side - Chat Interface */}
-        <div className="flex-1 flex flex-col p-2 max-[1180px]:landscape:p-2 sm:p-4 lg:p-8 lg:justify-center min-w-0">
+        <div className="flex-1 flex flex-col p-2 landscape:max-lg:p-1 sm:p-4 lg:p-8 min-w-0 min-h-0 portrait:max-lg:min-h-[50vh] landscape:max-lg:w-full landscape:max-lg:pt-20">
           {/* Prismatic chat container */}
           <div
-            className={`glass-chat backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[65vh] max-[1180px]:landscape:h-[85vh] sm:h-[55vh] md:h-[60vh] lg:flex-1 lg:max-h-[calc(100vh-8rem)] ${
+            className={`glass-chat backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden flex flex-col flex-1 relative ${
               theme === 'dark'
                 ? 'bg-gradient-to-br from-cyan-500/5 to-purple-500/5 border border-cyan-400/20'
                 : 'bg-gradient-to-br from-white/60 to-cyan-100/70 border border-cyan-400/50'
             }`}
           >
             {/* Chat messages */}
-            <div className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto overflow-x-hidden">
+            <div
+              className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto overflow-x-hidden"
+              style={{
+                paddingBottom: isDesktop
+                  ? '0px'
+                  : keyboardHeight > 0
+                    ? `${keyboardHeight + 80}px`
+                    : '80px',
+              }}
+            >
               <div className="flex flex-col space-y-3 sm:space-y-4">
                 {messages.map((msg, index) => (
                   <div
@@ -421,20 +577,25 @@ export default function AINicole() {
               </div>
             </div>
 
-            {/* Input area */}
+            {/* Fixed Input area */}
             <div
-              className={`p-3 sm:p-4 lg:p-6 border-t ${
-                theme === 'dark' ? 'border-white/10' : 'border-slate-200/30'
+              className={`fixed bottom-0 left-0 right-0 landscape:max-lg:relative landscape:max-lg:bottom-auto lg:relative lg:bottom-auto p-3 sm:p-4 lg:p-6 border-t backdrop-blur-xl z-50 ${
+                theme === 'dark'
+                  ? 'border-white/10 bg-gradient-to-br from-cyan-500/5 to-purple-500/5'
+                  : 'border-slate-200/30 bg-gradient-to-br from-white/80 to-cyan-100/70'
               }`}
             >
-              <div className="flex space-x-1 sm:space-x-2 lg:space-x-4">
+              <div className="flex space-x-1 sm:space-x-2 lg:space-x-4 max-w-full">
                 <input
                   type="text"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                  onKeyDown={(e) =>
+                    e.key === 'Enter' && !e.shiftKey && sendMessage()
+                  }
                   placeholder="Ask me about Nicole..."
-                  className={`flex-1 glass-input px-2 sm:px-3 lg:px-4 py-2 lg:py-3 rounded-lg sm:rounded-xl backdrop-blur-md border focus:outline-none focus:ring-2 transition-all duration-300 text-sm lg:text-base ${
+                  inputMode="text"
+                  className={`flex-1 glass-input px-2 sm:px-3 lg:px-4 py-2 lg:py-3 rounded-lg sm:rounded-xl backdrop-blur-md border focus:outline-none focus:ring-2 transition-all duration-300 text-sm lg:text-base min-w-0 ${
                     theme === 'dark'
                       ? 'bg-white/10 border-white/20 text-white placeholder-white/60 focus:ring-cyan-400/50 focus:border-cyan-400/50'
                       : 'bg-white/40 border-slate-200/50 text-slate-700 placeholder-slate-500 focus:ring-blue-400/50 focus:border-blue-400/50'
@@ -444,7 +605,7 @@ export default function AINicole() {
                 <button
                   onClick={sendMessage}
                   disabled={isLoading || !message.trim()}
-                  className={`glass-button px-2 sm:px-4 lg:px-6 py-2 lg:py-3 rounded-lg sm:rounded-xl backdrop-blur-md border transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm lg:text-base ${
+                  className={`glass-button px-2 sm:px-4 lg:px-6 py-2 lg:py-3 rounded-lg sm:rounded-xl backdrop-blur-md border transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm lg:text-base flex-shrink-0 ${
                     theme === 'dark'
                       ? 'bg-cyan-500/20 border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/30'
                       : 'bg-blue-400/30 border-blue-500/50 text-blue-700 hover:bg-blue-400/40'
@@ -453,6 +614,8 @@ export default function AINicole() {
                   Send
                 </button>
               </div>
+              {/* Safe area padding for mobile */}
+              <div className="h-safe-area-inset-bottom lg:hidden" />
             </div>
           </div>
         </div>
