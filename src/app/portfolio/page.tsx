@@ -24,7 +24,7 @@ export default function Portfolio() {
         </div>
 
         {/* Hero Section */}
-        <section className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden px-4 sm:px-6 lg:px-8">
+        <section className="relative flex flex-col items-center justify-center min-h-[100dvh] overflow-hidden px-4 sm:px-6 lg:px-8">
           <div className="glass w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-16 text-center rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg relative z-10">
             <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight animate-fade-in">
               <span className="bg-gradient-to-r from-[var(--primary)] via-[var(--foreground)] to-[var(--accent)] bg-clip-text text-transparent">
@@ -124,8 +124,9 @@ export default function Portfolio() {
           {/* Scroll Indicator */}
           <a
             href="#projects"
-            className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce cursor-pointer hover:scale-110 transition-transform duration-300 focus:outline-none"
+            className="absolute bottom-8 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce cursor-pointer hover:scale-110 transition-transform duration-300 focus:outline-none pb-safe"
             aria-label="Scroll to projects section"
+            style={{ bottom: 'max(32px, env(safe-area-inset-bottom))' }}
           >
             <span className="text-[var(--secondary)]/60 dark:text-[var(--secondary)]/50 text-[10px] sm:text-sm mb-1 sm:mb-2 font-medium">
               Scroll
