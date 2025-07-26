@@ -81,6 +81,45 @@ export default function Portfolio() {
                 <SiLeetcode className="w-7 h-7 social-icon" />
               </a>
             </div>
+
+            {/* AI Chat Button */}
+            <div className="mt-6 sm:mt-8 flex justify-center">
+              <a
+                href="/ai-nicole"
+                className="group inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-[var(--primary)]/10 via-[var(--accent)]/10 to-[var(--secondary)]/10 hover:from-[var(--primary)]/20 hover:via-[var(--accent)]/20 hover:to-[var(--secondary)]/20 border border-[var(--primary)]/30 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
+                aria-label="Chat with AI Nicole"
+              >
+                <svg
+                  className="w-5 h-5 text-[var(--primary)] group-hover:animate-pulse"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                  />
+                </svg>
+                <span className="text-sm sm:text-base font-medium text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors duration-300">
+                  Chat with AI Nicole
+                </span>
+                <svg
+                  className="w-4 h-4 text-[var(--secondary)] group-hover:translate-x-1 transition-transform duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </a>
+            </div>
           </div>
           {/* Scroll Indicator */}
           <a

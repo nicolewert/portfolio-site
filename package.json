@@ -25,6 +25,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "bcryptjs": "^3.0.2",
     "isomorphic-dompurify": "^2.26.0",
+    "jsdom": "^26.1.0",
     "jsonwebtoken": "^9.0.2",
     "next": "15.3.4",
     "react": "^19.0.0",
