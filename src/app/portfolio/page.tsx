@@ -24,7 +24,7 @@ export default function Portfolio() {
         </div>
 
         {/* Hero Section */}
-        <section className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden px-4 sm:px-6 lg:px-8">
+        <section className="relative flex flex-col items-center justify-center min-h-[100dvh] overflow-hidden px-4 sm:px-6 lg:px-8">
           <div className="glass w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-16 text-center rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg relative z-10">
             <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight animate-fade-in">
               <span className="bg-gradient-to-r from-[var(--primary)] via-[var(--foreground)] to-[var(--accent)] bg-clip-text text-transparent">
@@ -81,12 +81,52 @@ export default function Portfolio() {
                 <SiLeetcode className="w-7 h-7 social-icon" />
               </a>
             </div>
+
+            {/* AI Chat Button */}
+            <div className="mt-6 sm:mt-8 flex justify-center">
+              <a
+                href="/ai-nicole"
+                className="group inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-[var(--primary)]/10 via-[var(--accent)]/10 to-[var(--secondary)]/10 hover:from-[var(--primary)]/20 hover:via-[var(--accent)]/20 hover:to-[var(--secondary)]/20 border border-[var(--primary)]/30 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
+                aria-label="Chat with AI Nicole"
+              >
+                <svg
+                  className="w-5 h-5 text-[var(--primary)] group-hover:animate-pulse"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                  />
+                </svg>
+                <span className="text-sm sm:text-base font-medium text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors duration-300">
+                  Chat with AI Nicole
+                </span>
+                <svg
+                  className="w-4 h-4 text-[var(--secondary)] group-hover:translate-x-1 transition-transform duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </a>
+            </div>
           </div>
           {/* Scroll Indicator */}
           <a
             href="#projects"
-            className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce cursor-pointer hover:scale-110 transition-transform duration-300 focus:outline-none"
+            className="absolute bottom-8 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce cursor-pointer hover:scale-110 transition-transform duration-300 focus:outline-none pb-safe"
             aria-label="Scroll to projects section"
+            style={{ bottom: 'max(32px, env(safe-area-inset-bottom))' }}
           >
             <span className="text-[var(--secondary)]/60 dark:text-[var(--secondary)]/50 text-[10px] sm:text-sm mb-1 sm:mb-2 font-medium">
               Scroll

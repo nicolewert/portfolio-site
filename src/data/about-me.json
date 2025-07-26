@@ -54,12 +54,14 @@
       "gradientClass": "bg-gradient-to-br from-gray-700 to-gray-500"
     },
     {
-      "title": "This Portfolio",
+      "title": "AI Chatbot & Portfolio",
       "images": [
+        "/projects/Light_NicoleAI.png",
+        "/projects/Dark_NicoleAI.png",
         "/projects/Light_Portfolio.png",
         "/projects/Dark_Portfolio.png"
       ],
-      "description": "You're looking at it! Built with Next.js, React, and Supabase, this portfolio showcases selected projects and skills with a focus on speed, clarity, and accessibility. Features an AI-powered chatbot with glass futuristic interface for interactive exploration of Nicole's work.",
+      "description": "A modern, interactive portfolio featuring an intelligent AI chatbot powered by Gemini Flash. The site combines Next.js performance with a sophisticated glassmorphism design and seamless dark/light theme switching that respects user preferences. The AI assistant delivers contextual, personalized conversations about technical projects and career insights.",
       "github": "https://github.com/nicolewert/portfolio-site",
       "tags": [
         "Next.js",
