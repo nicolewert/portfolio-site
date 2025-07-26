@@ -198,8 +198,8 @@ export default function AINicole() {
   // Theme-aware gradient backgrounds using your portfolio theme colors
   const backgroundClass =
     theme === 'dark'
-      ? 'h-screen w-screen overflow-hidden relative'
-      : 'h-screen w-screen overflow-hidden relative'
+      ? 'h-screen supports-[height:100dvh]:h-dvh w-screen overflow-hidden relative'
+      : 'h-screen supports-[height:100dvh]:h-dvh w-screen overflow-hidden relative'
 
   return (
     <main
@@ -363,9 +363,9 @@ export default function AINicole() {
         </div>
       </div>
 
-      <div className="flex flex-col landscape:max-lg:flex-row lg:flex-row h-full w-full">
+      <div className="flex flex-col landscape:max-lg:flex-row lg:flex-row h-full supports-[height:100dvh]:h-dvh w-full">
         {/* Left side - Holographic Profile - Hidden in Mobile Landscape */}
-        <div className="w-full lg:w-1/3 flex flex-col items-center justify-center p-2 landscape:max-lg:p-1 sm:p-4 lg:p-8 min-h-[25vh] landscape:max-lg:min-h-0 lg:min-h-0 flex-shrink-0 landscape:max-lg:hidden">
+        <div className="w-full lg:w-1/3 flex flex-col items-center justify-center p-2 landscape:max-lg:p-1 sm:p-4 lg:p-8 min-h-[25vh] supports-[height:100dvh]:min-h-[25dvh] landscape:max-lg:min-h-0 lg:min-h-0 flex-shrink-0 landscape:max-lg:hidden">
           <div className="holographic-frame relative">
             {/* Glass frame with prismatic glow effect */}
             <div
@@ -492,7 +492,7 @@ export default function AINicole() {
         </div>
 
         {/* Right side - Chat Interface */}
-        <div className="flex-1 flex flex-col p-2 landscape:max-lg:p-1 sm:p-4 lg:p-8 min-w-0 min-h-0 portrait:max-lg:min-h-[50vh] landscape:max-lg:w-full landscape:max-lg:pt-20">
+        <div className="flex-1 flex flex-col p-2 landscape:max-lg:p-1 sm:p-4 lg:p-8 min-w-0 min-h-0 portrait:max-lg:min-h-[50vh] supports-[height:100dvh]:portrait:max-lg:min-h-[50dvh] landscape:max-lg:w-full landscape:max-lg:pt-20">
           {/* Prismatic chat container */}
           <div
             className={`glass-chat backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden flex flex-col flex-1 relative ${
