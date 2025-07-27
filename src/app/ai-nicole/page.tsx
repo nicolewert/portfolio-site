@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useTheme } from '../../contexts/ThemeContext'
 import DarkModeToggle from '../../components/DarkModeToggle'
 
@@ -12,6 +13,68 @@ const FormattedMessage = ({
   content: string
   theme: string
 }) => {
+  // Function to parse and render markdown links
+  const parseLinks = (text: string) => {
+    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
+    const parts = []
+    let lastIndex = 0
+    let match
+
+    while ((match = linkRegex.exec(text)) !== null) {
+      // Add text before the link
+      if (match.index > lastIndex) {
+        parts.push(text.slice(lastIndex, match.index))
+      }
+
+      const linkText = match[1]
+      const linkUrl = match[2]
+      const isExternal =
+        linkUrl.startsWith('http') || linkUrl.startsWith('mailto:')
+
+      // Create the link element
+      if (isExternal) {
+        parts.push(
+          <a
+            key={match.index}
+            href={linkUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`underline transition-all duration-300 hover:scale-105 ${
+              theme === 'dark'
+                ? 'text-cyan-300 hover:text-cyan-200'
+                : 'text-cyan-600 hover:text-cyan-700'
+            }`}
+          >
+            {linkText}
+          </a>
+        )
+      } else {
+        parts.push(
+          <Link
+            key={match.index}
+            href={linkUrl}
+            className={`underline transition-all duration-300 hover:scale-105 ${
+              theme === 'dark'
+                ? 'text-cyan-300 hover:text-cyan-200'
+                : 'text-cyan-600 hover:text-cyan-700'
+            }`}
+          >
+            {linkText}
+          </Link>
+        )
+      }
+
+      lastIndex = match.index + match[0].length
+    }
+
+    // Add remaining text after the last link
+    if (lastIndex < text.length) {
+      parts.push(text.slice(lastIndex))
+    }
+
+    return parts.length > 0 ? parts : [text]
+  }
+
   const formatText = (text: string) => {
     // Split by double line breaks to create paragraphs
     const paragraphs = text.split(/\n\s*\n/)
@@ -45,14 +108,16 @@ const FormattedMessage = ({
                           : '•'}
                     </span>
                     <span className="flex-1">
-                      {trimmed.replace(/^[•\-]|\d+\.\s*/, '').trim()}
+                      {parseLinks(
+                        trimmed.replace(/^[•\-]|\d+\.\s*/, '').trim()
+                      )}
                     </span>
                   </div>
                 )
               }
               return (
                 <div key={lIndex} className="mb-1">
-                  {trimmed}
+                  {parseLinks(trimmed)}
                 </div>
               )
             })}
@@ -72,7 +137,7 @@ const FormattedMessage = ({
           <div key={pIndex} className="mb-3">
             {chunks.map((chunk, cIndex) => (
               <div key={cIndex} className="mb-2">
-                {chunk}
+                {parseLinks(chunk)}
               </div>
             ))}
           </div>
@@ -81,7 +146,7 @@ const FormattedMessage = ({
 
       return (
         <div key={pIndex} className="mb-3">
-          {paragraph}
+          {parseLinks(paragraph)}
         </div>
       )
     })
