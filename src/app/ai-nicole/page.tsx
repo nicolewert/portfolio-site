@@ -93,6 +93,7 @@ const FormattedMessage = ({
 export default function AINicole() {
   const { theme } = useTheme()
   const [message, setMessage] = useState('')
+  const MAX_CHARS = 500
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -163,7 +164,7 @@ export default function AINicole() {
   }, [])
 
   const sendMessage = async () => {
-    if (!message.trim()) return
+    if (!message.trim() || message.length > MAX_CHARS) return
 
     const userMessage = { role: 'user', content: message }
     setMessages((prev) => [...prev, userMessage])
@@ -502,16 +503,7 @@ export default function AINicole() {
             }`}
           >
             {/* Chat messages */}
-            <div
-              className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto overflow-x-hidden"
-              style={{
-                paddingBottom: isDesktop
-                  ? '0px'
-                  : keyboardHeight > 0
-                    ? `${keyboardHeight + 80}px`
-                    : '80px',
-              }}
-            >
+            <div className="flex-1 p-3 sm:p-4 lg:p-6 overflow-y-auto overflow-x-hidden">
               <div className="flex flex-col space-y-3 sm:space-y-4">
                 {messages.map((msg, index) => (
                   <div
@@ -577,35 +569,61 @@ export default function AINicole() {
               </div>
             </div>
 
-            {/* Fixed Input area */}
+            {/* Input area */}
             <div
-              className={`fixed bottom-0 left-0 right-0 landscape:max-lg:relative landscape:max-lg:bottom-auto lg:relative lg:bottom-auto p-3 sm:p-4 lg:p-6 border-t backdrop-blur-xl z-50 ${
+              className={`relative p-3 sm:p-4 lg:p-6 border-t backdrop-blur-xl ${
                 theme === 'dark'
                   ? 'border-white/10 bg-gradient-to-br from-cyan-500/5 to-purple-500/5'
                   : 'border-slate-200/30 bg-gradient-to-br from-white/80 to-cyan-100/70'
               }`}
             >
-              <div className="flex space-x-1 sm:space-x-2 lg:space-x-4 max-w-full">
-                <input
-                  type="text"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  onKeyDown={(e) =>
-                    e.key === 'Enter' && !e.shiftKey && sendMessage()
-                  }
-                  placeholder="Ask me about Nicole..."
-                  inputMode="text"
-                  className={`flex-1 glass-input px-2 sm:px-3 lg:px-4 py-2 lg:py-3 rounded-lg sm:rounded-xl backdrop-blur-md border focus:outline-none focus:ring-2 transition-all duration-300 text-sm lg:text-base min-w-0 ${
-                    theme === 'dark'
-                      ? 'bg-white/10 border-white/20 text-white placeholder-white/60 focus:ring-cyan-400/50 focus:border-cyan-400/50'
-                      : 'bg-white/40 border-slate-200/50 text-slate-700 placeholder-slate-500 focus:ring-blue-400/50 focus:border-blue-400/50'
-                  }`}
-                  disabled={isLoading}
-                />
+              <div className="flex items-stretch space-x-1 sm:space-x-2 lg:space-x-4 max-w-full">
+                <div className="flex-1 relative">
+                  <textarea
+                    rows={1}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault()
+                        sendMessage()
+                      }
+                    }}
+                    placeholder="Ask me about Nicole..."
+                    maxLength={MAX_CHARS}
+                    className={`w-full glass-input px-2 sm:px-3 lg:px-4 py-2 lg:py-3 pr-12 sm:pr-14 rounded-lg sm:rounded-xl backdrop-blur-md border focus:outline-none focus:ring-2 transition-all duration-300 text-sm lg:text-base min-w-0 resize-none overflow-y-auto max-w-full word-wrap break-words font-medium leading-normal h-full ${
+                      theme === 'dark'
+                        ? 'bg-white/10 border-white/20 text-white placeholder-white/60 focus:ring-cyan-400/50 focus:border-cyan-400/50'
+                        : 'bg-white/40 border-slate-200/50 text-slate-700 placeholder-slate-500 focus:ring-blue-400/50 focus:border-blue-400/50'
+                    }`}
+                    disabled={isLoading}
+                    style={{
+                      wordWrap: 'break-word',
+                      overflowWrap: 'break-word',
+                    }}
+                  />
+
+                  {/* Character Counter Overlay */}
+                  <div className="absolute bottom-2 lg:bottom-3 right-2 lg:right-3 pointer-events-none">
+                    <div
+                      className={`px-1 py-0.5 rounded text-[10px] lg:text-xs font-medium backdrop-blur-sm border transition-all duration-300 ${
+                        message.length > MAX_CHARS
+                          ? 'text-red-400 border-red-400/40 bg-red-500/20'
+                          : theme === 'dark'
+                            ? 'text-cyan-300/70 border-cyan-400/20 bg-cyan-500/10'
+                            : 'text-slate-500 border-slate-300/40 bg-white/50'
+                      }`}
+                    >
+                      {message.length}/{MAX_CHARS}
+                    </div>
+                  </div>
+                </div>
                 <button
                   onClick={sendMessage}
-                  disabled={isLoading || !message.trim()}
-                  className={`glass-button px-2 sm:px-4 lg:px-6 py-2 lg:py-3 rounded-lg sm:rounded-xl backdrop-blur-md border transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm lg:text-base flex-shrink-0 ${
+                  disabled={
+                    isLoading || !message.trim() || message.length > MAX_CHARS
+                  }
+                  className={`glass-button px-2 sm:px-4 lg:px-6 py-2 lg:py-3 rounded-lg sm:rounded-xl backdrop-blur-md border transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm lg:text-base flex-shrink-0 leading-normal ${
                     theme === 'dark'
                       ? 'bg-cyan-500/20 border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/30'
                       : 'bg-blue-400/30 border-blue-500/50 text-blue-700 hover:bg-blue-400/40'
@@ -614,8 +632,6 @@ export default function AINicole() {
                   Send
                 </button>
               </div>
-              {/* Safe area padding for mobile */}
-              <div className="h-safe-area-inset-bottom lg:hidden" />
             </div>
           </div>
         </div>
