@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import aboutMe from '../data/about-me.json'
+import aboutMe from '../../data/about-me.json'
 
 export default function ResumeSection() {
   const [showAllSkills, setShowAllSkills] = useState(false)
@@ -112,7 +112,7 @@ export default function ResumeSection() {
             <div className="space-y-4">
               {/* Mobile skills display */}
               <div className="flex flex-wrap gap-2 text-[var(--foreground)]/80 md:hidden">
-                {mobileVisibleSkills.map((skill) => (
+                {mobileVisibleSkills.map((skill: string) => (
                   <div
                     key={skill}
                     className="px-3 py-1.5 rounded-full bg-[var(--accent)]/10 hover:text-[var(--primary)] hover:bg-[var(--primary)]/20 hover:scale-110 text-center font-medium whitespace-nowrap shadow-sm transition-all duration-300 ease-in-out cursor-pointer"
@@ -124,7 +124,7 @@ export default function ResumeSection() {
 
               {/* Desktop skills display */}
               <div className="hidden md:flex flex-wrap gap-2 text-[var(--foreground)]/80">
-                {desktopVisibleSkills.map((skill) => (
+                {desktopVisibleSkills.map((skill: string) => (
                   <div
                     key={skill}
                     className="px-3 py-1.5 rounded-full bg-[var(--accent)]/10 hover:text-[var(--primary)] hover:bg-[var(--primary)]/20 hover:scale-110 text-center font-medium whitespace-nowrap shadow-sm transition-all duration-300 ease-in-out cursor-pointer"

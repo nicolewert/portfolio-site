@@ -102,5 +102,28 @@
       }
     ],
     "expertise": "Frontend development with React/Next.js, backend API integration, authentication systems, AI-powered user interfaces, and modern web technologies"
-  }
+  },
+  "education": [
+    {
+      "school": "University of California, Davis",
+      "degree": "B.S. Computer Science",
+      "year": "2022"
+    }
+  ],
+  "experience": [
+    {
+      "role": "Senior Software Engineer",
+      "company": "Ford",
+      "duration": "Sep 2025 - Present",
+      "description": "Built a near-real-time manufacturing dashboard, streaming live ML inference to the UI via MQTT + SSE.",
+      "skills": ["React", "Next.js", "TypeScript", "Go", "GCP", "SSE"]
+    },
+    {
+      "role": "Software Engineer",
+      "company": "Malwarebytes",
+      "duration": "Apr 2022 - Sep 2025",
+      "description": "Shipped reusable React systems for dynamic purchase flows and led SSO integration (OAuth/OIDC) enabling personalized experiences.",
+      "skills": ["React", "JavaScript", "TypeScript", "OAuth/OIDC"]
+    }
+  ]
 }

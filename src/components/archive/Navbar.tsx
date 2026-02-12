@@ -1,8 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import DarkModeToggle from './DarkModeToggle'
-import { useTheme } from '../contexts/ThemeContext'
+import DarkModeToggle from '../DarkModeToggle'
+import { useTheme } from '../../contexts/ThemeContext'
 
 const links = [
   { href: '/portfolio#projects', label: 'Projects' },
