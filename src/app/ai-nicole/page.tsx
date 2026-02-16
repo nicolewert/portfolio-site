@@ -307,8 +307,8 @@ export default function AINicole() {
           <div
             className={`w-px h-6 ${theme === 'dark' ? 'bg-cyan-400/30' : 'bg-cyan-400/40'}`}
           />
-          <a
-            href="/portfolio"
+          <Link
+            href="/"
             className={`text-sm font-medium transition-all duration-300 hover:scale-105 ${
               theme === 'dark'
                 ? 'text-cyan-300 hover:text-cyan-200'
@@ -316,7 +316,7 @@ export default function AINicole() {
             }`}
           >
             View Portfolio →
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -522,8 +522,8 @@ export default function AINicole() {
 
           {/* Portfolio Link - Mobile */}
           <div className="flex justify-center mt-2 max-lg:landscape:mt-1 sm:mt-4 lg:hidden">
-            <a
-              href="/portfolio"
+            <Link
+              href="/"
               className={`flex items-center gap-1 px-3 py-1 rounded-full backdrop-blur-md border shadow-lg transition-all duration-300 hover:scale-105 ${
                 theme === 'dark'
                   ? 'bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border-cyan-400/30 text-cyan-300 hover:text-cyan-200'
@@ -553,7 +553,7 @@ export default function AINicole() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
 
