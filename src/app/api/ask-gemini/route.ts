@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
     if (!rateLimitCheck.allowed) {
       return NextResponse.json(
         {
-          text: "You've reached the daily question limit for this AI assistant. For more detailed conversations about Nicole's work, please [contact me directly](/ai-nicole)!",
+          text: "You've reached the daily question limit for this AI assistant. Feel free to [visit the homepage](/) to explore Nicole's portfolio!",
           rateLimited: true,
         },
         { status: 429 }
@@ -171,15 +171,12 @@ const getContext = () => {
         • Lab / Projects: [see my projects](/#lab) - Project showcases
         • Journey / Experience: [view my experience](/#journey) - Professional experience timeline
         • Blog: [read my blog](/blog) - Technical articles and insights
-        • AI Chat: [chat with me](/ai-nicole) - This current AI assistant
 
         WHEN TO USE LINKS:
         • When users ask about projects → direct to [my projects](/#lab)
         • When users ask about experience/resume → direct to [my experience](/#journey)
-        • When users ask to contact Nicole → direct to [chat with me](/ai-nicole)
         • When users want to see everything → direct to [my homepage](/)
         • When users ask about writing/articles → direct to [my blog](/blog)
-        • For rate limiting → direct to [contact me directly](/ai-nicole)
         
         CRITICAL FORMATTING REQUIREMENTS - ALWAYS FOLLOW:
         1. ALWAYS use markdown formatting with bullet points (•) for lists

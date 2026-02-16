@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { Geist, Inter } from 'next/font/google'
 import '../styles/globals.css'
 import { FloatingDock } from '@/components/ui/floating-dock'
-import { AIChatWidget } from '@/components/chat/ai-chat-widget'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -47,7 +46,6 @@ export default function RootLayout({
         <ThemeProvider>
           <LayoutWrapper>{children}</LayoutWrapper>
           <FloatingDock />
-          <AIChatWidget />
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
