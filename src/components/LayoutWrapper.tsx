@@ -1,15 +1,15 @@
 'use client'
 import { usePathname } from 'next/navigation'
-import { RippleBackground } from '@/components/ui/ripple-background'
+import { GradientBackground } from '@/components/ui/gradient-background'
 
 export const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname()
 
-  // Exclude ripple background from AI Nicole page
-  const shouldShowRipples = !pathname?.startsWith('/ai-nicole')
+  // Exclude gradient background from AI Nicole page
+  const shouldShowGradient = !pathname?.startsWith('/ai-nicole')
 
-  if (shouldShowRipples) {
-    return <RippleBackground>{children}</RippleBackground>
+  if (shouldShowGradient) {
+    return <GradientBackground>{children}</GradientBackground>
   }
 
   return <>{children}</>
