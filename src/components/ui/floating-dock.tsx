@@ -30,7 +30,7 @@ export const FloatingDock = () => {
 
   return (
     <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
-      <div className="flex items-center gap-1 px-2 py-2 rounded-full bg-white/10 dark:bg-zinc-900/40 backdrop-blur-2xl border border-black/5 dark:border-white/5 shadow-2xl ring-1 ring-black/5 dark:ring-white/5">
+      <div className="flex items-center gap-1 px-2 py-2 rounded-full bg-white/60 dark:bg-zinc-900/40 backdrop-blur-2xl border border-white/80 dark:border-white/5 shadow-lg shadow-slate-200/50 dark:shadow-none ring-1 ring-slate-900/5 dark:ring-white/5">
         {links.map((link) => {
           const isActive =
             pathname === link.href ||
@@ -42,7 +42,7 @@ export const FloatingDock = () => {
             <Link
               key={link.label}
               href={link.href}
-              className="relative group p-2 rounded-full transition-all duration-300 hover:bg-white/5"
+              className="relative group p-2 rounded-full transition-all duration-300 hover:bg-slate-100 dark:hover:bg-white/5"
               aria-label={link.label}
             >
               <motion.div
@@ -55,8 +55,8 @@ export const FloatingDock = () => {
                   className={cn(
                     'transition-colors duration-300',
                     isActive
-                      ? 'text-blue-400'
-                      : 'text-zinc-500 group-hover:text-zinc-200'
+                      ? 'text-blue-600 dark:text-blue-400'
+                      : 'text-slate-500 dark:text-zinc-500 group-hover:text-slate-800 dark:group-hover:text-zinc-200'
                   )}
                 />
 

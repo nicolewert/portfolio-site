@@ -16,7 +16,13 @@ export const RippleBackground: React.FC<{ children: React.ReactNode }> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationRef = useRef<number | null>(null)
   const ripplePoints = useRef<RipplePoint[]>([])
+  const themeRef = useRef<string>('dark')
   const { theme } = useTheme()
+
+  // Update ref on theme change — no teardown/restart needed
+  useEffect(() => {
+    themeRef.current = theme
+  }, [theme])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -39,11 +45,11 @@ export const RippleBackground: React.FC<{ children: React.ReactNode }> = ({
       canvas.height = window.innerHeight
     }
 
-    const animate = (time: number) => {
+    const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Set colors based on theme
-      const isDark = theme === 'dark'
+      // Read theme from ref — no dependency on state
+      const isDark = themeRef.current === 'dark'
 
       // Draw interference pattern
       const imageData = ctx.createImageData(canvas.width, canvas.height)
@@ -66,45 +72,43 @@ export const RippleBackground: React.FC<{ children: React.ReactNode }> = ({
           // Normalize interference
           interference = Math.max(0, Math.min(1, (interference + 3) / 6))
 
-          // Apply color based on interference with higher opacity for visibility
           const index = (y * canvas.width + x) * 4
           if (isDark) {
             // Dark theme: cyan/blue tones
             const alpha = interference * 0.25
-            data[index] = Math.floor(interference * 0.2 * 255) // R
-            data[index + 1] = Math.floor(interference * 0.8 * 255) // G
-            data[index + 2] = 255 // B
-            data[index + 3] = Math.floor(alpha * 255) // A
+            data[index] = Math.floor(interference * 0.2 * 255)
+            data[index + 1] = Math.floor(interference * 0.8 * 255)
+            data[index + 2] = 255
+            data[index + 3] = Math.floor(alpha * 255)
           } else {
-            // Light theme: blue tones with much higher visibility
-            const alpha = interference * 0.5 // Increased from 0.3
-            data[index] = Math.floor(interference * 0.4 * 255) // R
-            data[index + 1] = Math.floor(interference * 0.6 * 255) // G
-            data[index + 2] = Math.floor(interference * 1.0 * 255) // B (stronger blue)
-            data[index + 3] = Math.floor(alpha * 255) // A
+            // Light theme: soft blue tones visible on light background
+            const alpha = interference * 0.18
+            data[index] = Math.floor(interference * 0.55 * 255)
+            data[index + 1] = Math.floor(interference * 0.65 * 255)
+            data[index + 2] = Math.floor(interference * 1.0 * 255)
+            data[index + 3] = Math.floor(alpha * 255)
           }
         }
       }
 
       ctx.putImageData(imageData, 0, 0)
 
-      // Draw more visible ring effects at ripple points
+      // Draw ring effects at ripple points
       ripplePoints.current.forEach((point) => {
         const centerX = point.x * canvas.width
         const centerY = point.y * canvas.height
 
-        // Animated rings with higher opacity
         for (let i = 0; i < 3; i++) {
           const radius =
             (Math.sin(point.phase + i * Math.PI * 0.7) * 0.5 + 0.5) * 150 + 50
-          const alpha = (1 - (radius - 50) / 150) * (isDark ? 0.15 : 0.4) // Increased light theme opacity
+          const alpha = (1 - (radius - 50) / 150) * (isDark ? 0.15 : 0.12)
 
           ctx.beginPath()
           ctx.arc(centerX, centerY, radius, 0, Math.PI * 2)
           ctx.strokeStyle = isDark
             ? `rgba(0, 255, 255, ${alpha})`
             : `rgba(59, 130, 246, ${alpha})`
-          ctx.lineWidth = isDark ? 1 : 2 // Thicker lines in light mode
+          ctx.lineWidth = isDark ? 1 : 1.5
           ctx.stroke()
         }
       })
@@ -119,7 +123,7 @@ export const RippleBackground: React.FC<{ children: React.ReactNode }> = ({
 
     resize()
     window.addEventListener('resize', resize)
-    animate(0)
+    animate()
 
     return () => {
       window.removeEventListener('resize', resize)
@@ -127,7 +131,7 @@ export const RippleBackground: React.FC<{ children: React.ReactNode }> = ({
         cancelAnimationFrame(animationRef.current)
       }
     }
-  }, [theme])
+  }, []) // Only run once — theme changes picked up via ref
 
   return (
     <div className="relative min-h-screen">

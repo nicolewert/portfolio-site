@@ -127,8 +127,12 @@ export default async function Blog({ searchParams }: BlogPageProps) {
     console.error('Error loading blog:', error)
     return (
       <main className="min-h-screen px-4 py-32 max-w-5xl mx-auto relative z-10 text-center">
-        <h1 className="text-4xl font-bold text-white mb-4">The Archives</h1>
-        <p className="text-zinc-400">Unable to load posts at this time.</p>
+        <h1 className="text-4xl font-bold text-zinc-900 dark:text-white mb-4">
+          The Archives
+        </h1>
+        <p className="text-zinc-600 dark:text-zinc-400">
+          Unable to load posts at this time.
+        </p>
       </main>
     )
   }
