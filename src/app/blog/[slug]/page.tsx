@@ -114,7 +114,7 @@ export default async function BlogPost({ params }: BlogPostPageProps) {
           {post.featured_image_url && (
             <div className="mb-8 rounded-xl overflow-hidden">
               <Image
-                src={post.featured_image_url}
+                src={post.featured_image_url.trim()}
                 alt={post.title}
                 width={800}
                 height={400}

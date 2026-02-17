@@ -7,28 +7,38 @@ import { formatDate } from '@/lib/utils'
 
 interface BlogPostCardProps {
   post: BlogPost
-  featured?: boolean
 }
 
-export default function BlogPostCard({
-  post,
-  featured = false,
-}: BlogPostCardProps) {
+export default function BlogPostCard({ post }: BlogPostCardProps) {
   return (
-    <article
-      className={`glass rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg transition-all duration-300 hover:scale-105 hover:shadow-xl ${featured ? 'p-8' : 'p-6'}`}
-    >
+    <article className="glass rounded-2xl border border-[var(--foreground)]/5 shadow-2xl dark:shadow-[var(--foreground)]/5 backdrop-blur-lg transition-all duration-300 hover:scale-105 hover:shadow-xl p-6">
       <div className="flex flex-col h-full">
         {/* Featured Image */}
-        {post.featured_image_url && (
+        {post.featured_image_url ? (
           <div className="mb-4 rounded-xl overflow-hidden">
             <Image
-              src={post.featured_image_url}
+              src={post.featured_image_url.trim()}
               alt={post.title}
               width={400}
               height={200}
               className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
             />
+          </div>
+        ) : (
+          <div className="mb-4 rounded-xl overflow-hidden h-48 bg-gradient-to-br from-[var(--primary)]/10 to-[var(--primary)]/5 flex items-center justify-center">
+            <svg
+              className="w-12 h-12 text-[var(--primary)]/20"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"
+              />
+            </svg>
           </div>
         )}
 
@@ -56,9 +66,7 @@ export default function BlogPostCard({
         </div>
 
         {/* Title */}
-        <h2
-          className={`font-bold text-[var(--foreground)] mb-3 line-clamp-2 hover:text-[var(--primary)] transition-colors ${featured ? 'text-2xl' : 'text-xl'}`}
-        >
+        <h2 className="font-bold text-[var(--foreground)] mb-3 line-clamp-2 hover:text-[var(--primary)] transition-colors text-xl">
           <Link href={`/blog/${post.slug}`}>{post.title}</Link>
         </h2>
 

@@ -85,23 +85,11 @@ export default function BlogPostList({
 
   return (
     <div className="space-y-8">
-      {/* Featured Post */}
-      {posts.length > 0 && !searchQuery && !tagFilter && !categoryFilter && (
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-[var(--foreground)] mb-6">
-            Featured Post
-          </h2>
-          <BlogPostCard post={posts[0]} featured={true} />
-        </div>
-      )}
-
       {/* Posts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {posts
-          .slice(searchQuery || tagFilter || categoryFilter ? 0 : 1)
-          .map((post) => (
-            <BlogPostCard key={post.id} post={post} />
-          ))}
+        {posts.map((post) => (
+          <BlogPostCard key={post.id} post={post} />
+        ))}
       </div>
 
       {/* Load More Button */}
