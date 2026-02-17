@@ -1,3 +1,5 @@
+export const revalidate = 60
+
 import BlogPostList from '../../components/BlogPostList'
 import Head from 'next/head'
 import Link from 'next/link'

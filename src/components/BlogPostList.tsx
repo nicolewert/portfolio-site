@@ -20,18 +20,18 @@ export default function BlogPostList({
   const [posts, setPosts] = useState<BlogPost[]>(initialPosts?.posts || [])
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(initialPosts?.hasMore || false)
-  const [page, setPage] = useState(1)
+  const [nextCursor, setNextCursor] = useState<string | undefined>(
+    initialPosts?.nextCursor
+  )
 
   const loadPosts = useCallback(
     async (reset = false) => {
       setLoading(true)
 
       try {
-        const params = new URLSearchParams({
-          page: reset ? '1' : (page + 1).toString(),
-          limit: '9',
-        })
+        const params = new URLSearchParams({ limit: '9' })
 
+        if (!reset && nextCursor) params.append('cursor', nextCursor)
         if (searchQuery) params.append('search', searchQuery)
         if (tagFilter) params.append('tag', tagFilter)
         if (categoryFilter) params.append('category', categoryFilter)
@@ -41,20 +41,19 @@ export default function BlogPostList({
 
         if (reset) {
           setPosts(data.posts)
-          setPage(1)
         } else {
           setPosts((prev) => [...prev, ...data.posts])
-          setPage((prev) => prev + 1)
         }
 
         setHasMore(data.hasMore)
+        setNextCursor(data.nextCursor)
       } catch (error) {
         console.error('Error loading posts:', error)
       } finally {
         setLoading(false)
       }
     },
-    [searchQuery, tagFilter, categoryFilter, page]
+    [searchQuery, tagFilter, categoryFilter, nextCursor]
   )
 
   useEffect(() => {

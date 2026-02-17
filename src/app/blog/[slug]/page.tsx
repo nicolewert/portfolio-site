@@ -1,3 +1,6 @@
+export const revalidate = 60
+export const dynamicParams = true
+
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import Link from 'next/link'
@@ -13,10 +16,14 @@ interface BlogPostPageProps {
 }
 
 export async function generateStaticParams() {
-  const { posts } = await getPublishedPosts({ limit: 100 })
-  return posts.map((post) => ({
-    slug: post.slug,
-  }))
+  try {
+    const { posts } = await getPublishedPosts({ limit: 100 })
+    return posts.map((post) => ({
+      slug: post.slug,
+    }))
+  } catch {
+    return []
+  }
 }
 
 export async function generateMetadata({
