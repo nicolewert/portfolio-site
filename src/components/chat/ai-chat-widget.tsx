@@ -25,13 +25,18 @@ export const AIChatWidget = ({ isOpen, onClose }: AIChatWidgetProps) => {
   ])
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
+  const lastAssistantRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    scrollToBottom()
+    const lastMessage = messages[messages.length - 1]
+    if (lastMessage?.role === 'assistant' && messages.length > 1) {
+      lastAssistantRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    } else {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
   }, [messages])
 
   const sendMessage = async () => {
@@ -84,7 +89,7 @@ export const AIChatWidget = ({ isOpen, onClose }: AIChatWidgetProps) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className={`fixed bottom-24 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-6 w-[calc(100vw-2rem)] max-w-96 h-[min(500px,70vh)] z-50 flex flex-col rounded-2xl shadow-2xl overflow-hidden ${
+            className={`fixed bottom-24 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-6 w-[calc(100vw-2rem)] max-w-96 h-[min(600px,80vh)] z-50 flex flex-col rounded-2xl shadow-2xl overflow-hidden ${
               theme === 'dark'
                 ? 'border border-cyan-400/15 ring-1 ring-white/5'
                 : 'border border-cyan-200/60 ring-1 ring-cyan-300/20'
@@ -186,6 +191,11 @@ export const AIChatWidget = ({ isOpen, onClose }: AIChatWidgetProps) => {
                 {messages.map((msg, index) => (
                   <div
                     key={index}
+                    ref={
+                      index === messages.length - 1 && msg.role === 'assistant'
+                        ? lastAssistantRef
+                        : undefined
+                    }
                     className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
