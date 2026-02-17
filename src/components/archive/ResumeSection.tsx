@@ -6,7 +6,7 @@ import aboutMe from '../../data/about-me.json'
 export default function ResumeSection() {
   const [showAllSkills, setShowAllSkills] = useState(false)
 
-  const skills = aboutMe.skills
+  const skills = Object.values(aboutMe.ai_context.skills).flat()
 
   // Show 8 on mobile, 20 on desktop, all when expanded
   const mobileVisibleSkills = showAllSkills ? skills : skills.slice(0, 8)

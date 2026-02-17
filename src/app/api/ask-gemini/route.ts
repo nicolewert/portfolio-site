@@ -3,12 +3,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { readFileSync } from 'fs'
 import { join } from 'path'
 
-interface KeyProject {
-  name: string
-  summary: string
-  technologies: string[]
-}
-
 interface RateLimit {
   count: number
   resetTime: Date
@@ -138,34 +132,52 @@ function validateInput(message: string | unknown[]) {
 const getContext = () => {
   const aboutMePath = join(process.cwd(), 'src', 'data', 'about-me.json')
   const aboutMeData = JSON.parse(readFileSync(aboutMePath, 'utf8'))
-  const { name, role, company, location, skills, interests, ai_summary } =
-    aboutMeData
+  const { ai_context } = aboutMeData
+
+  const skillsSection = Object.entries(
+    ai_context.skills as Record<string, string[]>
+  )
+    .map(
+      ([category, items]) =>
+        `  ${category.replace(/_/g, ' ')}: ${items.join(', ')}`
+    )
+    .join('\n')
+
+  const workSection = ai_context.work_history
+    .map(
+      (job: {
+        role: string
+        company: string
+        duration: string
+        location: string
+        highlights: string[]
+      }) =>
+        `  ${job.role} at ${job.company} (${job.duration}, ${job.location})\n${job.highlights.map((h: string) => `    - ${h}`).join('\n')}`
+    )
+    .join('\n\n')
 
   return `
         You are an AI assistant for Nicole Wert's Software engineering portfolio website.
         Use the following information to answer questions about Nicole to potential employers and developer collaborators.
 
-        Name: ${name}
-        Role: ${role}
-        Company: ${company}
-        Location: ${location}
-        Skills: ${skills.join(', ')}
-        Interests: ${interests.join(', ')}
-        
-        About: ${ai_summary.about}
-        
-        Key Projects:
-        ${ai_summary.key_projects
-          .map(
-            (project: KeyProject) =>
-              `- ${project.name}: ${project.summary} (Technologies: ${project.technologies.join(', ')})`
-          )
-          .join('\n        ')}
-        
-        Expertise: ${ai_summary.expertise}
+        Name: ${ai_context.name}
+        Current Role: ${ai_context.current_role} at ${ai_context.current_company}
+        Location: ${ai_context.location}
+
+        Summary: ${ai_context.summary}
+
+        Skills:
+${skillsSection}
+
+        Work History:
+${workSection}
+
+        Education: ${ai_context.education.degrees.join(' & ')} from ${ai_context.education.school} (graduated ${ai_context.education.graduated})
+
+        Exploration Projects: ${ai_context.exploration_projects.join('; ')}
 
         Personality: Be enthusiastic, professional, and knowledgeable about Nicole's work. Highlight her technical skills and passion for AI integration in web development.
-        
+
         NAVIGATION & ROUTING GUIDE - Use these links to direct users:
         • Home: [visit the homepage](/) - Main landing page with overview
         • Lab / Projects: [see my projects](/#lab) - Project showcases
@@ -177,7 +189,7 @@ const getContext = () => {
         • When users ask about experience/resume → direct to [my experience](/#journey)
         • When users want to see everything → direct to [my homepage](/)
         • When users ask about writing/articles → direct to [my blog](/blog)
-        
+
         CRITICAL FORMATTING REQUIREMENTS - ALWAYS FOLLOW:
         1. ALWAYS use markdown formatting with bullet points (•) for lists
         2. NEVER write paragraphs longer than 2 sentences
@@ -185,16 +197,16 @@ const getContext = () => {
         4. Structure responses like this example:
            • Key point: Brief explanation
            • Another point: Short detail
-           
+
            Brief paragraph about topic.
-           
+
            • Final points: Listed clearly
         5. Use clean, simple text without bold formatting
         6. KEEP RESPONSES CONCISE - Maximum 3-4 bullet points or 2-3 short sentences total
         7. Prioritize the most important information only
         8. ALWAYS include relevant links using the markdown format [text](url) when directing users to specific sections
-        
-        Only respond to questions about Nicole Wert or these projects. 
+
+        Only respond to questions about Nicole Wert or these projects.
         If the question is unrelated, politely decline to answer and redirect to Nicole's work.
     `
 }

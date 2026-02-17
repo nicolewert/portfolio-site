@@ -1,115 +1,4 @@
 {
-  "name": "Nicole Wert",
-  "role": "Full-Stack Software Engineer",
-  "company": "Malwarebytes",
-  "location": "San Francisco Bay Area",
-  "skills": [
-    "TypeScript",
-    "JavaScript",
-    "Python",
-    "PHP",
-    "React",
-    "Next.js",
-    "Node.js",
-    "Tailwind CSS",
-    "Accessibility (WCAG)",
-    "Responsive Design",
-    "API Design",
-    "REST",
-    "Docker",
-    "Github Actions",
-    "Cloud Deployment",
-    "GenAI Prototyping",
-    "Prompt Engineering",
-    "Design Patterns",
-    "DSA",
-    "System Design"
-  ],
-  "interests": ["AI product design", "frontend innovation", "scalable systems"],
-
-  "projects": [
-    {
-      "title": "Pricing Component & Custom Markup",
-      "description": "Developed a reusable, site-wide pricing component and custom markup that replaced legacy code and empowered non-technical teams to configure global pricing, cart links, and popup experiences—boosting A/B testing speed and flexibility. Built with React, vanilla JS, and integrated with a WordPress server database and REST API.",
-      "images": [
-        "/projects/Card_PricingComponent.png",
-        "/projects/Button_PricingComponent.png"
-      ],
-      "live": "https://www.malwarebytes.com/premium",
-      "tags": ["React", "Vanilla JS", "WordPress", "REST API", "A/B Testing"],
-      "gradientClass": "bg-gradient-to-br from-gray-700 to-gray-500"
-    },
-    {
-      "title": "SSO Integration for Personalized Access",
-      "description": "Implemented secure Single Sign-On (SSO) functionality using OpenID Connect and OAuth 2.0, allowing users to seamlessly authenticate via internal subscription systems. Built with vanilla JavaScript and WordPress, the solution leveraged a REST API backend to enable tailored user flows, personalized web experiences, and unified identity management across services.",
-      "images": ["/projects/LoggedIn_SSO.png", "/projects/SignIn_SSO.png"],
-      "tags": [
-        "Vanilla JS",
-        "WordPress",
-        "REST API",
-        "OAuth 2.0",
-        "OpenID Connect",
-        "Authentication"
-      ],
-      "live": "https://www.malwarebytes.com",
-      "gradientClass": "bg-gradient-to-br from-gray-700 to-gray-500"
-    },
-    {
-      "title": "AI Chatbot & Portfolio",
-      "images": [
-        "/projects/Light_NicoleAI.png",
-        "/projects/Dark_NicoleAI.png",
-        "/projects/Light_Portfolio.png",
-        "/projects/Dark_Portfolio.png"
-      ],
-      "description": "A modern, interactive portfolio featuring an intelligent AI chatbot powered by Gemini Flash. The site combines Next.js performance with a sophisticated glassmorphism design and seamless dark/light theme switching that respects user preferences. The AI assistant delivers contextual, personalized conversations about technical projects and career insights.",
-      "github": "https://github.com/nicolewert/portfolio-site",
-      "tags": [
-        "Next.js",
-        "React",
-        "Supabase",
-        "Vercel",
-        "AI Chatbot",
-        "Glassmorphism"
-      ],
-      "gradientClass": "bg-gradient-to-br from-gray-700 to-gray-500"
-    }
-  ],
-
-  "ai_summary": {
-    "about": "Nicole Wert is a Full-Stack Software Engineer in the San Francisco Bay Area, specializing in React, Next.js, TypeScript, and AI integration. She's passionate about AI product design, frontend innovation, and scalable systems. She has 3+ years of experience.",
-    "key_projects": [
-      {
-        "name": "Pricing Component & Custom Markup",
-        "summary": "Built reusable React pricing components with WordPress integration, empowering non-technical teams and boosting A/B testing flexibility",
-        "technologies": ["React", "Vanilla JS", "WordPress", "REST API", "PHP"]
-      },
-      {
-        "name": "SSO Integration",
-        "summary": "Implemented secure Single Sign-On with OAuth 2.0 and OpenID Connect for personalized user experiences",
-        "technologies": [
-          "Vanilla JS",
-          "WordPress",
-          "OAuth 2.0",
-          "OpenID Connect",
-          "PHP"
-        ]
-      },
-      {
-        "name": "AI-Powered Portfolio",
-        "summary": "Built this interactive portfolio with Next.js and AI chatbot featuring glass futuristic interface",
-        "technologies": ["Next.js", "React", "Supabase", "AI Integration"]
-      }
-    ],
-    "expertise": "Frontend development with React/Next.js, backend API integration, authentication systems, AI-powered user interfaces, and modern web technologies"
-  },
-  "education": [
-    {
-      "school": "University of California, Davis",
-      "degree": "B.S. Computer Science",
-      "year": "2022"
-    }
-  ],
   "experience": [
     {
       "role": "Senior Software Engineer",
@@ -125,5 +14,88 @@
       "description": "Shipped reusable React systems for dynamic purchase flows and led SSO integration (OAuth/OIDC) enabling personalized experiences.",
       "skills": ["React", "JavaScript", "TypeScript", "OAuth/OIDC"]
     }
-  ]
+  ],
+
+  "ai_context": {
+    "name": "Nicole Wert",
+    "summary": "Software Engineer with 3+ years of experience building and iterating on web applications. Experienced in designing full-stack systems, developing modular frontends, RESTful APIs, and rapidly prototyping features using React/TypeScript, Next.js, and Go. Enjoys building systems that improve real-world workflows and refining user experiences through iteration. Collaborative, growth-oriented, and continuously learning.",
+
+    "current_role": "Sr. Software Engineer",
+    "current_company": "Ford",
+    "location": "Palo Alto, CA",
+
+    "skills": {
+      "languages_frameworks": [
+        "TypeScript",
+        "JavaScript",
+        "Go",
+        "Python",
+        "React",
+        "Next.js"
+      ],
+      "frontend": [
+        "Modular component design",
+        "responsive UI",
+        "client-side performance optimization"
+      ],
+      "backend": [
+        "REST APIs",
+        "real-time systems (WebSocket, MQTT, SSE)",
+        "authentication systems (OAuth 2.0, OpenID Connect)",
+        "data modeling",
+        "system performance and latency considerations"
+      ],
+      "devops": [
+        "Cloud deployment (GCP)",
+        "containerization",
+        "observability",
+        "environment management"
+      ],
+      "ai": [
+        "Rapid prototyping",
+        "GenAI powered features",
+        "prompt engineering",
+        "real-time feedback interfaces"
+      ]
+    },
+
+    "work_history": [
+      {
+        "role": "Sr. Software Engineer",
+        "company": "Ford",
+        "duration": "Sept 2025 - Present",
+        "location": "Palo Alto, CA",
+        "highlights": [
+          "Designed and built a near-real-time manufacturing dashboard from zero to production-ready demo in 2 weeks, owning system design, backend services, and frontend UI (Go, TypeScript, Next.js)",
+          "Streamed ML inference results (~1 msg/sec) to a live UI using MQTT and SSE, enabling real-time visualization, interaction, and feedback on model outputs",
+          "Built cloud-deployable infrastructure with observability and performance improvements; project positioned for rollout across additional plants"
+        ]
+      },
+      {
+        "role": "Software Engineer",
+        "company": "Malwarebytes",
+        "duration": "April 2022 - Sept 2025",
+        "location": "Santa Clara, CA",
+        "highlights": [
+          "Designed a reusable markup system and modular React components enabling dynamic pricing, cart links, and checkout modals site-wide with zero engineering dependency",
+          "Led full-stack SSO integration using OAuth 2.0 and OpenID Connect to unlock personalized UX and dynamic content",
+          "Prototyped GenAI-powered features, including an interactive website chatbot and a Chrome extension that parsed and flagged scam job postings"
+        ]
+      }
+    ],
+
+    "education": {
+      "school": "Yonsei University",
+      "degrees": [
+        "B.S. Energy & Environmental Science and Engineering",
+        "B.S. Creative Technology Management"
+      ],
+      "graduated": "August 2021"
+    },
+
+    "exploration_projects": [
+      "AI-assisted multi-model coding interface",
+      "Hamstash — approachable personal finance & savings tracker"
+    ]
+  }
 }
