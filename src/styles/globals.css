@@ -28,9 +28,9 @@ html.dark {
   --button-glass: rgba(0, 212, 255, 0.2);
   --button-border: rgba(0, 212, 255, 0.3);
   --button-highlight: rgba(0, 212, 255, 0.1);
-  /* Ripple Variables - Dark Mode - Keep original */
-  --ripple-primary: rgba(0, 212, 255, 0.15);
-  --ripple-secondary: rgba(139, 92, 246, 0.1);
+  /* Ripple Variables - Dark Mode - Cotton Candy */
+  --ripple-primary: rgba(255, 182, 193, 0.15);
+  --ripple-secondary: rgba(135, 206, 250, 0.12);
   --text-shadow-dark: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
@@ -113,14 +113,14 @@ html.dark .bg-enhanced {
 html.dark .glass {
   background: linear-gradient(
     135deg,
-    rgba(0, 255, 255, 0.04),
-    rgba(139, 92, 246, 0.03)
+    rgba(255, 182, 193, 0.04),
+    rgba(135, 206, 250, 0.03)
   );
-  border: 1px solid rgba(0, 255, 255, 0.08);
+  border: 1px solid rgba(255, 182, 193, 0.08);
   box-shadow:
-    0 4px 16px rgba(0, 255, 255, 0.05),
-    0 12px 32px rgba(139, 92, 246, 0.04),
-    0 24px 64px rgba(255, 0, 128, 0.03),
+    0 4px 16px rgba(255, 182, 193, 0.05),
+    0 12px 32px rgba(135, 206, 250, 0.04),
+    0 24px 64px rgba(200, 160, 255, 0.03),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
