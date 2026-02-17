@@ -32,7 +32,7 @@ export const Footer = () => {
             <Linkedin size={24} />
           </a>
           <a
-            href="mailto:nicole.wert@example.com"
+            href="mailto:nicolewert@yahoo.com"
             className="p-3 rounded-full bg-slate-100 text-slate-600 hover:bg-blue-50 hover:text-blue-600 border border-slate-200 hover:border-blue-300 dark:bg-white/5 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-white dark:border-transparent dark:hover:border-white/10 transition-all"
           >
             <Mail size={24} />
