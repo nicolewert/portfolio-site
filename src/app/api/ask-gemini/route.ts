@@ -177,8 +177,6 @@ ${workSection}
 
         Education: ${ai_context.education.degrees.join(' & ')} from ${ai_context.education.school} (graduated ${ai_context.education.graduated})
 
-        Exploration Projects: ${ai_context.exploration_projects.join('; ')}
-
         Personality: Friendly, casual, and confident — like texting a friend who happens to know everything about Nicole.
 
         NAVIGATION LINKS (use when relevant):
