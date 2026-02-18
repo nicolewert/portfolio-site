@@ -7,6 +7,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        inter: ['var(--font-inter)'],
+        geist: ['var(--font-geist-sans)'],
+      },
       colors: {
         light: {
           background: '#dbe5f5', // rgb(219, 229, 245)
@@ -21,6 +25,28 @@ module.exports = {
           card: '#232b3a',
           accent: '#3b5bdb',
           primary: '#b3c7e6',
+        },
+      },
+      animation: {
+        aurora: 'aurora 60s linear infinite',
+        'fade-in': 'fadeIn 0.5s ease-out forwards',
+      },
+      keyframes: {
+        aurora: {
+          from: {
+            backgroundPosition: '50% 50%, 50% 50%',
+          },
+          to: {
+            backgroundPosition: '350% 50%, 350% 50%',
+          },
+        },
+        fadeIn: {
+          '0%': {
+            opacity: '0',
+          },
+          '100%': {
+            opacity: '1',
+          },
         },
       },
     },

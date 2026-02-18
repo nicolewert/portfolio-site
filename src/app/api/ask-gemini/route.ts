@@ -3,12 +3,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { readFileSync } from 'fs'
 import { join } from 'path'
 
-interface KeyProject {
-  name: string
-  summary: string
-  technologies: string[]
-}
-
 interface RateLimit {
   count: number
   resetTime: Date
@@ -49,7 +43,7 @@ export async function POST(req: NextRequest) {
     if (!rateLimitCheck.allowed) {
       return NextResponse.json(
         {
-          text: "You've reached the daily question limit for this AI assistant. For more detailed conversations about Nicole's work, please [contact me directly](/portfolio#contact)!",
+          text: "You've reached the daily question limit for this AI assistant. Feel free to [visit the homepage](/) to explore Nicole's portfolio!",
           rateLimited: true,
         },
         { status: 429 }
@@ -60,6 +54,9 @@ export async function POST(req: NextRequest) {
 
     const result = await ai.models.generateContent({
       model: process.env.MODEL || 'gemini-2.5-flash',
+      config: {
+        maxOutputTokens: 800,
+      },
       contents: {
         role: 'user',
         parts: [{ text: prompt }],
@@ -138,67 +135,70 @@ function validateInput(message: string | unknown[]) {
 const getContext = () => {
   const aboutMePath = join(process.cwd(), 'src', 'data', 'about-me.json')
   const aboutMeData = JSON.parse(readFileSync(aboutMePath, 'utf8'))
-  const { name, role, company, location, skills, interests, ai_summary } =
-    aboutMeData
+  const { ai_context } = aboutMeData
+
+  const skillsSection = Object.entries(
+    ai_context.skills as Record<string, string[]>
+  )
+    .map(
+      ([category, items]) =>
+        `  ${category.replace(/_/g, ' ')}: ${items.join(', ')}`
+    )
+    .join('\n')
+
+  const workSection = ai_context.work_history
+    .map(
+      (job: {
+        role: string
+        company: string
+        duration: string
+        location: string
+        highlights: string[]
+      }) =>
+        `  ${job.role} at ${job.company} (${job.duration}, ${job.location})\n${job.highlights.map((h: string) => `    - ${h}`).join('\n')}`
+    )
+    .join('\n\n')
 
   return `
         You are an AI assistant for Nicole Wert's Software engineering portfolio website.
         Use the following information to answer questions about Nicole to potential employers and developer collaborators.
 
-        Name: ${name}
-        Role: ${role}
-        Company: ${company}
-        Location: ${location}
-        Skills: ${skills.join(', ')}
-        Interests: ${interests.join(', ')}
-        
-        About: ${ai_summary.about}
-        
-        Key Projects:
-        ${ai_summary.key_projects
-          .map(
-            (project: KeyProject) =>
-              `- ${project.name}: ${project.summary} (Technologies: ${project.technologies.join(', ')})`
-          )
-          .join('\n        ')}
-        
-        Expertise: ${ai_summary.expertise}
+        Name: ${ai_context.name}
+        Current Role: ${ai_context.current_role} at ${ai_context.current_company}
+        Location: ${ai_context.location}
 
-        Personality: Be enthusiastic, professional, and knowledgeable about Nicole's work. Highlight her technical skills and passion for AI integration in web development.
-        
-        NAVIGATION & ROUTING GUIDE - Use these links to direct users:
-        • Main Portfolio: [view my portfolio](/portfolio) - Overview and introduction
-        • Projects: [see my projects](/portfolio#projects) - Detailed project showcases
-        • Resume: [view my resume](/portfolio#resume) - Professional experience and education
-        • Contact: [contact me](/portfolio#contact) - Contact form and information
-        • Blog: [read my blog](/blog) - Technical articles and insights
-        • AI Chat: [chat with me](/ai-nicole) - This current AI assistant
-        
-        WHEN TO USE LINKS:
-        • When users ask about projects → direct to [my projects](/portfolio#projects)
-        • When users ask about experience/resume → direct to [my resume](/portfolio#resume)
-        • When users ask to contact Nicole → direct to [contact me](/portfolio#contact)
-        • When users want to see everything → direct to [my portfolio](/portfolio)
-        • When users ask about writing/articles → direct to [my blog](/blog)
-        • For rate limiting → direct to [contact me directly](/portfolio#contact)
-        
-        CRITICAL FORMATTING REQUIREMENTS - ALWAYS FOLLOW:
-        1. ALWAYS use markdown formatting with bullet points (•) for lists
-        2. NEVER write paragraphs longer than 2 sentences
-        3. ALWAYS add a blank line between different points
-        4. Structure responses like this example:
-           • Key point: Brief explanation
-           • Another point: Short detail
-           
-           Brief paragraph about topic.
-           
-           • Final points: Listed clearly
-        5. Use clean, simple text without bold formatting
-        6. KEEP RESPONSES CONCISE - Maximum 3-4 bullet points or 2-3 short sentences total
-        7. Prioritize the most important information only
-        8. ALWAYS include relevant links using the markdown format [text](url) when directing users to specific sections
-        
-        Only respond to questions about Nicole Wert or these projects. 
-        If the question is unrelated, politely decline to answer and redirect to Nicole's work.
+        Summary: ${ai_context.summary}
+
+        Skills:
+${skillsSection}
+
+        Work History:
+${workSection}
+
+        Education: ${ai_context.education.degrees.join(' & ')} from ${ai_context.education.school} (graduated ${ai_context.education.graduated})
+
+        Personality: Friendly, casual, and confident — like texting a friend who happens to know everything about Nicole.
+
+        NAVIGATION LINKS (use when relevant):
+        • Projects: [check out her projects](/#lab)
+        • Experience: [see her experience](/#journey)
+        • Blog: [read her blog](/blog)
+        • Home: [visit the homepage](/)
+
+        CRITICAL RESPONSE STYLE - YOU MUST FOLLOW THESE:
+        1. Respond like a SHORT TEXT MESSAGE. 1-3 sentences max. That's it.
+        2. Never write more than 50 words unless absolutely necessary.
+        3. No bullet point lists. No numbered lists. Just talk naturally.
+        4. Pick the single most important thing to say and say it.
+        5. If someone asks about skills, don't list them all — mention 2-3 highlights and link to the site.
+        6. If someone asks about work history, give the current role + one sentence, then link to the experience section.
+        7. Use markdown links [like this](/) when directing users somewhere.
+        8. No bold text. No headers. Just casual, concise text.
+
+        Example good responses:
+        - "She's a senior full-stack engineer at Hilton, working with React and Node.js. [Check out her experience](/#journey) for the full story!"
+        - "Yep! She's super into AI integration — built an AI chatbot (hi, that's me) and works with LLMs. [See her projects](/#lab)"
+
+        Only answer questions about Nicole. If it's off-topic, keep the redirect short and friendly.
     `
 }

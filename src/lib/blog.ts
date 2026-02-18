@@ -1,532 +1,369 @@
-import { supabase, supabaseAdmin } from './supabase'
-import { generateSlug } from './utils'
+import { notion, getDataSourceId } from './notion'
+import { NotionRenderer } from '@notion-render/client'
+import hljsPlugin from '@notion-render/hljs-plugin'
 import {
   BlogPost,
   Tag,
   Category,
-  CreateBlogPostData,
-  UpdateBlogPostData,
   BlogPostFilters,
   BlogPostListResponse,
-  BlogStats,
 } from '../types/blog'
+import type {
+  PageObjectResponse,
+  BlockObjectResponse,
+  RichTextItemResponse,
+} from '@notionhq/client/build/src/api-endpoints'
 
-// Public blog functions (for readers)
+// ---------------------------------------------------------------------------
+// Notion color → hex lookup
+// ---------------------------------------------------------------------------
+const NOTION_COLOR_MAP: Record<string, string> = {
+  default: '#6b7280',
+  gray: '#9ca3af',
+  brown: '#a16207',
+  orange: '#ea580c',
+  yellow: '#ca8a04',
+  green: '#16a34a',
+  blue: '#2563eb',
+  purple: '#7c3aed',
+  pink: '#db2777',
+  red: '#dc2626',
+  light_gray: '#d1d5db',
+}
+
+function notionColorToHex(color: string): string {
+  return NOTION_COLOR_MAP[color] ?? NOTION_COLOR_MAP.default
+}
+
+// ---------------------------------------------------------------------------
+// In-memory cache (60-second TTL)
+// ---------------------------------------------------------------------------
+interface CacheEntry<T> {
+  data: T
+  expiresAt: number
+}
+
+const cache = new Map<string, CacheEntry<unknown>>()
+const CACHE_TTL_MS = 60_000
+
+function getCached<T>(key: string): T | undefined {
+  const entry = cache.get(key)
+  if (!entry) return undefined
+  if (Date.now() > entry.expiresAt) {
+    cache.delete(key)
+    return undefined
+  }
+  return entry.data as T
+}
+
+function setCache<T>(key: string, data: T): void {
+  cache.set(key, { data, expiresAt: Date.now() + CACHE_TTL_MS })
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function richTextToPlain(rt: RichTextItemResponse[]): string {
+  return rt.map((t) => t.plain_text).join('')
+}
+
+function getProperty<T>(page: PageObjectResponse, name: string): T {
+  return page.properties[name] as T
+}
+
+function pageToPost(
+  page: PageObjectResponse
+): Omit<BlogPost, 'content'> & { content: string } {
+  const titleProp = getProperty<{
+    type: 'title'
+    title: RichTextItemResponse[]
+  }>(page, 'Title')
+  const slugProp = getProperty<{
+    type: 'rich_text'
+    rich_text: RichTextItemResponse[]
+  }>(page, 'Slug')
+  const excerptProp = getProperty<{
+    type: 'rich_text'
+    rich_text: RichTextItemResponse[]
+  }>(page, 'Excerpt')
+  const publishedProp = getProperty<{ type: 'checkbox'; checkbox: boolean }>(
+    page,
+    'Published'
+  )
+  const featuredImageProp = getProperty<{ type: 'url'; url: string | null }>(
+    page,
+    'Featured Image'
+  )
+  const metaDescProp = getProperty<{
+    type: 'rich_text'
+    rich_text: RichTextItemResponse[]
+  }>(page, 'Meta Description')
+  const tagsProp = getProperty<{
+    type: 'multi_select'
+    multi_select: Array<{ id: string; name: string; color: string }>
+  }>(page, 'Tags')
+  const categoriesProp = getProperty<{
+    type: 'multi_select'
+    multi_select: Array<{ id: string; name: string; color: string }>
+  }>(page, 'Categories')
+  const createdProp = getProperty<{
+    type: 'created_time'
+    created_time: string
+  }>(page, 'Created')
+  const updatedProp = getProperty<{
+    type: 'last_edited_time'
+    last_edited_time: string
+  }>(page, 'Updated')
+
+  const tags: Tag[] = (tagsProp?.multi_select ?? []).map((t) => ({
+    id: t.id,
+    name: t.name,
+    slug: t.name.toLowerCase().replace(/\s+/g, '-'),
+    color: notionColorToHex(t.color),
+    created_at: createdProp?.created_time ?? new Date().toISOString(),
+  }))
+
+  const categories: Category[] = (categoriesProp?.multi_select ?? []).map(
+    (c) => ({
+      id: c.id,
+      name: c.name,
+      slug: c.name.toLowerCase().replace(/\s+/g, '-'),
+      color: notionColorToHex(c.color),
+      created_at: createdProp?.created_time ?? new Date().toISOString(),
+    })
+  )
+
+  return {
+    id: page.id,
+    title: richTextToPlain(titleProp?.title ?? []),
+    slug: richTextToPlain(slugProp?.rich_text ?? []),
+    content: '', // filled later for single-post fetches
+    excerpt: richTextToPlain(excerptProp?.rich_text ?? []) || undefined,
+    published: publishedProp?.checkbox ?? false,
+    featured_image_url: featuredImageProp?.url ?? undefined,
+    meta_description:
+      richTextToPlain(metaDescProp?.rich_text ?? []) || undefined,
+    tags,
+    categories,
+    created_at: createdProp?.created_time ?? new Date().toISOString(),
+    updated_at: updatedProp?.last_edited_time ?? new Date().toISOString(),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Fetch all blocks (paginated + recursive for nested blocks)
+// ---------------------------------------------------------------------------
+
+async function fetchAllBlocks(blockId: string): Promise<BlockObjectResponse[]> {
+  const blocks: BlockObjectResponse[] = []
+  let cursor: string | undefined
+
+  do {
+    const response = await notion.blocks.children.list({
+      block_id: blockId,
+      start_cursor: cursor,
+      page_size: 100,
+    })
+
+    for (const block of response.results) {
+      const b = block as BlockObjectResponse
+      blocks.push(b)
+
+      if (b.has_children) {
+        const children = await fetchAllBlocks(b.id)
+        blocks.push(...children)
+      }
+    }
+
+    cursor = response.has_more ? (response.next_cursor ?? undefined) : undefined
+  } while (cursor)
+
+  return blocks
+}
+
+// ---------------------------------------------------------------------------
+// Render blocks to HTML
+// ---------------------------------------------------------------------------
+
+async function renderBlocksToHtml(
+  blocks: BlockObjectResponse[]
+): Promise<string> {
+  const renderer = new NotionRenderer({ client: notion })
+  await renderer.use(hljsPlugin({}))
+  return renderer.render(...blocks)
+}
+
+// ---------------------------------------------------------------------------
+// Public API — preserves existing function signatures
+// ---------------------------------------------------------------------------
+
 export async function getPublishedPosts(
   filters: BlogPostFilters = {}
 ): Promise<BlogPostListResponse> {
-  const { tag, category, search, limit = 10, offset = 0 } = filters
+  const { tag, category, search, limit = 10, cursor } = filters
 
-  let query = supabase
-    .from('blog_posts')
-    .select(
-      `
-      *,
-      tags:post_tags(tag:tags(*)),
-      categories:post_categories(category:categories(*))
-    `
-    )
-    .eq('published', true)
-    .order('created_at', { ascending: false })
+  const cacheKey = `posts:${tag ?? ''}:${category ?? ''}:${search ?? ''}:${limit}:${cursor ?? ''}`
+  const cached = getCached<BlogPostListResponse>(cacheKey)
+  if (cached) return cached
 
-  // Apply filters
-  if (search) {
-    query = query.or(
-      `title.ilike.%${search}%,content.ilike.%${search}%,excerpt.ilike.%${search}%`
-    )
-  }
+  // Build Notion filter
+  const andFilters: Array<Record<string, unknown>> = [
+    { property: 'Published', checkbox: { equals: true } },
+  ]
 
   if (tag) {
-    query = query.contains('tags', [{ slug: tag }])
+    andFilters.push({ property: 'Tags', multi_select: { contains: tag } })
   }
-
   if (category) {
-    query = query.contains('categories', [{ slug: category }])
+    andFilters.push({
+      property: 'Categories',
+      multi_select: { contains: category },
+    })
+  }
+  if (search) {
+    andFilters.push({
+      or: [
+        { property: 'Title', title: { contains: search } },
+        { property: 'Excerpt', rich_text: { contains: search } },
+      ],
+    })
   }
 
-  // Get total count for pagination
-  const { count } = await supabase
-    .from('blog_posts')
-    .select('*', { count: 'exact', head: true })
-    .eq('published', true)
+  const filter = andFilters.length === 1 ? andFilters[0] : { and: andFilters }
 
-  // Apply pagination
-  const { data: posts, error } = await query.range(offset, offset + limit - 1)
+  const dataSourceId = await getDataSourceId()
+  const response = await notion.dataSources.query({
+    data_source_id: dataSourceId,
+    filter: filter as Parameters<typeof notion.dataSources.query>[0]['filter'],
+    sorts: [{ property: 'Created', direction: 'descending' as const }],
+    page_size: limit,
+    start_cursor: cursor,
+  })
 
-  if (error) {
-    console.error('Error fetching blog posts:', error)
-    return {
-      posts: [],
-      total: 0,
-      page: Math.floor(offset / limit) + 1,
-      limit,
-      hasMore: false,
-    }
-  }
+  const posts = (response.results as PageObjectResponse[]).map(pageToPost)
+  const nextCursor = response.has_more
+    ? (response.next_cursor ?? undefined)
+    : undefined
 
-  // Transform the data to match our interface
-  const transformedPosts: BlogPost[] = posts.map((post) => ({
-    ...post,
-    tags: post.tags?.map((pt: { tag: Tag }) => pt.tag).filter(Boolean) || [],
-    categories:
-      post.categories
-        ?.map((pc: { category: Category }) => pc.category)
-        .filter(Boolean) || [],
-  }))
-
-  return {
-    posts: transformedPosts,
-    total: count || 0,
-    page: Math.floor(offset / limit) + 1,
+  const result: BlogPostListResponse = {
+    posts,
+    total: posts.length,
+    page: 1,
     limit,
-    hasMore: offset + limit < (count || 0),
+    hasMore: response.has_more,
+    nextCursor,
   }
+
+  setCache(cacheKey, result)
+  return result
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-  const { data, error } = await supabase
-    .from('blog_posts')
-    .select(
-      `
-      *,
-      tags:post_tags(tag:tags(*)),
-      categories:post_categories(category:categories(*))
-    `
-    )
-    .eq('slug', slug)
-    .eq('published', true)
-    .single()
+  const cacheKey = `post:${slug}`
+  const cached = getCached<BlogPost | null>(cacheKey)
+  if (cached !== undefined) return cached
 
-  if (error || !data) {
+  const dataSourceId = await getDataSourceId()
+  const response = await notion.dataSources.query({
+    data_source_id: dataSourceId,
+    filter: {
+      and: [
+        { property: 'Slug', rich_text: { equals: slug } },
+        { property: 'Published', checkbox: { equals: true } },
+      ],
+    } as Parameters<typeof notion.dataSources.query>[0]['filter'],
+    page_size: 1,
+  })
+
+  if (response.results.length === 0) {
+    setCache(cacheKey, null)
     return null
   }
 
-  return {
-    ...data,
-    tags: data.tags?.map((pt: { tag: Tag }) => pt.tag).filter(Boolean) || [],
-    categories:
-      data.categories
-        ?.map((pc: { category: Category }) => pc.category)
-        .filter(Boolean) || [],
-  }
+  const page = response.results[0] as PageObjectResponse
+  const post = pageToPost(page)
+
+  // Fetch and render page content
+  const blocks = await fetchAllBlocks(page.id)
+  const html = await renderBlocksToHtml(blocks)
+
+  const fullPost: BlogPost = { ...post, content: html }
+  setCache(cacheKey, fullPost)
+  return fullPost
 }
 
-export async function getAllTags(): Promise<Tag[]> {
-  const { data, error } = await supabase.from('tags').select('*').order('name')
-
-  if (error) {
-    console.error('Error fetching tags:', error)
-    return []
-  }
-
-  return data || []
-}
-
-export async function getAllCategories(): Promise<Category[]> {
-  const { data, error } = await supabase
-    .from('categories')
-    .select('*')
-    .order('name')
-
-  if (error) {
-    console.error('Error fetching categories:', error)
-    return []
-  }
-
-  return data || []
-}
-
-// Get only tags that are used in published posts
 export async function getUsedTags(): Promise<Tag[]> {
-  const { data, error } = await supabase
-    .from('tags')
-    .select(
-      `
-      *,
-      post_tags!inner(
-        post:blog_posts!inner(published)
-      )
-    `
-    )
-    .eq('post_tags.post.published', true)
-    .order('name')
+  const cacheKey = 'usedTags'
+  const cached = getCached<Tag[]>(cacheKey)
+  if (cached) return cached
 
-  if (error) {
-    console.error('Error fetching used tags:', error)
-    return []
+  const { posts } = await getPublishedPosts({ limit: 100 })
+
+  const tagMap = new Map<string, Tag>()
+  for (const post of posts) {
+    for (const tag of post.tags ?? []) {
+      if (!tagMap.has(tag.name)) {
+        tagMap.set(tag.name, tag)
+      }
+    }
   }
 
-  // Remove duplicates and flatten the structure
-  const uniqueTags =
-    data?.reduce((acc: Tag[], current) => {
-      if (!acc.find((tag) => tag.id === current.id)) {
-        const { post_tags, ...tag } = current
-        acc.push(tag as Tag)
-      }
-      return acc
-    }, []) || []
-
-  return uniqueTags
+  const tags = Array.from(tagMap.values()).sort((a, b) =>
+    a.name.localeCompare(b.name)
+  )
+  setCache(cacheKey, tags)
+  return tags
 }
 
-// Get only categories that are used in published posts
 export async function getUsedCategories(): Promise<Category[]> {
-  const { data, error } = await supabase
-    .from('categories')
-    .select(
-      `
-      *,
-      post_categories!inner(
-        post:blog_posts!inner(published)
-      )
-    `
-    )
-    .eq('post_categories.post.published', true)
-    .order('name')
+  const cacheKey = 'usedCategories'
+  const cached = getCached<Category[]>(cacheKey)
+  if (cached) return cached
 
-  if (error) {
-    console.error('Error fetching used categories:', error)
-    return []
+  const { posts } = await getPublishedPosts({ limit: 100 })
+
+  const catMap = new Map<string, Category>()
+  for (const post of posts) {
+    for (const cat of post.categories ?? []) {
+      if (!catMap.has(cat.name)) {
+        catMap.set(cat.name, cat)
+      }
+    }
   }
 
-  // Remove duplicates and flatten the structure
-  const uniqueCategories =
-    data?.reduce((acc: Category[], current) => {
-      if (!acc.find((cat) => cat.id === current.id)) {
-        const { post_categories, ...category } = current
-        acc.push(category as Category)
-      }
-      return acc
-    }, []) || []
-
-  return uniqueCategories
+  const categories = Array.from(catMap.values()).sort((a, b) =>
+    a.name.localeCompare(b.name)
+  )
+  setCache(cacheKey, categories)
+  return categories
 }
 
-// Get tags with usage count, sorted by most used
 export async function getTagsWithUsage(
   limit: number = 6
 ): Promise<(Tag & { postCount: number })[]> {
-  const { data, error } = await supabase
-    .from('tags')
-    .select(
-      `
-      *,
-      post_tags!inner(
-        post:blog_posts!inner(published)
-      )
-    `
-    )
-    .eq('post_tags.post.published', true)
+  const cacheKey = `tagsWithUsage:${limit}`
+  const cached = getCached<(Tag & { postCount: number })[]>(cacheKey)
+  if (cached) return cached
 
-  if (error) {
-    console.error('Error fetching tags with usage:', error)
-    return []
+  const { posts } = await getPublishedPosts({ limit: 100 })
+
+  const tagCounts = new Map<string, Tag & { postCount: number }>()
+  for (const post of posts) {
+    for (const tag of post.tags ?? []) {
+      const existing = tagCounts.get(tag.name)
+      if (existing) {
+        existing.postCount++
+      } else {
+        tagCounts.set(tag.name, { ...tag, postCount: 1 })
+      }
+    }
   }
 
-  // Group by tag and count posts
-  const tagCounts =
-    data?.reduce(
-      (acc: Record<string, Tag & { postCount: number }>, current) => {
-        const { post_tags, ...tag } = current
-        const tagId = tag.id
-
-        if (!acc[tagId]) {
-          acc[tagId] = { ...(tag as Tag), postCount: 0 }
-        }
-        acc[tagId].postCount++
-
-        return acc
-      },
-      {}
-    ) || {}
-
-  // Convert to array and sort by usage
-  return Object.values(tagCounts)
+  const result = Array.from(tagCounts.values())
     .sort((a, b) => b.postCount - a.postCount)
     .slice(0, limit)
-}
 
-// Admin blog functions (for content management)
-export async function createBlogPost(
-  postData: CreateBlogPostData
-): Promise<BlogPost | null> {
-  const { tag_ids, category_ids, ...blogPostData } = postData
-
-  // Create the blog post
-  const { data: post, error: postError } = await supabaseAdmin
-    .from('blog_posts')
-    .insert({
-      ...blogPostData,
-      slug: blogPostData.slug || generateSlug(blogPostData.title),
-    })
-    .select()
-    .single()
-
-  if (postError || !post) {
-    console.error('Error creating blog post:', postError)
-    return null
-  }
-
-  // Add tags if provided
-  if (tag_ids && tag_ids.length > 0) {
-    const tagInserts = tag_ids.map((tag_id) => ({
-      post_id: post.id,
-      tag_id,
-    }))
-
-    const { error: tagError } = await supabaseAdmin
-      .from('post_tags')
-      .insert(tagInserts)
-
-    if (tagError) {
-      console.error('Error adding tags to post:', tagError)
-    }
-  }
-
-  // Add categories if provided
-  if (category_ids && category_ids.length > 0) {
-    const categoryInserts = category_ids.map((category_id) => ({
-      post_id: post.id,
-      category_id,
-    }))
-
-    const { error: categoryError } = await supabaseAdmin
-      .from('post_categories')
-      .insert(categoryInserts)
-
-    if (categoryError) {
-      console.error('Error adding categories to post:', categoryError)
-    }
-  }
-
-  return post
-}
-
-export async function updateBlogPost(
-  postData: UpdateBlogPostData
-): Promise<BlogPost | null> {
-  const { id, tag_ids, category_ids, ...updateData } = postData
-
-  // Update the blog post
-  const { data: post, error: postError } = await supabaseAdmin
-    .from('blog_posts')
-    .update(updateData)
-    .eq('id', id)
-    .select()
-    .single()
-
-  if (postError || !post) {
-    console.error('Error updating blog post:', postError)
-    return null
-  }
-
-  // Update tags if provided
-  if (tag_ids !== undefined) {
-    // Remove existing tags
-    await supabaseAdmin.from('post_tags').delete().eq('post_id', id)
-
-    // Add new tags
-    if (tag_ids.length > 0) {
-      const tagInserts = tag_ids.map((tag_id) => ({
-        post_id: id,
-        tag_id,
-      }))
-
-      const { error: tagError } = await supabaseAdmin
-        .from('post_tags')
-        .insert(tagInserts)
-
-      if (tagError) {
-        console.error('Error updating tags for post:', tagError)
-      }
-    }
-  }
-
-  // Update categories if provided
-  if (category_ids !== undefined) {
-    // Remove existing categories
-    await supabaseAdmin.from('post_categories').delete().eq('post_id', id)
-
-    // Add new categories
-    if (category_ids.length > 0) {
-      const categoryInserts = category_ids.map((category_id) => ({
-        post_id: id,
-        category_id,
-      }))
-
-      const { error: categoryError } = await supabaseAdmin
-        .from('post_categories')
-        .insert(categoryInserts)
-
-      if (categoryError) {
-        console.error('Error updating categories for post:', categoryError)
-      }
-    }
-  }
-
-  return post
-}
-
-export async function deleteBlogPost(id: string): Promise<boolean> {
-  const { error } = await supabaseAdmin.from('blog_posts').delete().eq('id', id)
-
-  if (error) {
-    console.error('Error deleting blog post:', error)
-    return false
-  }
-
-  return true
-}
-
-export async function getAllPosts(
-  filters: BlogPostFilters = {}
-): Promise<BlogPostListResponse> {
-  const { published, search, limit = 10, offset = 0 } = filters
-
-  let query = supabaseAdmin
-    .from('blog_posts')
-    .select(
-      `
-      *,
-      tags:post_tags(tag:tags(*)),
-      categories:post_categories(category:categories(*))
-    `
-    )
-    .order('created_at', { ascending: false })
-
-  // Apply filters
-  if (published !== undefined) {
-    query = query.eq('published', published)
-  }
-
-  if (search) {
-    query = query.or(
-      `title.ilike.%${search}%,content.ilike.%${search}%,excerpt.ilike.%${search}%`
-    )
-  }
-
-  // Get total count for pagination
-  const { count } = await supabaseAdmin
-    .from('blog_posts')
-    .select('*', { count: 'exact', head: true })
-
-  // Apply pagination
-  const { data: posts, error } = await query.range(offset, offset + limit - 1)
-
-  if (error) {
-    console.error('Error fetching all blog posts:', error)
-    return {
-      posts: [],
-      total: 0,
-      page: Math.floor(offset / limit) + 1,
-      limit,
-      hasMore: false,
-    }
-  }
-
-  // Transform the data to match our interface
-  const transformedPosts: BlogPost[] = posts.map((post) => ({
-    ...post,
-    tags: post.tags?.map((pt: { tag: Tag }) => pt.tag).filter(Boolean) || [],
-    categories:
-      post.categories
-        ?.map((pc: { category: Category }) => pc.category)
-        .filter(Boolean) || [],
-  }))
-
-  return {
-    posts: transformedPosts,
-    total: count || 0,
-    page: Math.floor(offset / limit) + 1,
-    limit,
-    hasMore: offset + limit < (count || 0),
-  }
-}
-
-export async function getBlogStats(): Promise<BlogStats> {
-  const [
-    { count: totalPosts },
-    { count: publishedPosts },
-    { count: draftPosts },
-    { count: totalTags },
-    { count: totalCategories },
-    { data: recentPosts },
-  ] = await Promise.all([
-    supabaseAdmin
-      .from('blog_posts')
-      .select('*', { count: 'exact', head: true }),
-    supabaseAdmin
-      .from('blog_posts')
-      .select('*', { count: 'exact', head: true })
-      .eq('published', true),
-    supabaseAdmin
-      .from('blog_posts')
-      .select('*', { count: 'exact', head: true })
-      .eq('published', false),
-    supabaseAdmin.from('tags').select('*', { count: 'exact', head: true }),
-    supabaseAdmin
-      .from('categories')
-      .select('*', { count: 'exact', head: true }),
-    supabaseAdmin
-      .from('blog_posts')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(5),
-  ])
-
-  return {
-    totalPosts: totalPosts || 0,
-    publishedPosts: publishedPosts || 0,
-    draftPosts: draftPosts || 0,
-    totalTags: totalTags || 0,
-    totalCategories: totalCategories || 0,
-    recentPosts: recentPosts || [],
-  }
-}
-
-// Tag and category management
-export async function createTag(
-  name: string,
-  color: string = '#3b5bdb'
-): Promise<Tag | null> {
-  const { data, error } = await supabaseAdmin
-    .from('tags')
-    .insert({
-      name,
-      slug: generateSlug(name),
-      color,
-    })
-    .select()
-    .single()
-
-  if (error) {
-    console.error('Error creating tag:', error)
-    return null
-  }
-
-  return data
-}
-
-export async function createCategory(
-  name: string,
-  description?: string,
-  color: string = '#b3c7e6'
-): Promise<Category | null> {
-  const { data, error } = await supabaseAdmin
-    .from('categories')
-    .insert({
-      name,
-      slug: generateSlug(name),
-      description,
-      color,
-    })
-    .select()
-    .single()
-
-  if (error) {
-    console.error('Error creating category:', error)
-    return null
-  }
-
-  return data
+  setCache(cacheKey, result)
+  return result
 }

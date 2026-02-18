@@ -1,4 +1,5 @@
-import Navbar from '../../components/Navbar'
+export const revalidate = 60
+
 import BlogPostList from '../../components/BlogPostList'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -23,34 +24,32 @@ export default async function Blog({ searchParams }: BlogPageProps) {
   const { search, tag, category } = resolvedSearchParams
 
   // Fetch initial posts and filters
-  const [initialPosts, categories, allUsedTags] = await Promise.all([
-    getPublishedPosts({ search, tag, category, limit: 9 }),
-    getUsedCategories(),
-    getTagsWithUsage(50), // Get more tags for progressive disclosure
-  ])
+  try {
+    const [initialPosts, categories, allUsedTags] = await Promise.all([
+      getPublishedPosts({ search, tag, category, limit: 9 }),
+      getUsedCategories(),
+      getTagsWithUsage(50), // Get more tags for progressive disclosure
+    ])
 
-  return (
-    <>
-      <Head>
-        <title>Blog | Nicole Wert</title>
-        <meta
-          name="description"
-          content="Nicole Wert's blog - articles, tutorials, and thoughts on web development, design, and AI."
-        />
-      </Head>
-      <Navbar />
-      <main className="pt-32 pb-16 min-h-screen bg-[var(--background)]">
-        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Blog Header */}
-          <section className="max-w-3xl mx-auto text-center mb-12 animate-fade-in">
-            <h1 className="text-4xl sm:text-5xl font-bold mb-6 text-[var(--foreground)]">
-              Blog
+    return (
+      <>
+        <Head>
+          <title>Blog | Nicole Wert</title>
+          <meta
+            name="description"
+            content="Thoughts, tutorials, and insights on software engineering, AI, and career growth."
+          />
+        </Head>
+
+        <main className="min-h-screen px-4 py-32 max-w-5xl mx-auto relative z-10">
+          <div className="mb-12 text-center">
+            <h1 className="text-4xl md:text-6xl font-bold mb-4 text-zinc-900 dark:text-white">
+              The Archives
             </h1>
-            <p className="text-lg sm:text-xl text-[var(--secondary)] mb-8">
-              Articles, tutorials, and thoughts on web development, design, and
-              AI.
+            <p className="text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+              Thoughts on code, AI, and building digital products.
             </p>
-          </section>
+          </div>
 
           {/* Filter Tags and Categories - Only show if there are published posts */}
           {initialPosts.total > 0 &&
@@ -123,8 +122,20 @@ export default async function Blog({ searchParams }: BlogPageProps) {
               />
             </Suspense>
           </section>
-        </div>
+        </main>
+      </>
+    )
+  } catch (error) {
+    console.error('Error loading blog:', error)
+    return (
+      <main className="min-h-screen px-4 py-32 max-w-5xl mx-auto relative z-10 text-center">
+        <h1 className="text-4xl font-bold text-zinc-900 dark:text-white mb-4">
+          The Archives
+        </h1>
+        <p className="text-zinc-600 dark:text-zinc-400">
+          Unable to load posts at this time.
+        </p>
       </main>
-    </>
-  )
+    )
+  }
 }
